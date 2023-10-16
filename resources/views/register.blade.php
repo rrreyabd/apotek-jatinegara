@@ -60,8 +60,8 @@
                 </div>
             </div>
             
-            <div class="w-[55%]">
-                
+            <div class="w-[55%] flex justify-center items-center">
+                <img src="{{ asset('img/register.png/') }}" width="500" alt="" draggable="false">
             </div>
         </div>
     </form>

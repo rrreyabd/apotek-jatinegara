@@ -15,8 +15,8 @@
 <body class="font-Trip bg-gradient-to-br from-mainColor to-tertiaryColor h-[100vh] flex justify-center items-center">
     <form action="">
     <div class="bg-white w-[80vw] h-[80vh] rounded-3xl shadow-xl flex p-4">
-            <div class="w-[55%]">
-                    
+            <div class="w-[55%] flex justify-center items-center">
+                <img src="{{ asset('img/login.png/') }}" width="500" alt="" draggable="false">
             </div>
 
             <div class="w-[45%] flex flex-col items-center gap-4 justify-center">
