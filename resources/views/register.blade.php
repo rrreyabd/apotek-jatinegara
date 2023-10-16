@@ -20,35 +20,33 @@
                 
                 <input 
                 class="w-[350px] h-[50px] p-4 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack mt-4"
-                type="text" placeholder="Nama">
+                type="email" placeholder="Email">
                 
                 <input 
                 class="w-[350px] h-[50px] p-4 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack"
-                type="text" placeholder="Email">
-                
-                <input 
-                class="w-[350px] h-[50px] p-4 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack"
-                type="text" placeholder="No. Handphone">
+                type="text" placeholder="Username">
                 
                 <div class="relative">
-                    <input 
+                    <input id="passwordInput"
                     class="w-[350px] h-[50px] p-4 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack"
-                    type="text" placeholder="Sandi">
+                    type="password" placeholder="Sandi">
                     
-                    <button class="bg-mainColor absolute rounded-full w-[35px] h-[35px] top-2 right-2
+                    <button onclick="showPassword()" type="button"
+                    class="bg-mainColor absolute rounded-full w-[35px] h-[35px] top-2 right-2
                     flex justify-center items-center">
-                        <i class="fa-solid fa-eye text-white"></i>
+                        <i class="fa-solid fa-eye text-white" id="toggle"></i>
                     </button>
                 </div>
 
                 <div class="relative">
-                    <input 
+                    <input id="passwordConfirmInput"
                     class="w-[350px] h-[50px] p-4 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack"
-                    type="text" placeholder="Konfirmasi Sandi">
+                    type="password" placeholder="Konfirmasi Sandi">
                     
-                    <button class="bg-mainColor absolute rounded-full w-[35px] h-[35px] top-2 right-2
+                    <button onclick="showPasswordConfirm()" type="button"
+                    class="bg-mainColor absolute rounded-full w-[35px] h-[35px] top-2 right-2
                     flex justify-center items-center">
-                        <i class="fa-solid fa-eye text-white"></i>
+                        <i class="fa-solid fa-eye text-white" id="toggleConfirm"></i>
                     </button>
                 </div>
                 
@@ -67,5 +65,45 @@
             </div>
         </div>
     </form>
+
+    <script>
+        function showPassword() {
+            const toggle = document.getElementById('toggle');
+            const passwordInput = document.getElementById('passwordInput');
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+
+            if (toggle.classList.contains('fa-eye')) {
+                toggle.classList.remove('fa-eye');
+                toggle.classList.add('fa-eye-slash');
+            } else {
+                toggle.classList.remove('fa-eye-slash');
+                toggle.classList.add('fa-eye');
+            }
+        }
+
+        function showPasswordConfirm() {
+            const toggle = document.getElementById('toggleConfirm');
+            const passwordInput = document.getElementById('passwordConfirmInput');
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+
+            if (toggle.classList.contains('fa-eye')) {
+                toggle.classList.remove('fa-eye');
+                toggle.classList.add('fa-eye-slash');
+            } else {
+                toggle.classList.remove('fa-eye-slash');
+                toggle.classList.add('fa-eye');
+            }
+        }
+    </script>
 </body>
 </html>
