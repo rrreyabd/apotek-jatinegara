@@ -15,7 +15,9 @@ module.exports = {
         mainColor: '#1A8889',
         secondaryColor: '#F7A623',
         tertiaryColor: '#A7D3D4',
-        semiBlack: 'rgba(0,0,0,0.4)'
+        semiBlack: 'rgba(0,0,0,0.4)',
+        lightGrey: '#EDEDED',
+        darkGrey: '#5F5F5F',
       },
     },
   },

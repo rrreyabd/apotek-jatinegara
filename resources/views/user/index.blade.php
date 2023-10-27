@@ -12,16 +12,15 @@
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 </head>
-
 <body class="font-Trip">
-    @include('component.navbar')
+    @include('user.components.navbar')
     
-    @include('component.carousel')
+    @include('user.components.carousel')
     
-    @include('index.category')
-    @include('index.last-purchased')
+    @include('user.components.index.category')
+    @include('user.components.index.last-purchased')
         
-    @include('component.footer')
+    @include('user.components.footer')
 </body>
 
 </html>
