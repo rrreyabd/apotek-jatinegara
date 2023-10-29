@@ -13,14 +13,26 @@
 
 </head>
 <body class="font-Trip bg-gradient-to-br from-mainColor to-tertiaryColor h-[100vh] flex justify-center items-center">
-    <form action="">
+    <form method="POST" action="{{ route('password.email') }}">
+        @csrf
         <div class="bg-white w-[35vw] h-[50vh] rounded-3xl shadow-xl flex flex-col justify-center items-center gap-6 px-16 py-4 text-center">
             <p class="font-TripBold text-4xl">Lupa Sandi?</p>
             <p>Masukkan alamat Email Anda ke kolom di bawah. Kami akan mengirim tautan untuk membuat ulang sandi.</p>
 
-            <input 
+            <input name="email"
                 class="w-[350px] h-[50px] p-4 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack mt-4"
                 type="text" placeholder="Email">
+            @error('email')
+                <div class="text-md text-red-500 mt-1 ms-3 mb-0 text-left">
+                    {{ $message }}
+                </div>
+            @enderror
+
+            @if (session()->has('status'))
+                <div class="text-md text-mainColor mt-1 ms-3 mb-0 text-left">
+                    {{ session('status') }}
+                </div>
+            @endif
             
             <div class="flex gap-2">
                 <a href="login"

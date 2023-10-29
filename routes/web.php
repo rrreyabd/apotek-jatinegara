@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,18 +18,12 @@ Route::get('/', function () {
     return view('user.index');
 });
 
-Route::get('/register', function () {
-    return view('user.register');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    
 });
 
-Route::get('/login', function () {
-    return view('user.login');
-});
-
-Route::get('/forgot-email', function () {
-    return view('user.forgot-email');
-});
-
-Route::get('/produk', function () {
-    return view('user.products');
-});
+require __DIR__.'/auth.php';

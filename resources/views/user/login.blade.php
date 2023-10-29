@@ -13,21 +13,31 @@
 
 </head>
 <body class="font-Trip bg-gradient-to-br from-mainColor to-tertiaryColor h-[100vh] flex justify-center items-center">
-    <form action="">
-    <div class="bg-white w-[80vw] h-[80vh] rounded-3xl shadow-xl flex p-4">
+    
+    <form action="/login" method="POST">
+        @csrf
+        <div class="bg-white w-[80vw] h-[80vh] rounded-3xl shadow-xl flex p-4">
             <div class="w-[55%] flex justify-center items-center">
                 <img src="{{ asset('img/login.png/') }}" width="500" alt="" draggable="false">
             </div>
-
+            
             <div class="w-[45%] flex flex-col items-center gap-4 justify-center">
                 <p class="font-TripBold text-6xl">Masuk</p>
                 
-                <input 
-                class="w-[350px] h-[50px] p-4 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack mt-4"
-                type="text" placeholder="Email">
+                <div class="">
+                    <input name="email/username" value="{{ @old('email/username') }}"
+                    class="w-[350px] h-[50px] p-4 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack mt-4"
+                    type="text" placeholder="Email/Username">
+    
+                    @error('email/username')
+                        <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
                 
                 <div class="relative">
-                    <input id="passwordInput"
+                    <input id="passwordInput" name="password"
                     class="w-[350px] h-[50px] p-4 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack"
                     type="password" placeholder="Sandi">
                     
@@ -36,16 +46,23 @@
                     flex justify-center items-center">
                         <i class="fa-solid fa-eye text-white" id="toggle"></i>
                     </button>
+                    @error('password')
+                        <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 
-                <div class="w-[350px] flex justify-between">
-                    <div class="flex gap-2">
-                        <input type="checkbox" required>
-                        <p>Ingat saya</p>
-                    </div>
+                <div class="w-[350px] flex justify-end">
                     <a href="forgot-email" 
                     class="underline text-secondaryColor">Lupa sandi</a>
                 </div>
+                
+                @error('loginError')
+                    <div class="text-md text-red-500 mt-1 ms-3 mb-0 text-left">
+                        {{ $message }}
+                    </div>
+                @enderror
 
                 <button
                 class="w-[350px] h-[50px] p-4 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack bg-secondaryColor font-TripBold text-white flex justify-center items-center text-xl"
