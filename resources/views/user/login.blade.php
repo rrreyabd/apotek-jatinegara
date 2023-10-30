@@ -23,6 +23,12 @@
             
             <div class="w-[45%] flex flex-col items-center gap-4 justify-center">
                 <p class="font-TripBold text-6xl">Masuk</p>
+
+                @if (session('status') == 'verification-email')
+                    <div class="text-sm text-mainColor mt-1 ms-3 mb-0 text-center">
+                        {{ __('Link Verifikasi Telah Dikirimkan Ke Email Anda') }}
+                    </div>
+                @endif
                 
                 <div class="">
                     <input name="email/username" value="{{ @old('email/username') }}"
