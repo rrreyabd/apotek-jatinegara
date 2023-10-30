@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +17,38 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::get('/test', function () {
+    $user_id = User::where('role', 'user')->pluck('user_id')->all();
+        $hasil = [];
+
+        foreach ($user_id as $id) {
+            $factory = [
+                'customer_id' => fake()->uuid,
+                'user_id' => $id,
+                'cashier_phone' => fake()->phoneNumber(),
+            ];
+            $hasil[] = $factory;
+        }
+    return $hasil;
+});
+
+Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/', function () {
         return view('user.index');
+    });
+    
+});
+
+Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
+    Route::get('/cashier', function () {
+        return view('kasir.index');
+    });
+    
+});
+
+Route::middleware(['auth', 'verified', 'cekRole:owner'])->group(function () {
+    Route::get('/owner', function () {
+        return view('pemilik.index');
     });
     
 });
