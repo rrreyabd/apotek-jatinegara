@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoogleController;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,11 @@ Route::get('/test', function () {
             $hasil[] = $factory;
         }
     return $hasil;
+});
+
+Route::controller(GoogleController::class)->group(function() {
+    Route::get('auth/google', 'redirectToGoogle')->name('auth.goole');
+    Route::get('auth/google/callback','handleGoogleCallback');
 });
 
 Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
