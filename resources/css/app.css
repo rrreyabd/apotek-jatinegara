@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Trip';
+    src: url('../font/TripSans-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'TripBold';
+    src: url('../font/TripSans-Bold.ttf') format('truetype');
+}
+  
+body {
+    scroll-behavior: smooth;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
