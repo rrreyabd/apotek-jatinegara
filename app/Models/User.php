@@ -16,6 +16,17 @@ class User extends Authenticatable implements MustVerifyEmail
     // untuk menggunakan uuid
     protected $primaryKey = 'user_id';
     public $incrementing = false;
+    public $timestamps = false;
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'user_id');
+    }
+
+    public function cashier()
+    {
+        return $this->hasOne(Cashier::class, 'user_id');
+    }
 
 
     /**

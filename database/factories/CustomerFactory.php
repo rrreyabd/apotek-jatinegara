@@ -24,7 +24,7 @@ class CustomerFactory extends Factory
         return [
             'customer_id' => fake()->uuid,
             'user_id' => $id,
-            'customer_phone' => fake()->phoneNumber(),
+            'customer_phone' => '08'.strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)),
         ];
     }
 }

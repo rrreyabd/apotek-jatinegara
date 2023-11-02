@@ -17,10 +17,11 @@ return new class extends Migration
             $table->foreign('user_id')
                 ->references('user_id')
                 ->on('users')
-                ->onUpdate('cascade'); 
-            $table->string('cashier_phone');
-            $table->enum('cashier_gender', ['pria', 'wanita']);
-            $table->string('cashier_address');
+                ->onUpdate('cascade')
+                ->onDelete('cascade'); ;
+            $table->string('cashier_phone', 14)->notNullable();
+            $table->enum('cashier_gender', ['pria', 'wanita'])->notNullable();
+            $table->string('cashier_address', 150)->notNullable();
         });
     }
 
