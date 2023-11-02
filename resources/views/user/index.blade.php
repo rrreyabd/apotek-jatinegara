@@ -17,8 +17,8 @@
     
     @include('user.components.carousel')
     
-    @include('user.components.index.category')
-    @include('user.components.index.last-purchased')
+    @include('user.components.category')
+    @include('user.components.last-purchased')
         
     @include('user.components.footer')
 </body>
