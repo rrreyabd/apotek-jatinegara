@@ -1296,3 +1296,19 @@ Did you mean one of these?
 #3 D:\\College\\Semester3\\MSBD\\tubes_apotek_jn\\apotek-msbd\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #4 {main}
 "} 
+[2023-11-02 05:43:24] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\Alwin-Liufandy\School\SEM-3\MSBD\ApotekJatiNegara\apotek-msbd\resources\views" directory does not exist. in D:\Alwin-Liufandy\School\SEM-3\MSBD\ApotekJatiNegara\apotek-msbd\vendor\symfony\finder\Finder.php:640
+Stack trace:
+#0 D:\Alwin-Liufandy\School\SEM-3\MSBD\ApotekJatiNegara\apotek-msbd\vendor\laravel\framework\src\Illuminate\Filesystem\Filesystem.php(584): Symfony\Component\Finder\Finder->in('D:\\Alwin-Liufan...')
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files('D:\\Alwin-Liufan...')
+#2 Command line code(1): getViews('D:\\Alwin-Liufan...', Object(Illuminate\Filesystem\Filesystem))
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\Alwin-Liufandy\\School\\SEM-3\\MSBD\\ApotekJatiNegara\\apotek-msbd\\resources\\views\" directory does not exist. in D:\\Alwin-Liufandy\\School\\SEM-3\\MSBD\\ApotekJatiNegara\\apotek-msbd\\vendor\\symfony\\finder\\Finder.php:640
+Stack trace:
+#0 D:\\Alwin-Liufandy\\School\\SEM-3\\MSBD\\ApotekJatiNegara\\apotek-msbd\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(584): Symfony\\Component\\Finder\\Finder->in('D:\\\\Alwin-Liufan...')
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files('D:\\\\Alwin-Liufan...')
+#2 Command line code(1): getViews('D:\\\\Alwin-Liufan...', Object(Illuminate\\Filesystem\\Filesystem))
+#3 {main}
+  thrown at D:\\Alwin-Liufandy\\School\\SEM-3\\MSBD\\ApotekJatiNegara\\apotek-msbd\\vendor\\symfony\\finder\\Finder.php:640)
+[stacktrace]
+#0 {main}
+"} 
