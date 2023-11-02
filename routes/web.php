@@ -6,7 +6,11 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Models\Cashier;
+use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Group;
+use App\Models\Product;
+use App\Models\Supplier;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +25,15 @@ use App\Models\Customer;
 
 
 Route::get('/test', function () {
-    dd(User::where('role','cashier')->first()->cashier);
+    $products = Product::all();
+    $hasil = 0;
+    foreach ($products as $product) {
+        if($product->detail->group->group == 'ea'){
+            $hasil++;
+        }
+    }
+    dd($hasil); 
+
 });
 
 Route::controller(GoogleController::class)->group(function() {
