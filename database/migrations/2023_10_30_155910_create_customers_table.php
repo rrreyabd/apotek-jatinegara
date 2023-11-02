@@ -17,8 +17,9 @@ return new class extends Migration
             $table->foreign('user_id')
                 ->references('user_id')
                 ->on('users')
-                ->onUpdate('cascade'); 
-            $table->string('customer_phone');
+                ->onUpdate('cascade')
+                ->onDelete('cascade'); 
+            $table->string('customer_phone', 14)->nullable();
         });
     }
 

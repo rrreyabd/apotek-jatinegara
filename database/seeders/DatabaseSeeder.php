@@ -22,5 +22,9 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Cashier::factory(1)->create();
         \App\Models\Customer::factory(8)->create();
+        \App\Models\Category::factory(7)->create();
+        \App\Models\Unit::factory(10)->create();
+        \App\Models\Group::factory(6)->create();
+        \App\Models\Supplier::factory(10)->create();
     }
 }

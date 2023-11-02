@@ -5,6 +5,8 @@ use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Models\Cashier;
+use App\Models\Customer;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,18 +21,7 @@ use App\Http\Controllers\ProfileController;
 
 
 Route::get('/test', function () {
-    $user_id = User::where('role', 'user')->pluck('user_id')->all();
-        $hasil = [];
-
-        foreach ($user_id as $id) {
-            $factory = [
-                'customer_id' => fake()->uuid,
-                'user_id' => $id,
-                'cashier_phone' => fake()->phoneNumber(),
-            ];
-            $hasil[] = $factory;
-        }
-    return $hasil;
+    dd(User::where('role','cashier')->first()->cashier);
 });
 
 Route::controller(GoogleController::class)->group(function() {

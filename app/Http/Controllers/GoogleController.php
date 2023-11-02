@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Str;
@@ -38,6 +39,11 @@ class GoogleController extends Controller
                     'google_id' => $user->id,
                     'password' => Hash::make('123'),
                     'role' => 'user'
+                ]);
+
+                Customer::create([
+                    'customer_id' => Str::uuid(),
+                    'user_id' => User::where('role', 'user')->latest()->pluck('user_id')->first()
                 ]);
                 
                 event(new Registered($newUser));
