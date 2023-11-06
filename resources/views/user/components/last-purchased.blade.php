@@ -2,10 +2,10 @@
     <div class="w-[70vw] mt-8 flex flex-col gap-8">
         <p class="font-TripBold text-4xl">Terakhir Dibeli</p>    
 
-        <div class="flex justify-start">
-            <div class="flex flex-wrap justify-between gap-0 lg:gap-[65px]">
-                @for ($i = 0; $i < 4; $i++)
-                <a href="" class="mb-7 h-64 w-[220px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
+        <div class="flex justify-start relative">
+            <div class="flex flex-wrap justify-center gap-4">
+                @for ($i = 0; $i < 5; $i++)
+                <a href="" class="mb-7 h-72 w-[200px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
                     {{-- <div class="flex justify-start mb-2">
                         <span class="bg-red-500 text-white font-semibold px-2 py-1 text-sm rounded-md">Resep</span>
                     </div> --}}
@@ -25,7 +25,7 @@
                             <p class="font-semibold">Stok: 90</p>
                         </div>
 
-                        <button class="bg-mainColor h-[40px] w-[40px] rounded-full text-white text-2xl">+</button>
+                        <button type="submit" class="bg-mainColor h-[40px] w-[40px] rounded-full text-white text-2xl cursor-pointer">+</button>
                     </div>
 
                     {{-- <div class="px-2">

@@ -1,4 +1,4 @@
-<nav class="shadow-lg h-16 w-full flex justify-center bg-white duration-200 transition" id="navbar">
+<nav class="shadow-lg h-16 w-full flex justify-center bg-white static z-50" id="navbar">
     <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between">
         <p class="text-mainColor font-TripBold text-3xl">Apotek</p>
 
