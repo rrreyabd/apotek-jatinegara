@@ -33,6 +33,10 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/', function () {
         return view('user.index');
     });
+
+    Route::get('/produk', function () {
+        return view('user.products');
+    });
     
 });
 
