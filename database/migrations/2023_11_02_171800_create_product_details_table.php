@@ -17,8 +17,7 @@ return new class extends Migration
             $table->foreign('category_id')
                 ->references('category_id')
                 ->on('categories')
-                ->onUpdate('cascade')
-                ->onDelete('restrict');
+                ->onUpdate('cascade');
             $table->uuid('group_id');
             $table->foreign('group_id')
                 ->references('group_id')

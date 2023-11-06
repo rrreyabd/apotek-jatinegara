@@ -17,4 +17,8 @@ class Unit extends Model
         'unit_id',
         'unit',
     ];
+
+    public function product_detail(){
+        return $this->hasMany(ProductDetail::class, 'unit_id');
+    }
 }

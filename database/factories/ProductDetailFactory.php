@@ -40,7 +40,7 @@ class ProductDetailFactory extends Factory
             'product_type' => fake()->randomElement(['umum', 'resep dokter']),
             'product_photo' => fake()->word().'.jpg',
             'product_manufacture' => fake()->words(18, true),
-            'product_DPN' => 'DKL'. rand(1000000000,999999999) .'A2',
+            'product_DPN' => 'DKL'. fake()->numberBetween(100000000,999999999) .'A2',
             'product_sideEffect' => fake()->sentences(6, true),
             'product_description' => fake()->sentences(6, true),
             'product_dosage' => fake()->sentences(6, true),
