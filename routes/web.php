@@ -43,11 +43,15 @@ Route::controller(GoogleController::class)->group(function() {
 });
 
 Route::get('/', function () {
-    return view('user.index');
-});
+        return view('user.index');
+    });
+
+Route::get('/produk', function () {
+        return view('user.products');
+    });
 
 Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
-    
+
 });
 
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
