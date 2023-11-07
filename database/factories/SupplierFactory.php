@@ -18,6 +18,7 @@ class SupplierFactory extends Factory
     {
         return [
             'supplier_id' => fake()->uuid,
+            'supplier_code' => fake()->word(),
             'supplier' => 'PT. '.fake()->unique()->words(4, true),
             'supplier_address' => fake()->words(18, true),
             'supplier_phone' => '08'.strval(fake()->numberBetween(1000000000, 9999999999)),

@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('product_id', 20);
-            $table->foreignId('detail_id')
+            $table->uuid('product_id')->primary();
+            $table->string('product_code', 20);
+            $table->uuid('detail_id');
+            $table->foreign('detail_id')
                 ->references('detail_id')
                 ->on('product_details')
                 ->onUpdate('cascade')

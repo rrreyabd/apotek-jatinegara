@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Apotek | Masuk</title>
+    <title>{{ $title }}</title>
     @vite('resources/css/app.css')
 
     {{-- FONT AWESOME --}}
@@ -17,9 +17,10 @@
     
     @include('user.components.carousel')
     
-    @include('user.components.category')
-    @include('user.components.last-purchased')
-    @include('user.components.banyak-dicari ')
+    @auth
+        @include('user.components.index.category')
+        @include('user.components.index.last-purchased')
+    @endauth
         
     @include('user.components.footer')
 </body>

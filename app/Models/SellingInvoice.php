@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class SellingInvoice extends Model
 {
     use HasFactory;
-
     protected $primaryKey = 'selling_invoice_id';
     public $incrementing = false;
     public $timestamps = false;
