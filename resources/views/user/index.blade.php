@@ -12,14 +12,13 @@
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 </head>
-<body class="font-Trip">
+<body class="font-Inter relative">
     @include('user.components.navbar')
     
     @include('user.components.carousel')
     
-    @include('user.components.index.category')
-
     @auth
+        @include('user.components.index.category')
         @include('user.components.index.last-purchased')
     @endauth
         

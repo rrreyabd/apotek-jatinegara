@@ -10,6 +10,7 @@ module.exports = {
       fontFamily: {
         'Trip': ['Trip', 'sans'],
         'TripBold': ['TripBold', 'sans'],
+        'Inter': ['Inter', 'sans-serif'],
       },
       colors: {
         mainColor: '#1A8889',
@@ -18,6 +19,8 @@ module.exports = {
         semiBlack: 'rgba(0,0,0,0.4)',
         lightGrey: '#EDEDED',
         darkGrey: '#5F5F5F',
+        mediumGrey: '#5c5c5c',
+        mediumRed: '#FF0000',
       },
     },
   },
