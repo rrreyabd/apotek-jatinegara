@@ -50,7 +50,7 @@
                         class="border-2 h-12 px-4 rounded-xl bg-lightGrey">
                     </div>
 
-                    <button type="submit" class="w-48 bg-secondaryColor px-4 py-2 font-semibold text-white rounded-lg shadow-md shadow-semiBlack">Ubah Data</button>
+                    <button type="submit" class="w-48 bg-secondaryColor px-4 py-2 font-semibold text-lg text-white rounded-lg shadow-md shadow-semiBlack">Ubah Data</button>
                 </form>
 
                 <form action="" method=""
@@ -87,7 +87,7 @@
                         </button>
                     </div>
 
-                    <button type="submit" class="w-48 bg-secondaryColor px-4 py-2 font-semibold text-white rounded-lg shadow-md shadow-semiBlack">Ubah Sandi</button>
+                    <button type="submit" class="w-48 bg-secondaryColor px-4 py-2 font-semibold text-lg text-white rounded-lg shadow-md shadow-semiBlack">Ubah Sandi</button>
                 </form>
             </div>
         </div>
