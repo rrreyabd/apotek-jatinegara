@@ -22,18 +22,18 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Cashier::factory(1)->create();
         \App\Models\Customer::factory(8)->create();
-        \App\Models\Category::factory(7)->create();
+        \App\Models\Category::factory(8)->create();
         \App\Models\Unit::factory(10)->create();
         \App\Models\Group::factory(6)->create();
         \App\Models\Supplier::factory(10)->create();
         \App\Models\ProductDetail::factory(10)->create();
         for ($i=0; $i < 10; $i++) { 
             \App\Models\Product::factory(1)->create();
+            \App\Models\SellingInvoice::factory(1)->create();
         }
-        \App\Models\SellingInvoice::factory(6)->create();
-        \App\Models\SellingInvoiceDetail::factory(20)->create();
+        \App\Models\SellingInvoiceDetail::factory(40)->create();
         \App\Models\BuyingInvoice::factory(9)->create();
-        \App\Models\BuyingInvoiceDetail::factory(20)->create();
+        \App\Models\BuyingInvoiceDetail::factory(40)->create();
         \App\Models\Information::factory(1)->create();
     }
 }

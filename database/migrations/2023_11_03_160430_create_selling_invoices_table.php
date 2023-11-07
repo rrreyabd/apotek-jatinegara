@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('selling_invoices', function (Blueprint $table) {
             $table->uuid('selling_invoice_id')->primary();
+            $table->string('invoice_code', 20);
             $table->string('cashier_name', 100);
             $table->string('customer_name',100)->nullable();
             $table->string('customer_phone',14)->nullable();

@@ -18,7 +18,7 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $produk_id = Product::orderBy('product_id', 'desc')->pluck('product_id')->first();
+        $produk_id = Product::orderBy('product_code', 'desc')->pluck('product_code')->first();
         $number = intval(str_replace("P-", "", $produk_id)) + 1;
 
         $details_id = ProductDetail::pluck('detail_id')->all();
@@ -27,8 +27,8 @@ class ProductFactory extends Factory
         $stock = rand(0,50);
 
         return [
-            'id' => fake()->uuid,
-            'product_id' => 'P-'. str_pad($number, 6, '0', STR_PAD_LEFT),
+            'product_id' => fake()->uuid,
+            'product_code' => 'P-'. str_pad($number, 6, '0', STR_PAD_LEFT),
             'detail_id' => $detail_id,
             'product_name' => fake()->words(5, true),
             'product_expired'=> fake()->dateTime(),
