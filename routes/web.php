@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\ProductController;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
@@ -28,9 +29,10 @@ use App\Models\Supplier;
 
 
 Route::get('/test', function () {
-    $buyingInvoices = BuyingInvoice::where('supplier_name', 'PT. consectetur architecto aut voluptates')->first()->buyinginvoicedetail->pluck('product_name');
+    $produk_id = SellingInvoice::orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();
+        $number = intval(str_replace("INV-", "", $produk_id)) + 1;
 
-    echo($buyingInvoices);
+    echo('INV-'. str_pad($number, 6, '0', STR_PAD_LEFT));
 
     // $hasi = Group::where('group', 'repellendus')->first()->group_id;
     // $hasil = ProductDetail::where('group_id', $hasi)->get();
@@ -42,9 +44,7 @@ Route::controller(GoogleController::class)->group(function() {
     Route::get('auth/google/callback','handleGoogleCallback');
 });
 
-Route::get('/', function () {
-        return view('user.index');
-    });
+Route::get('/', [ProductController::class, 'home'])->name('home');
 
 Route::get('/produk', function () {
         return view('user.products');

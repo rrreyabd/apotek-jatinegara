@@ -33,6 +33,7 @@ class ProductDetailFactory extends Factory
         $supplier_id = fake()->randomElement($suppliers_id);
 
         return [
+            'detail_id' => fake()->uuid,
             'category_id' => $category_id,
             'unit_id' => $unit_id,
             'group_id' => $group_id,

@@ -19,6 +19,7 @@ return new class extends Migration
                 ->on('selling_invoices')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->string('product_id');
             $table->string('product_name');
             $table->integer('product_sell_price');
             $table->integer('quantity');
