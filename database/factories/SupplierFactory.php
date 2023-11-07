@@ -20,7 +20,7 @@ class SupplierFactory extends Factory
             'supplier_id' => fake()->uuid,
             'supplier' => 'PT. '.fake()->unique()->words(4, true),
             'supplier_address' => fake()->words(18, true),
-            'supplier_phone' => '08'.strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)),
+            'supplier_phone' => '08'.strval(fake()->numberBetween(1000000000, 9999999999)),
         ];
     }
 }

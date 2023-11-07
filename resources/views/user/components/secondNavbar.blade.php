@@ -3,7 +3,7 @@
         <p class="text-mainColor font-TripBold text-3xl">Apotek</p>
 
         <div class="flex gap-4 justify-center items-center">
-            {{-- JIKA USER BELUM LOGIN --}}
+            @guest
             <a href="login" class="text-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor h-[35px] px-3 rounded-lg">
                 Masuk
             </a>
@@ -12,7 +12,7 @@
                 Daftar
             </a>
 
-            {{-- JIKA USER SUDAH LOGIN --}}
+            @else
             <a href="" class="flex justify-center items-center h-[40px] w-[40px] relative">
                 <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
                 <span
@@ -23,6 +23,7 @@
                 class="border-2 border-mainColor h-[35px] w-[35px] rounded-full flex justify-center items-center overflow-hidden relative">
                 <i class="fa-solid fa-user text-3xl absolute top-1 text-mainColor"></i>
             </a>
+            @endguest
         </div>
     </div>
 </nav>

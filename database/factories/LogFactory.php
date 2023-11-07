@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Unit>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Log>
  */
-class UnitFactory extends Factory
+class LogFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,7 @@ class UnitFactory extends Factory
     public function definition(): array
     {
         return [
-            'unit_id' => fake()->uuid,
-            'unit' => fake()->unique()->words(mt_rand(1,2), true),
+            //
         ];
     }
 }

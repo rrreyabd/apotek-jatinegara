@@ -26,5 +26,14 @@ class DatabaseSeeder extends Seeder
         \App\Models\Unit::factory(10)->create();
         \App\Models\Group::factory(6)->create();
         \App\Models\Supplier::factory(10)->create();
+        \App\Models\ProductDetail::factory(10)->create();
+        for ($i=0; $i < 10; $i++) { 
+            \App\Models\Product::factory(1)->create();
+        }
+        \App\Models\SellingInvoice::factory(6)->create();
+        \App\Models\SellingInvoiceDetail::factory(20)->create();
+        \App\Models\BuyingInvoice::factory(9)->create();
+        \App\Models\BuyingInvoiceDetail::factory(20)->create();
+        \App\Models\Information::factory(1)->create();
     }
 }
