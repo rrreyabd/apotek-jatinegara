@@ -44,11 +44,15 @@ Route::controller(GoogleController::class)->group(function() {
 
 Route::get('/', function () {
         return view('user.index');
-    });
+});
 
 Route::get('/produk', function () {
         return view('user.products');
-    });
+});
+
+Route::get('/profile', function () {
+        return view('user.profile-user');
+});
 
 Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
 

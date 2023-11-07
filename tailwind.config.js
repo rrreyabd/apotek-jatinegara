@@ -20,6 +20,7 @@ module.exports = {
         lightGrey: '#EDEDED',
         darkGrey: '#5F5F5F',
         mediumGrey: '#5c5c5c',
+        mediumRed: '#FF0000',
       },
     },
   },
