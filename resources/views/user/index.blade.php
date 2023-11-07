@@ -12,13 +12,14 @@
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 </head>
-<body class="font-Trip">
+<body class="font-Inter relative">
     @include('user.components.navbar')
     
     @include('user.components.carousel')
     
     @include('user.components.category')
     @include('user.components.last-purchased')
+    @include('user.components.banyak-dicari ')
         
     @include('user.components.footer')
 </body>

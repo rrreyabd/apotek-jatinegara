@@ -11,6 +11,8 @@
     font-family: 'TripBold';
     src: url('../font/TripSans-Bold.ttf') format('truetype');
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
   
 body {
     scroll-behavior: smooth;
@@ -20,3 +22,30 @@ body {
     padding: 0;
     margin: 0;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  display: none;
+}
+
+input:focus {
+    outline: none;
+}
+
+.pageActive {
+    background-color: #1A8889;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+/* RADIO BUTTON START */
+
+
+
+/* RADIO BUTTON END */

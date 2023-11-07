@@ -1,6 +1,6 @@
 <div class="flex flex-col items-center mb-8">
     <div class="w-[80vw] mt-8 flex flex-col gap-8 ">
-        <p class="font-TripBold text-4xl">Terakhir Dibeli</p>    
+        <p class="font-TripBold text-4xl">Banyak Dicari</p>    
 
         <div class="flex justify-evenly relative">
             <div class="flex flex-wrap justify-center gap-4">

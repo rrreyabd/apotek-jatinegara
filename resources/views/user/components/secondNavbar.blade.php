@@ -1,4 +1,4 @@
-<nav class="shadow-lg h-16 w-full flex justify-center bg-white duration-200 transition" id="navbar">
+<nav class="shadow-lg h-16 w-full flex justify-center bg-white z-50 fixed" id="navbar">
     <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between">
         <p class="text-mainColor font-TripBold text-3xl">Apotek</p>
 
@@ -28,14 +28,5 @@
     </div>
 </nav>
 
-<script>
-    window.onscroll = function() {
-        var navbar = document.getElementById('navbar');
-
-        if (window.scrollY > 0) {
-            navbar.classList.add('fixed');
-        } else {
-            navbar.classList.remove('fixed');
-        }
-    };
-</script>
+{{-- agar position fixed navbar tidak diambil content dibawahnya  --}}
+<div class="h-16 w-full"></div>
