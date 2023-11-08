@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->uuid('product_id')->primary();
-            $table->string('product_code', 20);
+            $table->string('product_code', 20)->unique();
             $table->uuid('detail_id');
             $table->foreign('detail_id')
                 ->references('detail_id')
