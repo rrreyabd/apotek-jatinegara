@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             \App\Models\SellingInvoice::factory(1)->create();
         }
         \App\Models\SellingInvoiceDetail::factory(40)->create();
-        \App\Models\BuyingInvoice::factory(9)->create();
+        \App\Models\BuyingInvoice::factory(10)->create();
         \App\Models\BuyingInvoiceDetail::factory(40)->create();
         \App\Models\Information::factory(1)->create();
     }

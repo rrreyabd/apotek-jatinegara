@@ -18,14 +18,22 @@ class ProductController extends Controller
                     $product_last_purcase[] = $p;
                 }
             }
-        } else {
-            $product_last_purcase = NULL;
-        }
+
+            foreach(collect($product_last_purcase) as $p){
+                if(Product::where('product_name', $p->product_name)->first() != NULL){
+                    $products[] = Product::where('product_name', $p->product_name)->get();
+                }else{
+
+                }
+            }
+            } else {
+            $products = NULL;
+            }
 
         return view("user.index", [
             "title"=> "Apotek | Home",
             "categories"=> Category::orderBy('category')->get(),
-            "product_last_purcase"=> collect($product_last_purcase)->take(5),
+            "products"=> collect($products)->take(5),
         ]);
     }
     /**
