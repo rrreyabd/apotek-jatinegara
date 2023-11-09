@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Models\BuyingInvoice;
 use App\Models\Cashier;
 use App\Models\Category;
@@ -50,17 +51,17 @@ Route::get('/produk', function () {
         return view('user.products');
 });
 
-Route::get('/detail-pesanan', function () {
-        return view('user.detail-pesanan');
-});
-
-Route::get('/pembayaran', function () {
-        return view('user.pembayaran');
-});
-
-
 Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
+    Route::get('/user-profile', [UserController::class, 'profile'])->name('profile-user');
+    Route::post('/user-profile', [UserController::class, 'ubahProfile'])->name('change-profile');
 
+    Route::get('/pembayaran', function () {
+        return view('user.pembayaran');
+    });
+
+    Route::get('/detail-pesanan', function () {
+            return view('user.detail-pesanan');
+    });
 });
 
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {

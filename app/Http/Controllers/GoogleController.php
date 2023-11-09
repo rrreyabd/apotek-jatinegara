@@ -32,9 +32,12 @@ class GoogleController extends Controller
                 Auth::login($finduser);
                 return redirect("/");
             }else{
+                $usernames = User::where('username', 'LIKE', 'u %')->orderBy('username', 'desc')->pluck('username')->first();
+                $username = intval(str_replace("u ", "", $usernames)) + 1;
+
                 $newUser = User::create([
                     'user_id' => Str::uuid(),
-                    'username' => fake()->unique()->words(2, true),
+                    'username' => 'u '. str_pad($username, 1, '0', STR_PAD_LEFT),
                     'email' => $user->email,
                     'google_id' => $user->id,
                     'password' => Hash::make('123'),
