@@ -50,10 +50,6 @@ Route::get('/produk', function () {
         return view('user.products');
 });
 
-Route::get('/profile', function () {
-        return view('user.profile-user');
-});
-
 Route::get('/detail-pesanan', function () {
         return view('user.detail-pesanan');
 });

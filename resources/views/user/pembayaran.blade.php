@@ -25,7 +25,7 @@
                 <div class="flex gap-4 justify-between w-[50vw] flex-wrap">
                     @for ($i = 0; $i < 4; $i++)
                     <div class="relative">
-                        <input type="text" class="w-[24vw] shadow-md shadow-mediumGrey h-10 pl-24 rounded-full text-sm" placeholder="987123 a.n Gopal">
+                        <input type="text" class="w-[24vw] shadow-sm shadow-mediumGrey h-10 pl-24 rounded-full text-sm" placeholder="987123 a.n Gopal">
                         
                         <label for="paymentMethod{{$i}}" class="flex gap-2 items-center absolute left-3 top-[26%] cursor-pointer">
                             <input type="radio" name="paymentMethod" id="paymentMethod{{$i}}" class="h-5 w-5">
@@ -39,7 +39,7 @@
             <div class="flex flex-col gap-4 items-center w-full">
                 <p class="text-xl font-bold text-white textShadow">Bukti Pembayaran</p>
 
-                <label for="buktiPembayaran" class="w-[24vw] shadow-md shadow-mediumGrey h-10 px-3 rounded-full text-sm bg-white cursor-pointer flex gap-2 justify-start items-center">
+                <label for="buktiPembayaran" class="w-[24vw] shadow-sm shadow-mediumGrey h-10 px-3 rounded-full text-sm bg-white cursor-pointer flex gap-2 justify-start items-center">
                     <input type="file" name="" id="buktiPembayaran" class="hidden">
                     
                     <div class="w-7 h-7 rounded-full bg-mainColor text-white flex items-center justify-center">
