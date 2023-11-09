@@ -4,44 +4,58 @@
 
         <div class="flex justify-evenly relative">
             <div class="flex flex-wrap justify-center gap-4">
-                @for ($i = 0; $i < 5; $i++)
+                @if ($products->first() != NULL)
+                {{-- @dd($products_last_purcase->take(1)); --}}
+                @foreach ($products as $product)
                 <div class="h-fit w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
-                    <a href="">
+                    <a @if ($product->first()->product_stock != 0) href="" @endif>
                         <div class="px-2 w-full">
-                            <p class="font-semibold text-lg namaObat flex whitespace-normal break-words">Acyclovir 200 mg</p>
+                            <p class="font-semibold text-lg namaObat flex whitespace-normal break-words">{{ $product->first()->product_name }}</p>
                         </div>
 
                         <center class="relative">
+                            @if ($product->first()->detail->product_type == "resep dokter")
                             <span class="bg-red-500 text-white font-semibold px-2 py-1 text-sm rounded-md absolute top-1 left-2">Resep</span>
+                            @endif
+
                             <img src="{{ asset('img/obat1.jpg/') }}" width="150px" alt="" draggable="false">    
                         </center>
                     </a>
 
                     <div class="flex justify-between items-center">
                         <div class="px-2 flex flex-col justify-center w-[80%] whitespace-normal break-words">
-                            <p><span class="font-TripBold text-secondaryColor">Rp. 250.000.000</span> / kotak</p>
-                            <p class="font-semibold">Stok: 900</p>
+                            <p><span class="font-TripBold text-secondaryColor">Rp. {{ number_format($product->first()->product_sell_price, 0,
+                                    ',', '.') }}</span> / {{ $product->first()->detail->unit->unit }}</span> / kotak</p>
+                            <p class="font-semibold">Stok: {{ $product->first()->product_stock }}</p>
                         </div>
                         
                         <div class="w-[20%] h-full">
-                            <button type="button" class="bg-mainColor h-[40px] w-full rounded-full text-white text-2xl cursor-pointer">+</button>
+                            @if ($product->first()->product_stock == 0)
+                            @else
+                            <button type="submit" class="bg-mainColor h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                            @endif
                         </div>
                     </div>
                 </div>
-                @endfor
+                @endforeach
+                @else
+                <p class="text-2xl">Belum Membeli Produk Apapun!</p>  
+                @endif
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    const obatElements = document.getElementsByClassName("namaObat");
+    const obatElement = document.getElementsByClassName("namaObat");
 
-    for (let i = 0; i < obatElements.length; i++) {
-    const obatText = obatElements[i].textContent;
+    for (let i = 0; i < obatElement.length; i++) {
+    const obatText = obatElement[i].textContent;
 
-    if (obatText.length > 20) {
-        obatElements[i].textContent = obatText.slice(0, 18) + "...";
+    if (obatText.length > 18) {
+        obatElement[i].textContent = obatText.slice(0, 17) + "...";
     }
     }
 </script>

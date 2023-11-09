@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 @font-face {
     font-family: 'Trip';
@@ -11,8 +14,6 @@
     font-family: 'TripBold';
     src: url('../font/TripSans-Bold.ttf') format('truetype');
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
   
 body {
     scroll-behavior: smooth;
@@ -46,6 +47,13 @@ input:focus {
 
 /* RADIO BUTTON START */
 
-
+input[type="radio"] {
+    accent-color: #1A8889;
+    stroke: #1A8889;
+}
 
 /* RADIO BUTTON END */
+
+.textShadow {
+    text-shadow: 2px 2px rgba(0, 0, 0, .1);
+}

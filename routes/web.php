@@ -54,6 +54,15 @@ Route::get('/profile', function () {
         return view('user.profile-user');
 });
 
+Route::get('/detail-pesanan', function () {
+        return view('user.detail-pesanan');
+});
+
+Route::get('/pembayaran', function () {
+        return view('user.pembayaran');
+});
+
+
 Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
 
 });
