@@ -298,10 +298,10 @@
 
         const obatElements = document.getElementsByClassName("namaObat");
 
-        for (let i = 0; i < obatElements.length; i++) {
+            for (let i = 0; i < obatElements.length; i++) {
             const obatText = obatElements[i].textContent;
 
-            if (obatText.length > 20) {
+            if (obatText.length > 18) {
                 obatElements[i].textContent = obatText.slice(0, 17) + "...";
             }
         }

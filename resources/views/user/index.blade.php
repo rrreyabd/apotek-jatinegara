@@ -17,11 +17,14 @@
     
     @include('user.components.carousel')
     
+    @include('user.components.category')
+    
     @auth
-        @include('user.components.index.category')
-        @include('user.components.index.last-purchased')
+        @include('user.components.last-purchased')
     @endauth
-        
+    
+    @include('user.components.banyak-dicari')
+    
     @include('user.components.footer')
 </body>
 
