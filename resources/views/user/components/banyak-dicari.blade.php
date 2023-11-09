@@ -4,9 +4,8 @@
 
         <div class="flex justify-evenly relative">
             <div class="flex flex-wrap justify-center gap-4">
-                @if ($products->first() != NULL)
-                {{-- @dd($products_last_purcase->take(1)); --}}
-                @foreach ($products as $product)
+                @if ($products_best_seller->first() != NULL)
+                @foreach ($products_best_seller as $product)
                 <div class="h-fit w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
                     <a @if ($product->first()->product_stock != 0) href="" @endif>
                         <div class="px-2 w-full">
@@ -25,7 +24,7 @@
                     <div class="flex justify-between items-center">
                         <div class="px-2 flex flex-col justify-center w-[80%] whitespace-normal break-words">
                             <p><span class="font-TripBold text-secondaryColor">Rp. {{ number_format($product->first()->product_sell_price, 0,
-                                    ',', '.') }}</span> / {{ $product->first()->detail->unit->unit }}</span> / kotak</p>
+                                    ',', '.') }}</span> / </br>{{ $product->first()->detail->unit->unit }}</span></p>
                             <p class="font-semibold">Stok: {{ $product->first()->product_stock }}</p>
                         </div>
                         
@@ -41,7 +40,7 @@
                 </div>
                 @endforeach
                 @else
-                <p class="text-2xl">Belum Membeli Produk Apapun!</p>  
+                <p class="text-2xl">Belum Memiliki Product!</p>  
                 @endif
             </div>
         </div>
