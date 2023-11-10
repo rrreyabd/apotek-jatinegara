@@ -26,10 +26,14 @@ class SellingInvoiceFactory extends Factory
         $customers = User::where('role', 'user')->pluck('username')->all();
         $customer = fake()->randomElement($customers);
 
+        $customers_id = User::where('role', 'user')->pluck('user_id')->all();
+        $customer_id = fake()->randomElement($customers_id);
+
         return [
             'selling_invoice_id' => fake()->uuid,
             'invoice_code' => 'INV-'. str_pad($number, 6, '0', STR_PAD_LEFT),
             'cashier_name' => Cashier::first()->user->username,
+            'customer_id'=> $customer_id,
             'customer_name' => $customer,
             'customer_phone' => '08'.strval(fake()->numberBetween(1000000000, 9999999999)),
             'customer_file'=> fake()->word().'.jpg',

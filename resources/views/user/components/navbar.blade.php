@@ -24,51 +24,61 @@
             </a>
             @else
             {{-- JIKA USER SUDAH LOGIN --}}
-            <a href="" class="flex justify-center items-center h-[40px] w-[40px] relative">
-                <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
-                <span
-                    class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">18</span>
-            </a>
-
-            <button onclick="toggleProfile()"
-                class="border-2 border-mainColor h-[35px] w-[35px] rounded-full flex justify-center items-center overflow-hidden relative">
-                <i class="fa-solid fa-user text-3xl absolute top-1 text-mainColor"></i>
-            </button>
-
-            {{-- USER DROPDOWN START --}}
-            <div class="absolute top-16 right-0 bg-white shadow-md shadow-semiBlack w-64 h-fit rounded-md overflow-hidden cursor-pointer font-medium hidden opacity-0 transition-opacity duration-200 ease-in-out" id="dropdownMenu">   
-                <div class="border border-1 border-b-mediumGrey border-opacity-60 py-2 px-4 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-user text-3xl text-mainColor"></i>
-                    
-                    <div class="flex justify-center flex-col">
-                        <p class="font-semibold text-mainColor">{{ Auth()->user()->username }}</p>
-                        <p class="text-xs opacity-60">{{ Auth()->user()->email }}</p>
-                    </div>
-                </div>
-
-                <a href="/user-profile" class="flex justify-between px-4 pt-4 pb-2 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
-                    <div class="flex gap-2 items-center">
-                        <i class="fa-solid fa-gear"></i>
-                        <p>Pengaturan Akun</p>
-                    </div>
-                    <i class="fa-solid fa-chevron-right"></i>
+                @if (auth()->user()->role == 'user')
+                <a href="" class="flex justify-center items-center h-[40px] w-[40px] relative">
+                    <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
+                    <span
+                        class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">18</span>
                 </a>
 
-                <a href="#" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
-                    <div class="flex gap-2 items-center">
-                        <i class="fa-solid fa-list"></i>
-                        <p>Riwayat Pesanan</p>
-                    </div>
-                    <i class="fa-solid fa-chevron-right"></i>
+                <button onclick="toggleProfile()"
+                    class="border-2 border-mainColor h-[35px] w-[35px] rounded-full flex justify-center items-center overflow-hidden relative">
+                    <i class="fa-solid fa-user text-3xl absolute top-1 text-mainColor"></i>
+                </button>
+                @elseif (auth()->user()->role == 'cashier' || auth()->user()->role == 'owner')
+                <a href="/dashboard" class="bg-mainColor text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
+                    Dashboard
                 </a>
 
-                <form action="/logout" method="POST" class="flex justify-center px-4 py-2 items-center bg-red-600 text-white">
+                <form action="/logout" method="POST" class="bg-red-500 text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
                     @csrf
-                    <button>Logout</button>
-                </form>       
-            </div>
-            {{-- USER DROPDOWN END --}}
+                    <button type="submit" class="w-full h-full">Logout</button>
+                </form>
+                @endif
 
+                {{-- USER DROPDOWN START --}}
+                <div class="absolute top-16 right-0 bg-white shadow-md shadow-semiBlack w-64 h-fit rounded-md overflow-hidden cursor-pointer font-medium hidden opacity-0 transition-opacity duration-200 ease-in-out" id="dropdownMenu">   
+                    <div class="border border-1 border-b-mediumGrey border-opacity-60 py-2 px-4 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-user text-3xl text-mainColor"></i>
+                        
+                        <div class="flex justify-center flex-col">
+                            <p class="font-semibold text-mainColor">{{ Auth()->user()->username }}</p>
+                            <p class="text-xs opacity-60">{{ Auth()->user()->email }}</p>
+                        </div>
+                    </div>
+
+                    <a href="/user-profile" class="flex justify-between px-4 pt-4 pb-2 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                        <div class="flex gap-2 items-center">
+                            <i class="fa-solid fa-gear"></i>
+                            <p>Pengaturan Akun</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+
+                    <a href="#" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                        <div class="flex gap-2 items-center">
+                            <i class="fa-solid fa-list"></i>
+                            <p>Riwayat Pesanan</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+
+                    <form action="/logout" method="POST" class="flex justify-center items-center bg-red-600 text-white">
+                        @csrf
+                        <button class="w-full h-full py-2 px-4">Logout</button>
+                    </form>
+                </div>
+                {{-- USER DROPDOWN END --}}
             @endguest   
         </div>
     </div>

@@ -15,7 +15,7 @@ class ProductController extends Controller
     public function home() {
         // last purcase
             if(Auth()->user()){
-                $products_last_purcase = SellingInvoice::where('customer_name', Auth()->user()->username)->orderBy('order_date', 'desc')->get();
+                $products_last_purcase = SellingInvoice::where('customer_id', Auth()->user()->user_id)->orderBy('order_date', 'desc')->get();
 
                 
                 if ($products_last_purcase->count() > 0) {
@@ -26,7 +26,7 @@ class ProductController extends Controller
                     }
 
                     foreach(collect($product_last_purcase) as $p){
-                        if(Product::where('product_name', $p->product_name)->first() != NULL){
+                        if(Product::where('product_name', $p->product_name)->where('product_stock', '>',  0)->first() != NULL){
                             $products[] = Product::where('product_name', $p->product_name)->get();
                         }else{
                             $products = NULL;
@@ -48,7 +48,7 @@ class ProductController extends Controller
 
             if ($products_best_seller->count() > 0) {
                 foreach($products_best_seller as $p){
-                    if(Product::where('product_name', $p->product_name)->first() != NULL){
+                    if(Product::where('product_name', $p->product_name)->where('product_stock', '>',  0)->first() != NULL){
                         $product_best_seller[] = Product::where('product_name', $p->product_name)->get();
                     }else{
                         $product_best_seller = NULL;
