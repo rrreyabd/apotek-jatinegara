@@ -30,7 +30,6 @@
             <form action="/hapus-akun" method="POST" class="flex justify-between items-center">
                 @csrf
                 <h1 class="text-2xl font-bold">Pengaturan Akun</h1>
-                <form action="">
                     <button onclick="deleteAccountFirstValidation()" type="button" class="bg-mediumRed text-white px-4 py-1 font-semibold text-lg rounded-lg">Hapus Akun</button>                
 
                     {{-- HAPUS AKUN MODAL START --}}
@@ -56,7 +55,6 @@
                     </div>
                     {{-- HAPUS AKUN MODAL KEDUA END --}}
                 </form>
-            </div>
 
             <div class="flex justify-between">
                 <form action="/user-profile" method="POST"
