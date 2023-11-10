@@ -13,9 +13,7 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            /* Center horizontally */
             align-items: center;
-            /* Center vertically */
             min-height: 100vh;
         }
 
@@ -82,12 +80,12 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Verifikasi Email Anda Berhasil!</h1>
-        <p>
-            Terima kasih telah mengonfirmasi alamat email Anda. Akun Anda sekarang telah diaktifkan dan siap digunakan.
-        </p>
-        <a href="{{ $actionUrl }}" class="button">Verifikasi</a>
+    <div class="container" style="background-color: #ffff; border-radius: 15px; padding: 20px; width: 90%; max-width: 400px; box-shadow: 0 0 10px rgba(4, 6, 4, 0.5); text-align: center;">
+
+        <h1 style="color: #333; font-weight: bold; text-align:center">Verifikasi Alamat Email Anda</h1>
+        <p style="color: #666;">Untuk mengonfirmasi alamat email Anda, silahkan klik tombol di bawah ini.</p>
+        <a href="{{ $actionUrl }}" class="button" style="display: inline-block; background-color: #F7A623; color: #fff; padding: 10px 20px; font-weight: 600; border-radius: 15px; text-decoration: none; font-size: 18px; margin-top: 20px;">Verifikasi</a>
+
     </div>
 </body>
 
