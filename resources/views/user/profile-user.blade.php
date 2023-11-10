@@ -112,7 +112,7 @@
                             <i class="text-7xl text-mainColor fa-solid fa-circle-question"></i>
                             <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin ingin mengubah data Anda?</p>
                             <button  onclick="showDataChangeValidation()" type="button" class="bg-mainColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Batalkan Perubahan</button>
-                            <button type="submit" class="bg-secondaryColor w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Ubah Data Saya</button>
+                            <button type="submit" class="bg-secondaryColor w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack" disabled id="btnDataChange">Ubah Data Saya</button>
                         </div>
                     </div>
                     {{-- UBAH DATA MODAL END --}}
@@ -191,8 +191,11 @@
         }
 
         const showDataChangeValidation = () => {
+            const button = document.getElementById("btnDataChange");
             const modal = document.getElementById('dataChangeModal');
 
+            button.disabled = false;
+        
             if (modal.classList.contains('hidden')) {
                 requestAnimationFrame(() => {
                     modal.classList.remove('hidden');
