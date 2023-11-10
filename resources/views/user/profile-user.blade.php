@@ -11,8 +11,13 @@
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
-<body class="font-Inter relative">
+<body class="font-Inter relative h-[100vh]">
     @include('user.components.secondNavbar')
 
     <div class="flex flex-col items-center mb-16">
@@ -25,8 +30,33 @@
             <form action="/hapus-akun" method="POST" class="flex justify-between items-center">
                 @csrf
                 <h1 class="text-2xl font-bold">Pengaturan Akun</h1>
-                <button class="bg-mediumRed text-white px-4 py-1 font-semibold text-lg rounded-lg">Hapus Akun</button>                
-            </form>
+                <form action="">
+                    <button onclick="deleteAccountFirstValidation()" type="button" class="bg-mediumRed text-white px-4 py-1 font-semibold text-lg rounded-lg">Hapus Akun</button>                
+
+                    {{-- HAPUS AKUN MODAL START --}}
+                    <div class="w-full h-full opacity-0 absolute top-0 left-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="deleteAccountModal">
+                        <div class="bg-white h-fit w-[30%] rounded-lg shadow-sm shadow-semiBlack py-10 px-8 flex flex-col gap-4 items-center text-center">
+                            <i class="text-7xl text-red-600 fa-solid fa-circle-exclamation"></i>
+                            <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin ingin menghapus akun Anda?</p>
+                            <button onclick="deleteAccountFirstValidation()" type="button" class="bg-secondaryColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Batalkan Perubahan</button>
+                            <button onclick="deleteAccountSecondValidation()" type="button" class="bg-red-600 w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Lanjutkan</button>
+                        </div>
+                    </div>
+                    {{-- HAPUS AKUN MODAL END --}}
+
+                    {{-- HAPUS AKUN MODAL KEDUA START --}}
+                    <div class="w-full h-full opacity-0 absolute top-0 left-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="deleteAccountSecondModal">
+                        <div class="bg-white h-fit w-[40%] rounded-lg shadow-sm shadow-semiBlack py-10 px-8 flex flex-col gap-4 items-center text-center">
+                            <i class="text-7xl text-red-600 fa-solid fa-circle-exclamation"></i>
+                            <p class="text-xl font-medium w-[80%]">Menghapus akun Anda mengakibatkan kehilangan akses ke semua data dan informasi yang terkait dengan akun tersebut.</p>
+                            <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin?</p>
+                            <button onclick="deleteAccountSecondValidation()" type="button" class="bg-secondaryColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Batalkan Perubahan</button>
+                            <button type="submit" class="bg-red-600 w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Hapus akun saya</button>
+                        </div>
+                    </div>
+                    {{-- HAPUS AKUN MODAL KEDUA END --}}
+                </form>
+            </div>
 
             <div class="flex justify-between">
                 <form action="/user-profile" method="POST"
@@ -76,7 +106,18 @@
                         class="border-2 h-12 px-4 rounded-xl bg-lightGrey text-slate-500">
                     </div>
 
-                    <button type="submit" class="w-48 bg-secondaryColor px-4 py-2 font-semibold text-lg text-white rounded-lg shadow-md shadow-semiBlack">Ubah Data</button>
+                    <button onclick="showDataChangeValidation()" type="button" class="w-48 bg-secondaryColor px-4 py-2 font-semibold text-lg text-white rounded-lg shadow-md shadow-semiBlack cursor-pointer">Ubah Data</button>
+
+                    {{-- UBAH DATA MODAL START --}}
+                    <div class="w-full h-full opacity-0 absolute top-0 left-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="dataChangeModal">
+                        <div class="bg-white h-fit w-[30%] rounded-lg shadow-sm shadow-semiBlack py-10 px-8 flex flex-col gap-4 items-center text-center">
+                            <i class="text-7xl text-mainColor fa-solid fa-circle-question"></i>
+                            <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin ingin mengubah data Anda?</p>
+                            <button  onclick="showDataChangeValidation()" type="button" class="bg-mainColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Batalkan Perubahan</button>
+                            <button type="submit" class="bg-secondaryColor w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Ubah Data Saya</button>
+                        </div>
+                    </div>
+                    {{-- UBAH DATA MODAL END --}}
                 </form>
 
                 <form action="/user-profile" method="POST"
@@ -162,13 +203,22 @@
                         @enderror
                     </div>
 
-                    <button type="submit" class="w-48 bg-secondaryColor px-4 py-2 font-semibold text-lg text-white rounded-lg shadow-md shadow-semiBlack">Ubah Sandi</button>
+                    <button onclick="showPassChangeValidation()" type="button" class="w-48 bg-secondaryColor px-4 py-2 font-semibold text-lg text-white rounded-lg shadow-md shadow-semiBlack">Ubah Sandi</button>
+
+                    {{-- UBAH DATA MODAL START --}}
+                    <div class="w-full h-full opacity-0 absolute top-0 left-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="passChangeModal">
+                        <div class="bg-white h-fit w-[30%] rounded-lg shadow-sm shadow-semiBlack py-10 px-8 flex flex-col gap-4 items-center text-center">
+                            <i class="text-7xl text-mainColor fa-solid fa-circle-question"></i>
+                            <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin ingin mengubah sandi Anda?</p>
+                            <button onclick="showPassChangeValidation()" type="button" class="bg-mainColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Batalkan Perubahan</button>
+                            <button type="submit" class="bg-secondaryColor w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Ubah Sandi Saya</button>
+                        </div>
+                    </div>
+                    {{-- UBAH DATA MODAL END --}}
                 </form>
             </div>
         </div>
     </div>
-
-    @include('user.components.footer')
 
     <script>
         function showPassword() {
@@ -190,6 +240,124 @@
                 toggle.classList.add('fa-eye');
             }
         }
+
+        const showDataChangeValidation = () => {
+            const modal = document.getElementById('dataChangeModal');
+
+            if (modal.classList.contains('hidden')) {
+                requestAnimationFrame(() => {
+                    modal.classList.remove('hidden');
+                    document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
+                    requestAnimationFrame(() => {
+                        modal.classList.add('opacity-100');
+                    });
+                });
+            } else {
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-100');
+                    document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
+                    requestAnimationFrame(() => {
+                        modal.classList.add('hidden');
+                    });
+                });
+            }
+        }
+
+        const showPassChangeValidation = () => {
+            const modal = document.getElementById('passChangeModal');
+
+            if (modal.classList.contains('hidden')) {
+                requestAnimationFrame(() => {
+                    modal.classList.remove('hidden');
+                    document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
+                    requestAnimationFrame(() => {
+                        modal.classList.add('opacity-100');
+                    });
+                });
+            } else {
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-100');
+                    document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
+                    requestAnimationFrame(() => {
+                        modal.classList.add('hidden');
+                    });
+                });
+            }
+        }
+
+        const showPasswordChangeValidation = () => {
+            const modal = document.getElementById('passwordChangeModal');
+
+            if (modal.classList.contains('hidden')) {
+                requestAnimationFrame(() => {
+                    modal.classList.remove('hidden');
+                    document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
+                    requestAnimationFrame(() => {
+                        modal.classList.add('opacity-100');
+                    });
+                });
+            } else {
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-100');
+                    document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
+                    requestAnimationFrame(() => {
+                        modal.classList.add('hidden');
+                    });
+                });
+            }
+        }
+
+        const deleteAccountFirstValidation = () => {
+            const modal = document.getElementById('deleteAccountModal');
+
+            if (modal.classList.contains('hidden')) {
+                requestAnimationFrame(() => {
+                    modal.classList.remove('hidden');
+                    document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
+                    requestAnimationFrame(() => {
+                        modal.classList.add('opacity-100');
+                    });
+                });
+            } else {
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-100');
+                    document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
+                    requestAnimationFrame(() => {
+                        modal.classList.add('hidden');
+                    });
+                });
+            }
+        }
+
+        const deleteAccountSecondValidation = () => {
+            const previousModal = document.getElementById('deleteAccountModal');
+
+            if (previousModal.classList.contains('hidden') == false) {
+                previousModal.classList.add('hidden')
+            }
+
+            const modal = document.getElementById('deleteAccountSecondModal');
+
+            if (modal.classList.contains('hidden')) {
+                requestAnimationFrame(() => {
+                    modal.classList.remove('hidden');
+                    document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
+                    requestAnimationFrame(() => {
+                        modal.classList.add('opacity-100');
+                    });
+                });
+            } else {
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-100');
+                    document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
+                    requestAnimationFrame(() => {
+                        modal.classList.add('hidden');
+                    });
+                });
+            }
+        }
+
+        
     </script>
 </body>
 </html>
