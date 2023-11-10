@@ -50,7 +50,7 @@
                             <p class="text-xl font-medium w-[80%]">Menghapus akun Anda mengakibatkan kehilangan akses ke semua data dan informasi yang terkait dengan akun tersebut.</p>
                             <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin?</p>
                             <button onclick="deleteAccountSecondValidation()" type="button" class="bg-secondaryColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Batalkan Perubahan</button>
-                            <button type="submit" class="bg-red-600 w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Hapus akun saya</button>
+                            <button type="submit" class="bg-red-600 w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack" disabled id="btnDeleteAccount">Hapus akun saya</button>
                         </div>
                     </div>
                     {{-- HAPUS AKUN MODAL KEDUA END --}}
@@ -58,7 +58,7 @@
 
             <div class="flex justify-between">
                 <form action="/user-profile" method="POST"
-                class="w-[48%] h-fit px-8 py-4 border-2 rounded-md border-lightGrey flex flex-col items-center gap-4">
+                class="w-[48%] h-fit px-8 py-4 border-2 rounded-md border-mediumGrey border-opacity-20 flex flex-col items-center gap-4">
                 @csrf
                     <input type="hidden" name="update" value="profile">
                     <p class="text-xl font-semibold">Profil Pengguna</p>
@@ -104,7 +104,7 @@
                         class="border-2 h-12 px-4 rounded-xl bg-lightGrey text-slate-500">
                     </div>
 
-                    <button onclick="showDataChangeValidation()" type="button" class="w-48 bg-secondaryColor px-4 py-2 font-semibold text-lg text-white rounded-lg shadow-md shadow-semiBlack cursor-pointer">Ubah Data</button>
+                    <button onclick="showDataChangeValidation()" type="button" class="w-fit bg-secondaryColor px-4 py-1 font-semibold text-lg text-white rounded-lg shadow-sm shadow-semiBlack cursor-pointer">Ubah Data</button>
 
                     {{-- UBAH DATA MODAL START --}}
                     <div class="w-full h-full opacity-0 absolute top-0 left-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="dataChangeModal">
@@ -112,14 +112,14 @@
                             <i class="text-7xl text-mainColor fa-solid fa-circle-question"></i>
                             <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin ingin mengubah data Anda?</p>
                             <button  onclick="showDataChangeValidation()" type="button" class="bg-mainColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Batalkan Perubahan</button>
-                            <button type="submit" class="bg-secondaryColor w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Ubah Data Saya</button>
+                            <button type="submit" class="bg-secondaryColor w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack" disabled id="btnDataChange">Ubah Data Saya</button>
                         </div>
                     </div>
                     {{-- UBAH DATA MODAL END --}}
                 </form>
 
                 <form action="/user-profile" method="POST"
-                class="w-[48%] h-fit px-8 py-4 border-2 rounded-md border-lightGrey flex flex-col items-center gap-4">
+                class="w-[48%] h-fit px-8 py-4 border-2 rounded-md border-mediumGrey border-opacity-20 flex flex-col items-center gap-4">
                     @csrf
                     <input type="hidden" name="update" value="password">
                     <p class="text-xl font-semibold">Ubah Kata Sandi</p>
@@ -201,7 +201,7 @@
                         @enderror
                     </div>
 
-                    <button onclick="showPassChangeValidation()" type="button" class="w-48 bg-secondaryColor px-4 py-2 font-semibold text-lg text-white rounded-lg shadow-md shadow-semiBlack">Ubah Sandi</button>
+                    <button onclick="showPassChangeValidation()" type="button" class="w-fit bg-secondaryColor px-4 py-1 font-semibold text-lg text-white rounded-lg shadow-sm shadow-semiBlack">Ubah Sandi</button>
 
                     {{-- UBAH DATA MODAL START --}}
                     <div class="w-full h-full opacity-0 absolute top-0 left-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="passChangeModal">
@@ -209,7 +209,7 @@
                             <i class="text-7xl text-mainColor fa-solid fa-circle-question"></i>
                             <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin ingin mengubah sandi Anda?</p>
                             <button onclick="showPassChangeValidation()" type="button" class="bg-mainColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Batalkan Perubahan</button>
-                            <button type="submit" class="bg-secondaryColor w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Ubah Sandi Saya</button>
+                            <button type="submit" class="bg-secondaryColor w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack" disabled id="btnPasswordChange">Ubah Sandi Saya</button>
                         </div>
                     </div>
                     {{-- UBAH DATA MODAL END --}}
@@ -241,8 +241,10 @@
 
         const showDataChangeValidation = () => {
             const modal = document.getElementById('dataChangeModal');
-
+            const button = document.getElementById("btnDataChange");
+        
             if (modal.classList.contains('hidden')) {
+                button.disabled = false;
                 requestAnimationFrame(() => {
                     modal.classList.remove('hidden');
                     document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
@@ -251,6 +253,7 @@
                     });
                 });
             } else {
+                button.disabled = true;
                 requestAnimationFrame(() => {
                     modal.classList.remove('opacity-100');
                     document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
@@ -263,8 +266,10 @@
 
         const showPassChangeValidation = () => {
             const modal = document.getElementById('passChangeModal');
+            const button = document.getElementById("btnPasswordChange");
 
             if (modal.classList.contains('hidden')) {
+                button.disabled = false;
                 requestAnimationFrame(() => {
                     modal.classList.remove('hidden');
                     document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
@@ -273,28 +278,7 @@
                     });
                 });
             } else {
-                requestAnimationFrame(() => {
-                    modal.classList.remove('opacity-100');
-                    document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
-                    requestAnimationFrame(() => {
-                        modal.classList.add('hidden');
-                    });
-                });
-            }
-        }
-
-        const showPasswordChangeValidation = () => {
-            const modal = document.getElementById('passwordChangeModal');
-
-            if (modal.classList.contains('hidden')) {
-                requestAnimationFrame(() => {
-                    modal.classList.remove('hidden');
-                    document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
-                    requestAnimationFrame(() => {
-                        modal.classList.add('opacity-100');
-                    });
-                });
-            } else {
+                button.disabled = true;
                 requestAnimationFrame(() => {
                     modal.classList.remove('opacity-100');
                     document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
@@ -335,8 +319,10 @@
             }
 
             const modal = document.getElementById('deleteAccountSecondModal');
+            const button = document.getElementById("btnDeleteAccount");
 
             if (modal.classList.contains('hidden')) {
+                button.disabled = false;
                 requestAnimationFrame(() => {
                     modal.classList.remove('hidden');
                     document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
@@ -345,6 +331,7 @@
                     });
                 });
             } else {
+                button.disabled = true;
                 requestAnimationFrame(() => {
                     modal.classList.remove('opacity-100');
                     document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
