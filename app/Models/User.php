@@ -16,7 +16,6 @@ class User extends Authenticatable implements MustVerifyEmail
     // untuk menggunakan uuid
     protected $primaryKey = 'user_id';
     public $incrementing = false;
-    public $timestamps = false;
 
     public function customer()
     {
@@ -62,4 +61,5 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
 }

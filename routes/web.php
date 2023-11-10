@@ -5,8 +5,15 @@ use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Models\BuyingInvoice;
 use App\Models\Cashier;
+use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Group;
+use App\Models\Product;
+use App\Models\ProductDetail;
+use App\Models\SellingInvoice;
+use App\Models\Supplier;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +28,13 @@ use App\Models\Customer;
 
 
 Route::get('/test', function () {
-    dd(User::where('role','cashier')->first()->cashier);
+    $buyingInvoices = BuyingInvoice::where('supplier_name', 'PT. consectetur architecto aut voluptates')->first()->buyinginvoicedetail->pluck('product_name');
+
+    echo($buyingInvoices);
+
+    // $hasi = Group::where('group', 'repellendus')->first()->group_id;
+    // $hasil = ProductDetail::where('group_id', $hasi)->get();
+    // echo($hasil);
 });
 
 Route::controller(GoogleController::class)->group(function() {
@@ -29,11 +42,16 @@ Route::controller(GoogleController::class)->group(function() {
     Route::get('auth/google/callback','handleGoogleCallback');
 });
 
-Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
-    Route::get('/', function () {
+Route::get('/', function () {
         return view('user.index');
     });
-    
+
+Route::get('/produk', function () {
+        return view('user.products');
+    });
+
+Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
+
 });
 
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
