@@ -20,7 +20,7 @@ class ProductDetailFactory extends Factory
      */
     public function definition(): array
     {
-            $categories_id = Category::all()->pluck('category_id');
+        $categories_id = Category::all()->pluck('category_id');
         $category_id = fake()->randomElement($categories_id);
 
         $units_id = Unit::all()->pluck('unit_id');
@@ -33,6 +33,7 @@ class ProductDetailFactory extends Factory
         $supplier_id = fake()->randomElement($suppliers_id);
 
         return [
+            'detail_id' => fake()->uuid,
             'category_id' => $category_id,
             'unit_id' => $unit_id,
             'group_id' => $group_id,

@@ -38,9 +38,15 @@
                     type="text" placeholder="Username">
                     
                     @error('username')
-                        <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
-                            {{ $message }}
-                        </div>
+                        @if ($message == 'The username field format is invalid.')
+                            <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
+                                The username field must not contain spaces (" ").
+                            </div>
+                        @else
+                            <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
+                                {{ $message }}
+                            </div>
+                        @endif
                     @enderror
                 </div>
                 
