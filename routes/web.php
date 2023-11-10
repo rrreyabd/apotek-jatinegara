@@ -78,4 +78,8 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->group(function () {
     
 });
 
+Route::get('/404', function () {
+    return view('user.404');
+});
+
 require __DIR__.'/auth.php';

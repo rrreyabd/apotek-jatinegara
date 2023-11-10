@@ -7,7 +7,7 @@
                 @if ($products_last_purcase->first() != NULL)
                 {{-- @dd($products_last_purcase->take(1)); --}}
                 @foreach ($products_last_purcase as $product)
-                <div class="h-fit w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
+                <div class="h-full w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
                     <a @if ($product->first()->product_stock != 0) href="" @endif>
                         <div class="px-2 w-full">
                             <p class="font-semibold text-lg namaObat flex whitespace-normal break-words">{{ $product->first()->product_name }}</p>

@@ -6,7 +6,7 @@
             <div class="flex flex-wrap justify-center gap-4">
                 @if ($products_best_seller->first() != NULL)
                 @foreach ($products_best_seller as $product)
-                <div class="h-fit w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
+                <div class="h-full w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
                     <a @if ($product->first()->product_stock != 0) href="" @endif>
                         <div class="px-2 w-full">
                             <p class="font-semibold text-lg namaObat flex whitespace-normal break-words">{{ $product->first()->product_name }}</p>
@@ -54,7 +54,7 @@
     const obatText = obatElement[i].textContent;
 
     if (obatText.length > 18) {
-        obatElement[i].textContent = obatText.slice(0, 17) + "...";
+        obatElement[i].textContent = obatText.slice(0, 16) + "...";
     }
     }
 </script>
