@@ -69,6 +69,42 @@
             </div>
             {{-- USER DROPDOWN END --}}
 
+            {{-- <div class="absolute top-16 right-0 bg-white shadow-md shadow-semiBlack w-64 h-fit rounded-md overflow-hidden cursor-pointer font-medium hidden opacity-0 transition-opacity duration-200 ease-in-out" id="dropdownMenu">   
+                <div class="border border-1 border-b-mediumGrey border-opacity-60 py-2 px-4 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-user text-3xl text-mainColor"></i>
+                    
+                    <div class="flex justify-center flex-col">
+                        <p class="font-semibold text-mainColor">{{ Auth()->user()->username }}</p>
+                        <p class="text-xs opacity-60">{{ Auth()->user()->email }}</p>
+                    </div>
+                </div>
+
+                <a href="/user-profile" class="flex justify-between px-4 pt-4 pb-2 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                    <div class="flex gap-2 items-center">
+                        <i class="fa-solid fa-gear"></i>
+                        <p>Pengaturan Akun</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+
+                <a href="#" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                    <div class="flex gap-2 items-center">
+                        <i class="fa-solid fa-list"></i>
+                        <p>Riwayat Pesanan</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+
+                <form action="/logout" method="POST" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition text-red-600">
+                    @csrf
+                    <div class="flex gap-2 items-center">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <p>Logout</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </form>
+            </div> --}}
+
             @endguest   
         </div>
     </div>
