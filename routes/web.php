@@ -34,12 +34,9 @@ Route::get('/test', function () {
         $number = intval(str_replace("INV-", "", $produk_id)) + 1;
 
     echo('INV-'. str_pad($number, 6, '0', STR_PAD_LEFT));
-
-    // $hasi = Group::where('group', 'repellendus')->first()->group_id;
-    // $hasil = ProductDetail::where('group_id', $hasi)->get();
-    // echo($hasil);
 });
 
+// halaman akses tanpa login
 Route::controller(GoogleController::class)->group(function() {
     Route::get('auth/google', 'redirectToGoogle')->name('auth.goole');
     Route::get('auth/google/callback','handleGoogleCallback');
@@ -50,10 +47,18 @@ Route::get('/', [ProductController::class, 'home'])->name('home');
 Route::get('/produk', function () {
         return view('user.products');
 });
+// akhir halaman akses tanpa login
 
+// halama user, cashier, owner
+Route::middleware(['auth', 'verified', 'cekRole:user,cashies,owner'])->group(function () {
+});
+// akhir halaman user, cashier, owner
+
+// halaman user
 Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/user-profile', [UserController::class, 'profile'])->name('profile-user');
-    Route::post('/user-profile', [UserController::class, 'ubahProfile'])->name('change-profile');
+    Route::post('/user-profile', [UserController::class, 'ubah'])->name('change-profile');
+    Route::post('/hapus-akun', [UserController::class, 'hapus'])->name('delete-profile');
 
     Route::get('/pembayaran', function () {
         return view('user.pembayaran');
@@ -63,23 +68,24 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
             return view('user.detail-pesanan');
     });
 });
+// akhir halaman user
 
+// halaman cashier
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
     Route::get('/cashier', function () {
         return view('kasir.index');
     });
     
 });
+// akhir halaman cashier
 
+// halaman owner
 Route::middleware(['auth', 'verified', 'cekRole:owner'])->group(function () {
     Route::get('/owner', function () {
         return view('pemilik.index');
     });
     
 });
-
-Route::get('/404', function () {
-    return view('user.404');
-});
+// akhir halaman owner
 
 require __DIR__.'/auth.php';

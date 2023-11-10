@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>404 :(</title>
+    <title>404</title>
     @vite('resources/css/app.css')
 
     {{-- FONT AWESOME --}}
@@ -19,9 +19,7 @@
         <p class="font-Inter text-2xl font-extrabold">404 - HALAMAN TIDAK TERSEDIA</p>
         <p class="font-medium w-96 text-center">Halaman yang anda cari mungkin sudah dihapus, berubah penamaan, atau sedang tidak tersedia.</p>
 
-        <form action="/" method="GET">
-            <button class="px-8 py-3 bg-mainColor font-semibold text-lg rounded-full text-white shadow-md shadow-semiBlack">Kembali ke Website</button>
-        </form>
+        <a href="/" class="px-8 py-3 bg-mainColor font-semibold text-lg rounded-full text-white shadow-md shadow-semiBlack">Kembali ke Website</a>
     </div>
 </body>
 </html>
