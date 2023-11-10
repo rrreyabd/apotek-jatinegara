@@ -17,7 +17,6 @@ class ProductController extends Controller
             if(Auth()->user()){
                 $products_last_purcase = SellingInvoice::where('customer_id', Auth()->user()->user_id)->orderBy('order_date', 'desc')->get();
 
-                
                 if ($products_last_purcase->count() > 0) {
                     foreach($products_last_purcase as $product){
                         foreach($product->sellinginvoicedetail as $p){
@@ -41,6 +40,7 @@ class ProductController extends Controller
         // akhir last purcase
 
         // banyak dicari
+            // ubah jadi view
             $products_best_seller = SellingInvoiceDetail::select('product_name', DB::raw('COUNT(*) as jumlah_kemunculan'))
             ->groupBy('product_name')
             ->OrderBy('jumlah_kemunculan', 'DESC')

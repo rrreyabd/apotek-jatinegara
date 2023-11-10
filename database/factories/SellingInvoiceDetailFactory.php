@@ -29,8 +29,8 @@ class SellingInvoiceDetailFactory extends Factory
             'selling_detail_id' => fake()->uuid,
             'selling_invoice_id' => $id,
             'product_name' => $product_name,
-            'product_sell_price' => fake()->numberBetween(1000,1000000),
-            'quantity' => fake()->numberBetween(1, 100),
+            'product_sell_price' => fake()->numberBetween(1000,100000),
+            'quantity' => fake()->numberBetween(1, 20),
         ];
     }
 }

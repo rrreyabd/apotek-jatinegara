@@ -43,7 +43,7 @@
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
 
-                <a href="#" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                <a href="/riwayat-pesanan" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
                     <div class="flex gap-2 items-center">
                         <i class="fa-solid fa-list"></i>
                         <p>Riwayat Pesanan</p>

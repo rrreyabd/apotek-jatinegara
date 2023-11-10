@@ -67,6 +67,10 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/detail-pesanan', function () {
             return view('user.detail-pesanan');
     });
+
+    Route::get('/riwayat-pesanan', [UserController::class,'riwayatTransaksi'])->name('riwayat-transaksi');
+
+    Route::get('/detail-riwayat-pesanan', [UserController::class,'detailRiwayatTransaksi'])->name('detail-riwayat-transaksi');
 });
 // akhir halaman user
 
