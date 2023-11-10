@@ -51,10 +51,10 @@
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
 
-                <form action="/logout" method="POST" class="flex justify-center px-4 py-2 items-center bg-red-600 text-white">
+                <form action="/logout" method="POST" class="flex justify-center items-center bg-red-600 text-white">
                     @csrf
-                    <button>Logout</button>
-                </form>       
+                    <button class="w-full h-full py-2 px-4">Logout</button>
+                </form>      
             </div>
             {{-- USER DROPDOWN END --}}
             @endguest

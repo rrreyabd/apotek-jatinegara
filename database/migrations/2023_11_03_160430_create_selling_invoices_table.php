@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('selling_invoice_id')->primary();
             $table->string('invoice_code', 20)->unique();
             $table->string('cashier_name', 100);
+            $table->char('customer_id',36);
             $table->string('customer_name',100)->nullable();
             $table->string('customer_phone',14)->nullable();
             $table->string('customer_file')->nullable();

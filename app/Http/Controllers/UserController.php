@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -14,11 +17,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function ubahProfile(Request $request) {
-        if($request->username == auth()->user()->username && $request->nohp == auth()->user()->customer->customer_phone) {
-            return redirect()->route('profile-user');
-        } else {
-            if ($request->username == auth()->user()->username) {
+    public function ubah(Request $request) {
+        if ($request->update == 'profile') {
+
+            if($request->username == auth()->user()->username && $request->nohp == auth()->user()->customer->customer_phone) {
+                return redirect()->route('profile-user');
+            } else {
+                if ($request->username == auth()->user()->username) {
                 $validated_data = $request->validate([
                     'username' => ['required', 'string', 'min:5', 'regex:/^[^\s]+$/', 'max:255'],
                     'nohp' => ['numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
@@ -31,9 +36,39 @@ class UserController extends Controller
             }
             auth()->user()->update(['username' => $validated_data['username']]);
             auth()->user()->customer->update(['customer_phone' => $validated_data['nohp']]);
-    
-            return redirect()->route('profile-user')->with('success','Berhasil Mengubah Data');
-        }
+            
+            return redirect()->route('profile-user')->with('success_profile','Berhasil Mengubah Data');
+            }
 
+        } else if($request->update == 'password'){
+
+            $validated_data = $request->validate([
+                'password_lama' => 'required|min:8|regex:/^[^\s]+$/',
+                'password_baru' => 'required|min:8|regex:/^[^\s]+$/',
+                'konfirmasi_password_baru' => 'required|min:8|same:password_baru|regex:/^[^\s]+$/'
+            ]);
+
+            if (Hash::check($request->password_lama, auth()->user()->password)) {
+                auth()->user()->update([
+                    'password' => bcrypt($request->password_baru)
+                ]);
+
+                return redirect()->back()->with('success_password', 'Password Berhasil Diubah!!');
+            }
+
+            return redirect()->back()->with('error', 'Konfirmasi Password Lama Salah!!');
+        }
+    }
+
+    public function hapus(Request $request): RedirectResponse{
+        $username = Auth()->user()->username;
+
+        Auth()->guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        User::where('username', $username)->delete();
+
+        return redirect('/');
     }
 }

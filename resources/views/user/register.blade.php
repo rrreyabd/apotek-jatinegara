@@ -61,9 +61,15 @@
                         <i class="fa-solid fa-eye text-white" id="toggle"></i>
                     </button>
                     @error('password')
+                    @if ($message == 'The password field format is invalid.')
+                        <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
+                            The password field must not contain spaces (" ").
+                        </div>
+                    @else
                         <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
                             {{ $message }}
                         </div>
+                    @endif
                     @enderror
                 </div>
 
@@ -78,9 +84,15 @@
                         <i class="fa-solid fa-eye text-white" id="toggleConfirm"></i>
                     </button>
                     @error('konfirmasiPassword')
+                    @if ($message == 'The konfirmasi password field format is invalid.')
+                        <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
+                            The konfirmasi field must not contain spaces (" ").
+                        </div>
+                    @else
                         <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
                             {{ $message }}
                         </div>
+                    @endif
                     @enderror
                 </div>
 
