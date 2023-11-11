@@ -1,64 +1,91 @@
 <nav class="shadow-lg h-16 w-full flex justify-center bg-white z-50 fixed" id="navbar">
-    <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between">
-        <a href="/" class="text-mainColor font-TripBold text-3xl">Apotek</a>
+    <div class="relative w-full flex justify-center">
+        <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between relative">
+            <a href="/" class="text-mainColor font-TripBold text-3xl">Apotek</a>
 
-        <div class="flex gap-4 justify-center items-center relative">
-            @guest
-            <a href="login" class="text-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor h-[35px] px-3 rounded-lg">
-                Masuk
-            </a>
-
-            <a href="register" class="bg-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor text-white h-[35px] px-3 rounded-lg">
-                Daftar
-            </a>
-
-            @else
-            <a href="" class="flex justify-center items-center h-[40px] w-[40px] relative">
-                <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
-                <span
-                    class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">18</span>
-            </a>
-            
-            <button onclick="toggleProfile()"
-                class="border-2 border-mainColor h-[35px] w-[35px] rounded-full flex justify-center items-center overflow-hidden relative">
-                <i class="fa-solid fa-user text-3xl absolute top-1 text-mainColor"></i>
-            </button>
-
-            {{-- USER DROPDOWN START --}}
-            <div class="absolute top-16 right-0 bg-white shadow-md shadow-semiBlack w-64 h-fit rounded-md overflow-hidden cursor-pointer font-medium hidden opacity-0 transition-opacity duration-200 ease-in-out" id="dropdownMenu">   
-                <div class="border border-1 border-b-mediumGrey border-opacity-60 py-2 px-4 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-user text-3xl text-mainColor"></i>
-                    
-                    <div class="flex justify-center flex-col">
-                        <p class="font-semibold text-mainColor">{{ Auth()->user()->username }}</p>
-                        <p class="text-xs opacity-60">{{ Auth()->user()->email }}</p>
-                    </div>
-                </div>
-
-                <a href="/user-profile" class="flex justify-between px-4 pt-4 pb-2 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
-                    <div class="flex gap-2 items-center">
-                        <i class="fa-solid fa-gear"></i>
-                        <p>Pengaturan Akun</p>
-                    </div>
-                    <i class="fa-solid fa-chevron-right"></i>
+            <div class="flex gap-4 justify-center items-center relative">
+                @guest
+                {{-- JIKA USER BELUM LOGIN --}}
+                <a href="login"
+                    class="text-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor h-[35px] px-3 rounded-lg">
+                    Masuk
                 </a>
 
-                <a href="#" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
-                    <div class="flex gap-2 items-center">
-                        <i class="fa-solid fa-list"></i>
-                        <p>Riwayat Pesanan</p>
-                    </div>
-                    <i class="fa-solid fa-chevron-right"></i>
+                <a href="register"
+                    class="bg-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor text-white h-[35px] px-3 rounded-lg">
+                    Daftar
                 </a>
+                @else
+                {{-- JIKA USER SUDAH LOGIN --}}
+                    @if (auth()->user()->role == 'user')
+                    <a href="" class="flex justify-center items-center h-[40px] w-[40px] relative">
+                        <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
+                        <span
+                            class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">18</span>
+                    </a>
 
-                <form action="/logout" method="POST" class="flex justify-center items-center bg-red-600 text-white">
-                    @csrf
-                    <button class="w-full h-full py-2 px-4">Logout</button>
-                </form>      
+                    <button onclick="toggleProfile()"
+                        class="border-2 border-mainColor h-[35px] w-[35px] rounded-full flex justify-center items-center overflow-hidden relative">
+                        <i class="fa-solid fa-user text-3xl absolute top-1 text-mainColor"></i>
+                    </button>
+                    @elseif (auth()->user()->role == 'cashier' || auth()->user()->role == 'owner')
+                    <a href="/dashboard" class="bg-mainColor text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
+                        Dashboard
+                    </a>
+
+                    <form action="/logout" method="POST" class="bg-red-500 text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
+                        @csrf
+                        <button type="submit" class="w-full h-full">Logout</button>
+                    </form>
+                    @endif
+
+                    {{-- USER DROPDOWN START --}}
+                    <div class="absolute top-16 right-0 bg-white shadow-md shadow-semiBlack w-64 h-fit rounded-md overflow-hidden cursor-pointer font-medium hidden opacity-0 transition-opacity duration-200 ease-in-out" id="dropdownMenu">   
+                        <div class="border border-1 border-b-mediumGrey border-opacity-60 py-2 px-4 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-user text-3xl text-mainColor"></i>
+                            
+                            <div class="flex justify-center flex-col">
+                                <p class="font-semibold text-mainColor">{{ Auth()->user()->username }}</p>
+                                <p class="text-xs opacity-60">{{ Auth()->user()->email }}</p>
+                            </div>
+                        </div>
+
+                        <a href="/user-profile" class="flex justify-between px-4 pt-4 pb-2 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                            <div class="flex gap-2 items-center">
+                                <i class="fa-solid fa-gear"></i>
+                                <p>Pengaturan Akun</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+
+                        <a href="#" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                            <div class="flex gap-2 items-center">
+                                <i class="fa-solid fa-list"></i>
+                                <p>Riwayat Pesanan</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+
+                        <div class="flex justify-center items-center bg-red-600 text-white">
+                            <button onclick="logoutAlert()" type="button" class="w-full h-full py-2 px-4">Logout</button>
+                        </div>
+                    </div>
+                    {{-- USER DROPDOWN END --}}
+
+                @endguest   
             </div>
-            {{-- USER DROPDOWN END --}}
-            @endguest
         </div>
+        {{-- LOGOUT ALERT START --}}
+        <form action="/logout" method="POST" class="w-screen h-screen opacity-0 absolute top-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="logoutAlertPopUp">
+            @csrf
+            <div class="bg-white h-fit w-[30%] rounded-lg shadow-sm shadow-semiBlack py-10 px-8 flex flex-col gap-4 items-center text-center">
+                <i class="text-7xl text-mainColor fa-solid fa-circle-question"></i>
+                <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin ingin keluar dari akun Anda?</p>
+                <button onclick="logoutAlert()" type="button" class="bg-mainColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Kembali</button>
+                <button type="submit" class="bg-mediumRed w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack" disabled id="btnLogout">Keluar</button>
+            </div>
+        </form>  
+        {{-- LOGOUT ALERT END --}}
     </div>
 </nav>
 
@@ -95,4 +122,29 @@
             menu.classList.add('opacity-0');
         }
     });
+
+    const logoutAlert = () => {
+        const modal = document.getElementById('logoutAlertPopUp');
+        const button = document.getElementById("btnLogout");
+
+        if (modal.classList.contains('hidden')) {
+            button.disabled = false;
+            requestAnimationFrame(() => {
+                modal.classList.remove('hidden');
+                document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
+                requestAnimationFrame(() => {
+                    modal.classList.add('opacity-100');
+                });
+            });
+        } else {
+            button.disabled = true;
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-100');
+                document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
+                requestAnimationFrame(() => {
+                    modal.classList.add('hidden');
+                });
+            });
+        }
+    }
 </script>
