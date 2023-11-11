@@ -36,7 +36,7 @@
                     <i class="fa-solid fa-user text-3xl absolute top-1 text-mainColor"></i>
                 </button>
                 @elseif (auth()->user()->role == 'cashier' || auth()->user()->role == 'owner')
-                <a href="/dashboard" class="bg-mainColor text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
+                <a href="/{{ auth()->user()->role }}" class="bg-mainColor text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
                     Dashboard
                 </a>
 

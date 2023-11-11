@@ -69,8 +69,9 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     });
 
     Route::get('/riwayat-pesanan', [UserController::class,'riwayatTransaksi'])->name('riwayat-transaksi');
-
     Route::get('/detail-riwayat-pesanan', [UserController::class,'detailRiwayatTransaksi'])->name('detail-riwayat-transaksi');
+
+    Route::get('/produk', [ProductController::class,'produk'])->name('produk');
 });
 // akhir halaman user
 
