@@ -3,6 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Cashier;
+use App\Models\Customer;
+use App\Models\SellingInvoice;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,10 +20,21 @@ class SellingInvoiceFactory extends Factory
      */
     public function definition(): array
     {
+        $produk_id = SellingInvoice::orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();
+        $number = intval(str_replace("INV-", "", $produk_id)) + 1;
+
+        $customers = User::where('role', 'user')->pluck('username')->all();
+        $customer = fake()->randomElement($customers);
+
+        $customers_id = User::where('role', 'user')->pluck('user_id')->all();
+        $customer_id = fake()->randomElement($customers_id);
+
         return [
             'selling_invoice_id' => fake()->uuid,
+            'invoice_code' => 'INV-'. str_pad($number, 6, '0', STR_PAD_LEFT),
             'cashier_name' => Cashier::first()->user->username,
-            'customer_name' => fake()->words(2, true),
+            'customer_id'=> $customer_id,
+            'customer_name' => $customer,
             'customer_phone' => '08'.strval(fake()->numberBetween(1000000000, 9999999999)),
             'customer_file'=> fake()->word().'.jpg',
             'customer_request' => fake()->words(10, true),

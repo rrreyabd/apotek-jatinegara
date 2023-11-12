@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-
+    protected $primaryKey = 'product_id';
     public $incrementing = false;
 
     protected $fillable = [
@@ -26,5 +26,10 @@ class Product extends Model
     public function detail()
     {
         return $this->belongsTo(ProductDetail::class, 'detail_id');
+    }
+
+    public function cart()
+    {
+        return $this->hasMany(Cart::class, 'product_id');
     }
 }

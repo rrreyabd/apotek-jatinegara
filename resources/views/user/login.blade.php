@@ -24,6 +24,12 @@
             <div class="w-[45%] flex flex-col items-center gap-4 justify-center">
                 <p class="font-TripBold text-6xl">Masuk</p>
 
+                @error('loginError')
+                    <div class="text-md text-red-500 mt-1 ms-3 mb-0 text-left">
+                        {{ $message }}
+                    </div>
+                @enderror
+
                 @if (session('status') == 'verification-email')
                     <div class="text-sm text-mainColor mt-1 ms-3 mb-0 text-center">
                         {{ __('Link Verifikasi Telah Dikirimkan Ke Email Anda') }}
@@ -63,12 +69,6 @@
                     <a href="forgot-email" 
                     class="underline text-secondaryColor">Lupa sandi</a>
                 </div>
-                
-                @error('loginError')
-                    <div class="text-md text-red-500 mt-1 ms-3 mb-0 text-left">
-                        {{ $message }}
-                    </div>
-                @enderror
 
                 <button
                 class="w-[350px] h-[50px] p-4 m-0 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack bg-secondaryColor font-TripBold text-white flex justify-center items-center text-xl"

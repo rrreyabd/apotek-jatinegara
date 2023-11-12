@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use App\Models\SellingInvoice;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,12 +21,16 @@ class SellingInvoiceDetailFactory extends Factory
         $selling_id = SellingInvoice::pluck('selling_invoice_id')->all();
         $id = fake()->randomElement($selling_id);
 
+        // $product_name = Product::pluck('product_name')->all();
+        $products_name = Product::all()->pluck('product_name');
+        $product_name = fake()->randomElement($products_name);
+
         return [
             'selling_detail_id' => fake()->uuid,
             'selling_invoice_id' => $id,
-            'product_name' => fake()->words(2,true),
-            'product_sell_price' => fake()->numberBetween(1000,1000000),
-            'quantity' => fake()->numberBetween(1, 100),
+            'product_name' => $product_name,
+            'product_sell_price' => fake()->numberBetween(1000,100000),
+            'quantity' => fake()->numberBetween(1, 20),
         ];
     }
 }

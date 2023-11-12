@@ -5,62 +5,226 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Category;
+use App\Models\Group;
+use App\Models\SellingInvoice;
+use App\Models\SellingInvoiceDetail;
+use App\Models\Unit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    public function home() {
+        // last purcase
+            if(Auth()->user()){
+                $products_last_purcase = SellingInvoice::where('customer_id', Auth()->user()->user_id)->orderBy('order_date', 'desc')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+                
+                if ($products_last_purcase->count() > 0) {
+                    foreach($products_last_purcase as $product){
+                        foreach($product->sellinginvoicedetail as $p){
+                            $product_last_purcase[] = $p;
+                        }
+                    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreProductRequest $request)
-    {
-        //
-    }
+                    foreach(collect($product_last_purcase) as $p){
+                        if(Product::where('product_name', $p->product_name)->where('product_stock', '>',  0)->first() != NULL){
+                            $products[] = Product::where('product_name', $p->product_name)->get();
+                        }
+                    }
+                } else {
+                    $products = NULL;
+                }
+            } else {
+                $products = NULL;
+            }
+        // akhir last purcase
+        
+        // banyak dicari
+            // ubah jadi view
+            $products_best_seller = SellingInvoiceDetail::select('product_name', DB::raw('COUNT(*) as jumlah_kemunculan'))
+            ->groupBy('product_name')
+            ->OrderBy('jumlah_kemunculan', 'DESC')
+            ->get();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
+            if ($products_best_seller->count() > 0) {
+                foreach($products_best_seller as $p){
+                    if(Product::where('product_name', $p->product_name)->where('product_stock', '>',  0)->first() != NULL){
+                        // echo(collect(Product::where('product_name', $p->product_name)->first()));
+                        $product_best_seller[] = Product::where('product_name', $p->product_name)->get();
+                    }
+                }
+            } else {
+                $product_best_seller = NULL;
+            }
+        // akhir banyak dicari
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProductRequest $request, Product $product)
-    {
-        //
+        return view("user.index", [
+            "title"=> "Apotek | Home",
+            "categories"=> Category::orderBy('category')->get() ?? [],
+            "products_last_purcase"=> collect($products ?? [])->take(5),
+            "products_best_seller" => collect($product_best_seller ?? [])->take(5),
+        ]);
     }
+    
+    public function produk(Request $request) {
+        $categories = Category::orderBy('category')->get();
+        $groups = Group::orderBy('group')->get();
+        $units = Unit::orderBy('unit')->get();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
-    {
-        //
+        $all_product = Product::all();
+
+        // filter kategori
+        if ($request->kategori) {
+            if (Category::where('category', $request->kategori)->first() != NULL) {
+                // ubah menjadi view
+                $product = Product::whereHas('detail.category', function ($query) use ($request) { 
+                    $query->where('category', $request->kategori);
+                });
+            }else{
+                $product = NULL;
+            }
+        }
+        // akhir filter kategori
+
+        // filter group
+        if ($request->golongan) {
+            if (Group::where('group', $request->golongan)->first() != NULL) {
+                // ubah menjadi view
+                if($request->kategori) {
+                    $product = $product->whereHas('detail.group', function ($query) use ($request) {
+                        $query->where('group', $request->golongan);
+                    });
+                }else{
+                    $product = Product::whereHas('detail.group', function ($query) use ($request) { 
+                        $query->where('group', $request->golongan);
+                    });
+                }
+            }else{
+                $product = NULL;
+            }
+        }
+        // akhir filter group
+
+        // filter unit
+        if ($request->bentuk) {
+            if (Unit::where('unit', $request->bentuk)->first() != NULL) {
+                // ubah menjadi view
+                if($request->golongan) {
+                    $product = $product->whereHas('detail.unit', function ($query) use ($request) {
+                        $query->where('unit', $request->bentuk);
+                    });
+                }elseif($request->kategori){
+                    $product = $product->whereHas('detail.unit', function ($query) use ($request) {
+                        $query->where('unit', $request->bentuk);
+                    });
+                }else{
+                    $product = Product::whereHas('detail.unit', function ($query) use ($request) { 
+                        $query->where('unit', $request->bentuk);
+                    });
+                }
+            }else{
+                $product = NULL;
+            }
+        }
+        // akhir filter unit
+
+        // filter harga
+        if ($request->maksimum || $request->minimum) {
+            if ($request->maksimum) {
+                if($request->golongan || $request->kategori || $request->bentuk) {
+                    $product = $product->where('product_sell_price', '<=', $request->maksimum);
+                }else{
+                    $product = Product::where('product_sell_price', '<=', $request->maksimum);
+                }
+            }
+            
+            if ($request->minimum){
+                if($request->golongan || $request->kategori || $request->bentuk || $request->maksimum) {
+                    $product = $product->where('product_sell_price', '>=', $request->minimum);
+                }else{
+                    $product = Product::where('product_sell_price', '>=', $request->minimum);
+                }
+            }
+        }
+        // akhir filter harga
+
+        // filter
+        if ($request->filter) {
+            if ($request->filter == "Popular") {
+                if($request->golongan || $request->kategori || $request->bentuk || $request->maksimum || $request->minimum) {
+                    $product = Product::join('Selling_Invoice_Details', 'Products.product_name', '=', 'Selling_Invoice_Details.product_name')
+                    ->whereIn('Products.product_name', $product->pluck('product_name')->toArray())
+                    ->select('Products.*', DB::raw('COUNT(Selling_Invoice_Details.product_name) as jumlah_kemunculan'))
+                    ->groupBy('Products.product_id', 'Products.product_code', 'Products.detail_id', 'Products.product_name', 'Products.product_sell_price', 'Products.product_stock')
+                    ->orderBy('jumlah_kemunculan', 'DESC');
+                }else{
+                    $product = Product::join('Selling_Invoice_Details', 'Products.product_name', '=', 'Selling_Invoice_Details.product_name')
+                    ->select('Products.*', DB::raw('COUNT(Selling_Invoice_Details.product_name) as jumlah_kemunculan'))
+                    ->groupBy('Products.product_id', 'Products.product_code', 'Products.detail_id', 'Products.product_name', 'Products.product_sell_price', 'Products.product_stock')
+                    ->orderBy('jumlah_kemunculan', 'DESC');
+                }
+            }
+            
+            if ($request->filter == "Nama A - Z"){
+                if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
+                    $product = $product->orderBy('product_name');
+                }else{
+                    $product = Product::orderBy('product_name');
+                }
+            }
+
+            if ($request->filter == "Nama Z - A"){
+                if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
+                    $product = $product->orderBy('product_name', 'DESC');
+                }else{
+                    $product = Product::orderBy('product_name', 'DESC');
+                }
+            }
+
+            if ($request->filter == "Harga Tinggi - Rendah"){
+                if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
+                    $product = $product->orderBy('product_sell_price', 'DESC');
+                }else{
+                    $product = Product::orderBy('product_sell_price', 'DESC');
+                }
+            }
+
+            if ($request->filter == "Harga Rendah - Tinggi"){
+                if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
+                    $product = $product->orderBy('product_sell_price');
+                }else{
+                    $product = Product::orderBy('product_sell_price');
+                }
+            }
+        }
+        // akhir filter
+
+        // filter cari
+        if ($request->cari) {
+                if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum || $request->filter) {
+                    $product = $product->where('Products.product_name', 'like' ,"%". $request->cari ."%");
+                }else{
+                    $product = Product::where('product_name', 'like' ,"%". $request->cari ."%");
+                }
+        }
+        // akhir filter cari
+            
+        if(isset($product)) {
+            $product = $product->paginate(9)->withQueryString();
+        }else{
+            $product = Product::paginate(9)->withQueryString();
+        }
+        
+
+        return view("user.products", [
+            "products"=> $product ?? NULL,
+            "all_products" => $all_product ?? [],
+            "categories"=> $categories ?? [],
+            "units"=> $units ?? [],
+            "groups"=> $groups ?? [],
+        ]);
     }
 }

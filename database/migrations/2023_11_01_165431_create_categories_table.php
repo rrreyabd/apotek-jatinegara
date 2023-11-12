@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->uuid('category_id')->primary();
             $table->string('category', 100)->unique()->notNullable();
+            $table->string('category_image',255);
         });
     }
 

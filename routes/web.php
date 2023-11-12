@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\ProductController;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Models\BuyingInvoice;
 use App\Models\Cashier;
 use App\Models\Category;
@@ -28,44 +30,71 @@ use App\Models\Supplier;
 
 
 Route::get('/test', function () {
-    $buyingInvoices = BuyingInvoice::where('supplier_name', 'PT. consectetur architecto aut voluptates')->first()->buyinginvoicedetail->pluck('product_name');
+    $produk_id = SellingInvoice::orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();
+        $number = intval(str_replace("INV-", "", $produk_id)) + 1;
 
-    echo($buyingInvoices);
-
-    // $hasi = Group::where('group', 'repellendus')->first()->group_id;
-    // $hasil = ProductDetail::where('group_id', $hasi)->get();
-    // echo($hasil);
+    echo('INV-'. str_pad($number, 6, '0', STR_PAD_LEFT));
 });
 
+// halaman akses tanpa login
 Route::controller(GoogleController::class)->group(function() {
     Route::get('auth/google', 'redirectToGoogle')->name('auth.goole');
     Route::get('auth/google/callback','handleGoogleCallback');
 });
 
-Route::get('/', function () {
-        return view('user.index');
-    });
+Route::get('/', [ProductController::class, 'home'])->name('home');
 
 Route::get('/produk', function () {
         return view('user.products');
+});
+// akhir halaman akses tanpa login
+
+// halama user, cashier, owner
+Route::middleware(['auth', 'verified', 'cekRole:user,cashies,owner'])->group(function () {
+});
+// akhir halaman user, cashier, owner
+
+// halaman user
+Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
+    Route::get('/user-profile', [UserController::class, 'profile'])->name('profile-user');
+    Route::post('/user-profile', [UserController::class, 'ubah'])->name('change-profile');
+    Route::post('/hapus-akun', [UserController::class, 'hapus'])->name('delete-profile');
+
+    Route::get('/pembayaran', function () {
+        return view('user.pembayaran');
     });
 
-Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
+    Route::get('/detail-pesanan', function () {
+            return view('user.detail-pesanan');
+    });
 
+    Route::get('/riwayat-pesanan', [UserController::class,'riwayatTransaksi'])->name('riwayat-transaksi');
+    Route::get('/detail-riwayat-pesanan', [UserController::class,'detailRiwayatTransaksi'])->name('detail-riwayat-transaksi');
+
+    Route::get('/produk', [ProductController::class,'produk'])->name('produk');
 });
+// akhir halaman user
 
+// Halaman Cashier
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
     Route::get('/cashier', function () {
         return view('kasir.index');
     });
+
+    Route::get('/cashier/riwayat-transaksi', function () {
+        return view('kasir.riwayat-transaksi');
+    });
     
 });
+// Akhir Halaman Cashier
 
+// halaman owner
 Route::middleware(['auth', 'verified', 'cekRole:owner'])->group(function () {
     Route::get('/owner', function () {
         return view('pemilik.index');
     });
     
 });
+// akhir halaman owner
 
 require __DIR__.'/auth.php';

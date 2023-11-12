@@ -10,6 +10,7 @@ class ProductDetail extends Model
     use HasFactory;
 
     protected $primaryKey = 'detail_id';
+    public $incrementing = false;
     public $timestamps = false;
     
 
@@ -17,7 +18,7 @@ class ProductDetail extends Model
         'id',
     ];
 
-    public function produk()
+    public function product()
     {
         return $this->hasMany(Product::class, 'detail_id');
     }
