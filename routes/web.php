@@ -76,8 +76,8 @@ Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
         return view('kasir.index');
     });
 
-    Route::get('/cashier/sidebar', function () {
-        return view('kasir.sidebar');
+    Route::get('/cashier/riwayat-transaksi', function () {
+        return view('kasir.riwayat-transaksi');
     });
     
 });
