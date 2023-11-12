@@ -24,8 +24,22 @@ module.exports = {
         semiWhite: '#fefefe',
         plat: '#dedede',
       },
-      animation: {},
-      keyframes: {},
+      animation: {
+        scale: 'scale 3s infinite linear',
+      },
+      keyframes: {
+        scale: {
+          '0%': {
+            scale: '100%',
+          },
+          '50%': {
+            scale: '130%',
+          },
+          '100%': {
+            scale: '100%',
+          }
+        },
+      },
     },
   },
   plugins: [],

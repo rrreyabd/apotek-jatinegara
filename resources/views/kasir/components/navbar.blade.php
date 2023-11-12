@@ -26,9 +26,13 @@
         if (sidebar.classList.contains('-translate-x-80')) {
             sidebar.classList.remove('-translate-x-80')
             main.classList.add('brightness-50')
+            // document.body.classList.add('h-[100vh]')
+            // document.body.classList.add('overflow-hidden')
         } else {
             sidebar.classList.add('-translate-x-80')
             main.classList.remove('brightness-50')
+            // document.body.classList.remove('h-[100vh]')
+            // document.body.classList.remove('overflow-hidden')
         }
 
     }

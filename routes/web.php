@@ -84,6 +84,18 @@ Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
     Route::get('/cashier/riwayat-transaksi', function () {
         return view('kasir.riwayat-transaksi');
     });
+
+    Route::get('/cashier/img', function () {
+        return view('kasir.show-image');
+    });
+
+    Route::get('/cashier/pesanan-pending', function () {
+        return view('kasir.pesanan-pending');
+    });
+
+    Route::get('/cashier/pesanan-online', function () {
+        return view('kasir.pesanan-online');
+    });
     
 });
 // Akhir Halaman Cashier
