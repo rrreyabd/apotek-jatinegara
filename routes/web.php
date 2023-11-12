@@ -70,14 +70,18 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
 });
 // akhir halaman user
 
-// halaman cashier
+// Halaman Cashier
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
     Route::get('/cashier', function () {
         return view('kasir.index');
     });
+
+    Route::get('/cashier/sidebar', function () {
+        return view('kasir.sidebar');
+    });
     
 });
-// akhir halaman cashier
+// Akhir Halaman Cashier
 
 // halaman owner
 Route::middleware(['auth', 'verified', 'cekRole:owner'])->group(function () {
