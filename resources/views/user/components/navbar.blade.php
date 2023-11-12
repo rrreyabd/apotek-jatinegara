@@ -3,6 +3,44 @@
         <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between relative">
             <a href="/" class="text-mainColor font-TripBold text-3xl">Apotek</a>
 
+<<<<<<< HEAD
+        <form action="/produk" method="GET" class="relative">
+            <input type="text" name="cari" value="{{ request()->cari ?? "" }}" placeholder="Paracetamol"
+                class="px-3 py-2 w-[400px] rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack">
+            <button class="absolute right-4 top-2">
+                <i class="fa-solid fa-magnifying-glass text-2xl text-secondaryColor"></i>
+            </button>
+        </form>
+
+        <div class="flex gap-4 justify-center items-center relative">
+            @guest
+            {{-- JIKA USER BELUM LOGIN --}}
+            <a href="login"
+                class="text-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor h-[35px] px-3 rounded-lg">
+                Masuk
+            </a>
+
+            <a href="register"
+                class="bg-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor text-white h-[35px] px-3 rounded-lg">
+                Daftar
+            </a>
+            @else
+            {{-- JIKA USER SUDAH LOGIN --}}
+                @if (auth()->user()->role == 'user')
+                <a href="" class="flex justify-center items-center h-[40px] w-[40px] relative">
+                    <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
+                    <span
+                        class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">{{ auth()->user()->cart->count() }}</span>
+                </a>
+
+                <button onclick="toggleProfile()"
+                    class="border-2 border-mainColor h-[35px] w-[35px] rounded-full flex justify-center items-center overflow-hidden relative">
+                    <i class="fa-solid fa-user text-3xl absolute top-1 text-mainColor"></i>
+                </button>
+                @elseif (auth()->user()->role == 'cashier' || auth()->user()->role == 'owner')
+                <a href="/{{ auth()->user()->role }}" class="bg-mainColor text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
+                    Dashboard
+=======
             <form action="" class="relative">
                 <input type="text" placeholder="Paracetamol"
                     class="px-3 py-2 w-[400px] rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack">
@@ -17,6 +55,7 @@
                 <a href="login"
                     class="text-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor h-[35px] px-3 rounded-lg">
                     Masuk
+>>>>>>> 55e2c859c420687a66ba920ac08af5513ed0af4f
                 </a>
 
                 <a href="register"
@@ -32,6 +71,14 @@
                             class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">18</span>
                     </a>
 
+<<<<<<< HEAD
+                    <a href="/riwayat-pesanan" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                        <div class="flex gap-2 items-center">
+                            <i class="fa-solid fa-list"></i>
+                            <p>Riwayat Pesanan</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right"></i>
+=======
                     <button onclick="toggleProfile()"
                         class="border-2 border-mainColor h-[35px] w-[35px] rounded-full flex justify-center items-center overflow-hidden relative">
                         <i class="fa-solid fa-user text-3xl absolute top-1 text-mainColor"></i>
@@ -39,6 +86,7 @@
                     @elseif (auth()->user()->role == 'cashier' || auth()->user()->role == 'owner')
                     <a href="/dashboard" class="bg-mainColor text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
                         Dashboard
+>>>>>>> 55e2c859c420687a66ba920ac08af5513ed0af4f
                     </a>
 
                     <form action="/logout" method="POST" class="bg-red-500 text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
