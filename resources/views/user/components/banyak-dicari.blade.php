@@ -13,7 +13,7 @@
                         </div>
 
                         <center class="relative">
-                            @if ($product->first()->detail->product_type == "resep dokter")
+                            @if ($product->first()->description->product_type == "resep dokter")
                             <span class="bg-red-500 text-white font-semibold px-2 py-1 text-sm rounded-md absolute top-1 left-2">Resep</span>
                             @endif
 
@@ -23,17 +23,20 @@
 
                     <div class="flex justify-between items-center">
                         <div class="px-2 flex flex-col justify-center w-[80%] whitespace-normal break-words">
-                            <p><span class="font-TripBold text-secondaryColor">Rp. {{ number_format($product->first()->product_sell_price, 0,
-                                    ',', '.') }}</span> / </br>{{ $product->first()->detail->unit->unit }}</span></p>
-                            <p class="font-semibold">Stok: {{ $product->first()->product_stock }}</p>
+                            <p><span class="font-TripBold text-secondaryColor">Rp. {{ number_format($product->first()->detail()->orderBy('product_expired')->first()->product_sell_price, 0,
+                                    ',', '.') }}</span> / </br>{{ $product->first()->description->unit->unit }}</span></p>
+                            <p class="font-semibold">Stok: {{ $product->first()->detail()->orderBy('product_expired')->first()->product_stock }}</p>
                         </div>
                         
                         <div class="w-[20%] h-full">
-                            @if ($product->first()->product_stock == 0)
-                            @else
+                            @if ($product->first()->product_status == "aktif")
+                            <form action="/keranjang/tambah" method="POST">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->first()->product_id }}">
                             <button type="submit" class="bg-mainColor h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
+                            </form>
                             @endif
                         </div>
                     </div>

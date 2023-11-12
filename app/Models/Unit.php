@@ -18,7 +18,7 @@ class Unit extends Model
         'unit',
     ];
 
-    public function product_detail(){
-        return $this->hasMany(ProductDetail::class, 'unit_id');
+    public function product_description(){
+        return $this->hasMany(ProductDescription::class, 'unit_id');
     }
 }
