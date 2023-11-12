@@ -16,7 +16,7 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $categories = ['Alergi', 'Asam Urat', 'Demam', 'Diabetes', 'Flu & Batuk', 'Hipertensi', 'Kesehatan Wanita', 'Pencernaan'];
+        $categories = ['Alergi', 'Asam Urat', 'Demam', 'Diabetes', 'Flu dan Batuk', 'Hipertensi', 'Kesehatan Wanita', 'Pencernaan'];
         $category = fake()->unique()->randomElement($categories);
 
         return [
