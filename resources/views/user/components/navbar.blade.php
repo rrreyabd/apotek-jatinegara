@@ -2,8 +2,8 @@
     <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between">
         <a href="/" class="text-mainColor font-TripBold text-3xl">Apotek</a>
 
-        <form action="" class="relative">
-            <input type="text" placeholder="Paracetamol"
+        <form action="/produk" method="GET" class="relative">
+            <input type="text" name="cari" value="{{ request()->cari ?? "" }}" placeholder="Paracetamol"
                 class="px-3 py-2 w-[400px] rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack">
             <button class="absolute right-4 top-2">
                 <i class="fa-solid fa-magnifying-glass text-2xl text-secondaryColor"></i>
@@ -28,7 +28,7 @@
                 <a href="" class="flex justify-center items-center h-[40px] w-[40px] relative">
                     <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
                     <span
-                        class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">18</span>
+                        class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">{{ auth()->user()->cart->count() }}</span>
                 </a>
 
                 <button onclick="toggleProfile()"

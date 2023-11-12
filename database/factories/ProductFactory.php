@@ -33,8 +33,8 @@ class ProductFactory extends Factory
             'product_name' => fake()->words(5, true),
             'product_expired'=> fake()->dateTime(),
             'product_stock' => $stock,
-            'product_buy_price' => 12000,
-            'product_sell_price' => 15000,
+            'product_buy_price' => fake()->numberBetween(1000,100000),
+            'product_sell_price' => fake()->numberBetween(1000,100000),
             'product_status'=> $stock == 0 ? 'tidak aktif' : 'aktif',
         ];
     }

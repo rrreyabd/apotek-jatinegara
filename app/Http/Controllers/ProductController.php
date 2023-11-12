@@ -150,6 +150,67 @@ class ProductController extends Controller
             }
         }
         // akhir filter harga
+
+        // filter
+        if ($request->filter) {
+            if ($request->filter == "Popular") {
+                if($request->golongan || $request->kategori || $request->bentuk || $request->maksimum || $request->minimum) {
+                    $product = Product::join('Selling_Invoice_Details', 'Products.product_name', '=', 'Selling_Invoice_Details.product_name')
+                    ->whereIn('Products.product_name', $product->pluck('product_name')->toArray())
+                    ->select('Products.*', DB::raw('COUNT(Selling_Invoice_Details.product_name) as jumlah_kemunculan'))
+                    ->groupBy('Products.product_id', 'Products.product_code', 'Products.detail_id', 'Products.product_name', 'Products.product_sell_price', 'Products.product_stock')
+                    ->orderBy('jumlah_kemunculan', 'DESC');
+                }else{
+                    $product = Product::join('Selling_Invoice_Details', 'Products.product_name', '=', 'Selling_Invoice_Details.product_name')
+                    ->select('Products.*', DB::raw('COUNT(Selling_Invoice_Details.product_name) as jumlah_kemunculan'))
+                    ->groupBy('Products.product_id', 'Products.product_code', 'Products.detail_id', 'Products.product_name', 'Products.product_sell_price', 'Products.product_stock')
+                    ->orderBy('jumlah_kemunculan', 'DESC');
+                }
+            }
+            
+            if ($request->filter == "Nama A - Z"){
+                if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
+                    $product = $product->orderBy('product_name');
+                }else{
+                    $product = Product::orderBy('product_name');
+                }
+            }
+
+            if ($request->filter == "Nama Z - A"){
+                if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
+                    $product = $product->orderBy('product_name', 'DESC');
+                }else{
+                    $product = Product::orderBy('product_name', 'DESC');
+                }
+            }
+
+            if ($request->filter == "Harga Tinggi - Rendah"){
+                if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
+                    $product = $product->orderBy('product_sell_price', 'DESC');
+                }else{
+                    $product = Product::orderBy('product_sell_price', 'DESC');
+                }
+            }
+
+            if ($request->filter == "Harga Rendah - Tinggi"){
+                if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
+                    $product = $product->orderBy('product_sell_price');
+                }else{
+                    $product = Product::orderBy('product_sell_price');
+                }
+            }
+        }
+        // akhir filter
+
+        // filter cari
+        if ($request->cari) {
+                if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum || $request->filter) {
+                    $product = $product->where('Products.product_name', 'like' ,"%". $request->cari ."%");
+                }else{
+                    $product = Product::where('product_name', 'like' ,"%". $request->cari ."%");
+                }
+        }
+        // akhir filter cari
             
         if(isset($product)) {
             $product = $product->paginate(9)->withQueryString();

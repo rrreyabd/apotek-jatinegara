@@ -24,7 +24,7 @@
     <div class="flex flex-col items-center mb-8">
         <div class="w-[70vw] mt-8 flex gap-8">
 
-            {{-- 1 --}}
+            {{-- bagian kiri --}}
             <div class="w-[30%] p-4 overflow-hidden">
                 
                     <div class="h-full w-full flex gap-10 flex-col">
@@ -35,19 +35,43 @@
                             </div>
 
                             <hr class="border-1 border border-[#cccccc]">
-
                             <div class="bg-lightGrey w-full h-[200px] rounded-md shadow-md shadow-gray-300 px-10 leading-relaxed flex flex-col text-mediumGrey font-bold text-lg justify-center">
-                                <a href="" class="hover:text-black change-color-on-click">Popular</a>
-                                <a href="" class="hover:text-black change-color-on-click">Nama A - Z</a>
-                                <a href="" class="hover:text-black change-color-on-click">Nama Z - A</a>
-                                <a href="" class="hover:text-black change-color-on-click">Harga Tinggi - Rendah</a>
-                                <a href="" class="hover:text-black change-color-on-click">Harga Rendah - Tinggi</a>
+                                @php
+                                    $filters = ['Popular', 'Nama A - Z', 'Nama Z - A', 'Harga Rendah - Tinggi', 'Harga Tinggi - Rendah', 'Hapus Filter']
+                                @endphp
+                                @foreach ($filters as $filter)
+                                <form action="/produk" method="GET">
+                                    <input type="hidden" name="filter" value="{{ $filter == "Hapus Filter" ? "" : $filter }}">
+                                    @if (request()->cari)
+                                        <input type="hidden" name="cari" value="{{ request()->cari }}">
+                                    @endif
+                                    @if (request()->kategori)
+                                        <input type="hidden" name="kategori" value="{{ request()->kategori }}">
+                                    @endif
+                                    @if (request()->golongan)
+                                        <input type="hidden" name="golongan" value="{{ request()->golongan }}">
+                                    @endif
+                                    @if (request()->bentuk)
+                                        <input type="hidden" name="bentuk" value="{{ request()->bentuk }}">
+                                    @endif
+                                    @if (request()->minimum)
+                                        <input type="hidden" name="minimum" value="{{ request()->minimum }}">
+                                    @endif
+                                    @if (request()->maksimum)
+                                        <input type="hidden" name="maksimum" value="{{ request()->maksimum }}">
+                                    @endif
+                                    <button type="submit" class="hover:text-black change-color-on-click">{{ $filter }}</button>
+                                </form>
+                                @endforeach
                             </div>
                         </div>
 
                         {{-- CATEGORY START --}}
                     <div class="flex gap-4 flex-col">
                         <form action="/produk" method="GET">
+                            @if (request()->cari)
+                                <input type="hidden" name="cari" value="{{ request()->cari }}">
+                            @endif
                             <div class="flex items-center mb-3 text-mediumGrey justify-between bg-white">
                                 <p class="text-xl font-TripBold ml-10">Kategori</p>
                                 <button type="button" onclick="showFilter('filter1', 'filterIcon1')" class="h-full flex items-center text-darkGrey text-xl pr-2">
@@ -205,11 +229,29 @@
                 </div>
             </div>
 
-            {{-- 2 --}}
+            {{-- bagian kanan --}}
             <div class="w-[70%] flex flex-col gap-8">
                 <div class="flex justify-between items-center">
-                    <form action="" class="relative">
-                        <input type="text" placeholder="Cari nama produk di sini..."
+                    <form action="/produk" method="GET" class="relative">
+                        @if (request()->filter)
+                            <input type="hidden" name="filter" value="{{ request()->filter }}">
+                        @endif
+                        @if (request()->kategori)
+                            <input type="hidden" name="kategori" value="{{ request()->kategori }}">
+                        @endif
+                        @if(request()->golongan)
+                            <input type="hidden" name="golongan" value="{{ request()->golongan }}">
+                        @endif
+                        @if (request()->bentuk)
+                            <input type="hidden" name="bentuk" value="{{ request()->bentuk }}">
+                        @endif
+                        @if (request()->minimum)
+                            <input type="hidden" name="minimum" value="{{ request()->minimum }}">
+                        @endif
+                        @if (request()->maksimum)
+                            <input type="hidden" name="maksimum" value="{{ request()->maksimum }}">
+                        @endif
+                        <input type="text" name="cari" value="{{ request()->cari }}" placeholder="Cari nama produk di sini..."
                         class="h-12 w-96 shadow-md rounded-md px-4">
 
                         <button type="submit" class="absolute right-3 top-3 text-xl">
@@ -217,16 +259,147 @@
                         </button>
                     </form>
 
-                    <p class="font-semibold text-mediumGrey">Filter: Harga Tinggi - Rendah</p>
+                    @if (request()->filter)
+                    <p class="font-semibold text-mediumGrey">Filter: {{ request()->filter }}</p>
+                    @endif
                 </div>
 
                 <div class="flex flex-wrap gap-4">
-                    @for ($i = 0; $i < 3; $i++)    
-                    <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
-                        <p>Kategori: Obat Demam</p>
-                        <button type="button" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
-                    </div>
-                    @endfor
+                    @if (request()->kategori)
+                    <form action="/produk" method="GET">
+                        @if (request()->filter)
+                            <input type="hidden" name="filter" value="{{ request()->filter }}">
+                        @endif
+                        @if (request()->cari)
+                            <input type="hidden" name="cari" value="{{ request()->cari }}">
+                        @endif
+                        @if (request()->golongan)
+                            <input type="hidden" name="golongan" value="{{ request()->golongan }}">
+                        @endif
+                        @if (request()->bentuk)
+                            <input type="hidden" name="bentuk" value="{{ request()->bentuk }}">
+                        @endif
+                        @if (request()->minimum)
+                            <input type="hidden" name="minimum" value="{{ request()->minimum }}">
+                        @endif
+                        @if (request()->maksimum)
+                            <input type="hidden" name="maksimum" value="{{ request()->maksimum }}">
+                        @endif
+                        <input type="hidden" name="kategori" value="">
+                        <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
+                            <p>Kategori: {{ request()->kategori }}</p>
+                            <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
+                        </div>
+                    </form>
+                    @endif
+                    @if (request()->golongan)
+                    <form action="/produk" method="GET">
+                        @if (request()->filter)
+                            <input type="hidden" name="filter" value="{{ request()->filter }}">
+                        @endif
+                        @if (request()->cari)
+                            <input type="hidden" name="cari" value="{{ request()->cari }}">
+                        @endif
+                        @if (request()->kategori)
+                            <input type="hidden" name="kategori" value="{{ request()->kategori }}">
+                        @endif
+                        @if (request()->bentuk)
+                            <input type="hidden" name="bentuk" value="{{ request()->bentuk }}">
+                        @endif
+                        @if (request()->minimum)
+                            <input type="hidden" name="minimum" value="{{ request()->minimum }}">
+                        @endif
+                        @if (request()->maksimum)
+                            <input type="hidden" name="maksimum" value="{{ request()->maksimum }}">
+                        @endif
+                        <input type="hidden" name="golongan" value="">
+                        <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
+                            <p>golongan: {{ request()->golongan }}</p>
+                            <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
+                        </div>
+                    </form>
+                    @endif
+                    @if (request()->bentuk)
+                    <form action="/produk" method="GET">
+                        @if (request()->filter)
+                            <input type="hidden" name="filter" value="{{ request()->filter }}">
+                        @endif
+                        @if (request()->cari)
+                            <input type="hidden" name="cari" value="{{ request()->cari }}">
+                        @endif
+                        @if (request()->kategori)
+                            <input type="hidden" name="kategori" value="{{ request()->kategori }}">
+                        @endif
+                        @if (request()->golongan)
+                            <input type="hidden" name="golongan" value="{{ request()->golongan }}">
+                        @endif
+                        @if (request()->minimum)
+                            <input type="hidden" name="minimum" value="{{ request()->minimum }}">
+                        @endif
+                        @if (request()->maksimum)
+                            <input type="hidden" name="maksimum" value="{{ request()->maksimum }}">
+                        @endif
+                        <input type="hidden" name="bentuk" value="">
+                        <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
+                            <p>bentuk: {{ request()->bentuk }}</p>
+                            <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
+                        </div>
+                    </form>
+                    @endif
+                    @if (request()->minimum)
+                    <form action="/produk" method="GET">
+                        @if (request()->filter)
+                            <input type="hidden" name="filter" value="{{ request()->filter }}">
+                        @endif
+                        @if (request()->cari)
+                            <input type="hidden" name="cari" value="{{ request()->cari }}">
+                        @endif
+                        @if (request()->kategori)
+                            <input type="hidden" name="kategori" value="{{ request()->kategori }}">
+                        @endif
+                        @if (request()->golongan)
+                            <input type="hidden" name="golongan" value="{{ request()->golongan }}">
+                        @endif
+                        @if (request()->bentuk)
+                            <input type="hidden" name="bentuk" value="{{ request()->bentuk }}">
+                        @endif
+                        @if (request()->maksimum)
+                            <input type="hidden" name="maksimum" value="{{ request()->maksimum }}">
+                        @endif
+                        <input type="hidden" name="minimum" value="">
+                        <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
+                            <p>minimum: {{ request()->minimum }}</p>
+                            <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
+                        </div>
+                    </form>
+                    @endif
+                    @if (request()->maksimum)
+                    <form action="/produk" method="GET">
+                        @if (request()->filter)
+                            <input type="hidden" name="filter" value="{{ request()->filter }}">
+                        @endif
+                        @if (request()->cari)
+                            <input type="hidden" name="cari" value="{{ request()->cari }}">
+                        @endif
+                        @if (request()->kategori)
+                            <input type="hidden" name="kategori" value="{{ request()->kategori }}">
+                        @endif
+                        @if (request()->golongan)
+                            <input type="hidden" name="golongan" value="{{ request()->golongan }}">
+                        @endif
+                        @if (request()->bentuk)
+                            <input type="hidden" name="bentuk" value="{{ request()->bentuk }}">
+                        @endif
+                        @if (request()->minimum)
+                            <input type="hidden" name="minimum" value="{{ request()->minimum }}">
+                        @endif
+                        <input type="hidden" name="maksimum" value="">
+                        <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
+                            <p>maksimum: {{ request()->maksimum }}</p>
+                            <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
+                        </div>
+                    </form>
+                    @endif
                 </div>
 
                 <div class="flex flex-wrap justify-start gap-4">
@@ -255,7 +428,7 @@
                             </div>
                             
                             <div class="w-[20%] h-full">
-                                @if ($product->product_stock == 0)
+                                @if ($product->product_status == "tidak aktif" || $product->product_status == 'exp')
                                 @else
                                 <button type="submit" class="bg-mainColor h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
                                     <i class="fa-solid fa-plus"></i>
@@ -272,9 +445,6 @@
                 {{ $products ? $products->links() : "" }}
                 <!-- PAGINATION END -->
             </div>
-            {{-- FILTER PRODUK START --}}
-                
-            {{-- FILTER PRODUK END --}}
         </div>
     </div>
     
