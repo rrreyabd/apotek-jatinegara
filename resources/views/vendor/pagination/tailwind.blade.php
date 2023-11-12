@@ -6,14 +6,12 @@
                 {{ "Menampilkan " }}
                 @if ($paginator->firstItem())
                     <span class="font-medium">{{ $paginator->firstItem() }}</span>
-                    {{ " - " }}
+                    {{ " Sampai " }}
                     <span class="font-medium">{{ $paginator->lastItem() }}</span>
                 @else
                     {{ $paginator->count() }}
                 @endif
-                {{ " Dari " }}
-                <span class="font-medium">{{ $paginator->total() }}</span>
-                {{ " Hasil" }}
+                    {{ " Items " }}
             </p>
         </div>
         {{-- end showing result --}}

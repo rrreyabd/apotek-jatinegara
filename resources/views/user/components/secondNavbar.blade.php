@@ -15,10 +15,10 @@
             @else
             {{-- JIKA USER SUDAH LOGIN --}}
                 @if (auth()->user()->role == 'user')
-                <a href="" class="flex justify-center items-center h-[40px] w-[40px] relative">
+                <a href="/keranjang" class="flex justify-center items-center h-[40px] w-[40px] relative">
                     <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
                     <span
-                        class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">18</span>
+                        class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">{{ auth()->user()->cart->count() }}</span>
                 </a>
 
                 <button onclick="toggleProfile()"

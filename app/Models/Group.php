@@ -18,7 +18,7 @@ class Group extends Model
         'group',
     ];
 
-    public function product_detail(){
-        return $this->hasMany(ProductDetail::class, 'group_id');
+    public function product_description(){
+        return $this->hasMany(ProductDescription::class, 'group_id');
     }
 }

@@ -20,7 +20,7 @@ class Supplier extends Model
         'supplier_phone',
     ];
 
-    public function product_detail(){
-        return $this->hasMany(ProductDetail::class, 'supplier_id');
+    public function product_description(){
+        return $this->hasMany(ProductDescription::class, 'supplier_id');
     }
 }

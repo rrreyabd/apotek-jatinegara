@@ -92,9 +92,9 @@
                                 @foreach ($categories as $category)
                                     @php
                                         $jumlah = 0;
-                                        $detail = $category->product_detail;
+                                        $description = $category->product_description;
 
-                                        foreach ($detail as $d) {
+                                        foreach ($description as $d) {
                                             $jumlah += $d->product->count();
                                         }
                                     @endphp
@@ -134,9 +134,9 @@
                                 @foreach ($groups as $group)
                                     @php
                                         $jumlah = 0;
-                                        $detail = $group->product_detail;
+                                        $description = $group->product_description;
 
-                                        foreach ($detail as $d) {
+                                        foreach ($description as $d) {
                                             $jumlah += $d->product->count();
                                         }
                                     @endphp
@@ -176,9 +176,9 @@
                                 @foreach ($units as $unit)
                                     @php
                                         $jumlah = 0;
-                                        $detail = $unit->product_detail;
+                                        $description = $unit->product_description;
 
-                                        foreach ($detail as $d) {
+                                        foreach ($description as $d) {
                                             $jumlah += $d->product->count();
                                         }
                                     @endphp
@@ -412,7 +412,7 @@
                             </div>
     
                             <center class="relative">
-                                @if ($product->detail->product_type == "resep dokter")
+                                @if ($product->description->product_type == "resep dokter")
                                 <span class="bg-red-500 text-white font-semibold px-2 py-1 text-sm rounded-md absolute top-1 left-2">Resep</span>
                                 @endif
     
@@ -422,17 +422,20 @@
     
                         <div class="flex justify-between items-center">
                             <div class="px-2 flex flex-col justify-center w-[80%] whitespace-normal break-words">
-                                <p><span class="font-TripBold text-secondaryColor">Rp. {{ number_format($product->product_sell_price, 0,
-                                        ',', '.') }}</span> / </br> {{ $product->detail->unit->unit }}</span></p>
-                                <p class="font-semibold">Stok: {{ $product->product_stock }}</p>
+                                <p><span class="font-TripBold text-secondaryColor">Rp. {{ number_format($product->detail()->orderBy('product_expired')->first()->product_sell_price, 0,
+                                        ',', '.') }}</span> / </br> {{ $product->description->unit->unit }}</span></p>
+                                <p class="font-semibold">Stok: {{ $product->detail()->orderBy('product_expired')->first()->product_stock }}</p>
                             </div>
                             
                             <div class="w-[20%] h-full">
-                                @if ($product->product_status == "tidak aktif" || $product->product_status == 'exp')
-                                @else
+                                @if ($product->product_status == 'aktif')
+                                <form action="/keranjang/tambah" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->product_id }}">
                                 <button type="submit" class="bg-mainColor h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
+                                </form>
                                 @endif
                             </div>
                         </div>

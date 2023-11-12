@@ -29,7 +29,7 @@ class ProductController extends Controller
                     }
 
                     foreach(collect($product_last_purcase) as $p){
-                        if(Product::where('product_name', $p->product_name)->where('product_stock', '>',  0)->first() != NULL){
+                        if(Product::where('product_name', $p->product_name)->where('product_status',  'aktif')->first() != NULL){
                             $products[] = Product::where('product_name', $p->product_name)->get();
                         }
                     }
@@ -50,7 +50,7 @@ class ProductController extends Controller
 
             if ($products_best_seller->count() > 0) {
                 foreach($products_best_seller as $p){
-                    if(Product::where('product_name', $p->product_name)->where('product_stock', '>',  0)->first() != NULL){
+                    if(Product::where('product_name', $p->product_name)->where('product_status',  'aktif')->first() != NULL){
                         // echo(collect(Product::where('product_name', $p->product_name)->first()));
                         $product_best_seller[] = Product::where('product_name', $p->product_name)->get();
                     }
@@ -80,7 +80,7 @@ class ProductController extends Controller
         if ($request->kategori) {
             if (Category::where('category', $request->kategori)->first() != NULL) {
                 // ubah menjadi view
-                $product = Product::whereHas('detail.category', function ($query) use ($request) { 
+                $product = Product::whereHas('description.category', function ($query) use ($request) { 
                     $query->where('category', $request->kategori);
                 });
             }else{
@@ -94,11 +94,11 @@ class ProductController extends Controller
             if (Group::where('group', $request->golongan)->first() != NULL) {
                 // ubah menjadi view
                 if($request->kategori) {
-                    $product = $product->whereHas('detail.group', function ($query) use ($request) {
+                    $product = $product->whereHas('description.group', function ($query) use ($request) {
                         $query->where('group', $request->golongan);
                     });
                 }else{
-                    $product = Product::whereHas('detail.group', function ($query) use ($request) { 
+                    $product = Product::whereHas('description.group', function ($query) use ($request) { 
                         $query->where('group', $request->golongan);
                     });
                 }
@@ -113,15 +113,15 @@ class ProductController extends Controller
             if (Unit::where('unit', $request->bentuk)->first() != NULL) {
                 // ubah menjadi view
                 if($request->golongan) {
-                    $product = $product->whereHas('detail.unit', function ($query) use ($request) {
+                    $product = $product->whereHas('description.unit', function ($query) use ($request) {
                         $query->where('unit', $request->bentuk);
                     });
                 }elseif($request->kategori){
-                    $product = $product->whereHas('detail.unit', function ($query) use ($request) {
+                    $product = $product->whereHas('description.unit', function ($query) use ($request) {
                         $query->where('unit', $request->bentuk);
                     });
                 }else{
-                    $product = Product::whereHas('detail.unit', function ($query) use ($request) { 
+                    $product = Product::whereHas('description.unit', function ($query) use ($request) { 
                         $query->where('unit', $request->bentuk);
                     });
                 }
@@ -135,17 +135,25 @@ class ProductController extends Controller
         if ($request->maksimum || $request->minimum) {
             if ($request->maksimum) {
                 if($request->golongan || $request->kategori || $request->bentuk) {
-                    $product = $product->where('product_sell_price', '<=', $request->maksimum);
+                    $product = $product->whereHas('detail', function($query) use ($request) {
+                        $query->where('product_sell_price', '<=', $request->maksimum);
+                    });
                 }else{
-                    $product = Product::where('product_sell_price', '<=', $request->maksimum);
+                    $product = Product::whereHas('detail', function($query) use ($request) {
+                        $query->where('product_sell_price', '<=', $request->maksimum);
+                    });
                 }
             }
             
             if ($request->minimum){
                 if($request->golongan || $request->kategori || $request->bentuk || $request->maksimum) {
-                    $product = $product->where('product_sell_price', '>=', $request->minimum);
+                    $product = $product->whereHas('detail', function($query) use ($request) {
+                        $query->where('product_sell_price', '>=', $request->minimum);
+                    });
                 }else{
-                    $product = Product::where('product_sell_price', '>=', $request->minimum);
+                    $product = Product::whereHas('detail', function($query) use ($request) {
+                        $query->where('product_sell_price', '>=', $request->minimum);
+                    });
                 }
             }
         }
@@ -158,12 +166,12 @@ class ProductController extends Controller
                     $product = Product::join('Selling_Invoice_Details', 'Products.product_name', '=', 'Selling_Invoice_Details.product_name')
                     ->whereIn('Products.product_name', $product->pluck('product_name')->toArray())
                     ->select('Products.*', DB::raw('COUNT(Selling_Invoice_Details.product_name) as jumlah_kemunculan'))
-                    ->groupBy('Products.product_id', 'Products.product_code', 'Products.detail_id', 'Products.product_name', 'Products.product_sell_price', 'Products.product_stock')
+                    ->groupBy('Products.product_id', 'Products.description_id', 'Products.product_name')
                     ->orderBy('jumlah_kemunculan', 'DESC');
                 }else{
                     $product = Product::join('Selling_Invoice_Details', 'Products.product_name', '=', 'Selling_Invoice_Details.product_name')
                     ->select('Products.*', DB::raw('COUNT(Selling_Invoice_Details.product_name) as jumlah_kemunculan'))
-                    ->groupBy('Products.product_id', 'Products.product_code', 'Products.detail_id', 'Products.product_name', 'Products.product_sell_price', 'Products.product_stock')
+                    ->groupBy('Products.product_id', 'Products.description_id', 'Products.product_name')
                     ->orderBy('jumlah_kemunculan', 'DESC');
                 }
             }
@@ -186,17 +194,29 @@ class ProductController extends Controller
 
             if ($request->filter == "Harga Tinggi - Rendah"){
                 if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
-                    $product = $product->orderBy('product_sell_price', 'DESC');
+                    $product = $product->join('product_details', 'products.product_id', '=', 'product_details.product_id')
+                    ->orderBy('product_details.product_sell_price', 'DESC')
+                    ->select('products.*', 'product_details.product_sell_price')
+                    ->distinct();
                 }else{
-                    $product = Product::orderBy('product_sell_price', 'DESC');
+                    $product = Product::join('product_details', 'products.product_id', '=', 'product_details.product_id')
+                    ->orderBy('product_details.product_sell_price', 'DESC')
+                    ->select('products.*', 'product_details.product_sell_price')
+                    ->distinct();
                 }
             }
 
             if ($request->filter == "Harga Rendah - Tinggi"){
                 if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
-                    $product = $product->orderBy('product_sell_price');
+                    $product = $product->join('product_details', 'products.product_id', '=', 'product_details.product_id')
+                    ->orderBy('product_details.product_sell_price', 'ASC')
+                    ->select('products.*', 'product_details.product_sell_price')
+                    ->distinct();
                 }else{
-                    $product = Product::orderBy('product_sell_price');
+                    $product = Product::join('product_details', 'products.product_id', '=', 'product_details.product_id')
+                    ->orderBy('product_details.product_sell_price', 'ASC')
+                    ->select('products.*', 'product_details.product_sell_price')
+                    ->distinct();
                 }
             }
         }
@@ -207,7 +227,7 @@ class ProductController extends Controller
                 if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum || $request->filter) {
                     $product = $product->where('Products.product_name', 'like' ,"%". $request->cari ."%");
                 }else{
-                    $product = Product::where('product_name', 'like' ,"%". $request->cari ."%");
+                    $product = Product::where('Products.product_name', 'like' ,"%". $request->cari ."%");
                 }
         }
         // akhir filter cari
@@ -217,7 +237,6 @@ class ProductController extends Controller
         }else{
             $product = Product::paginate(9)->withQueryString();
         }
-        
 
         return view("user.products", [
             "products"=> $product ?? NULL,
