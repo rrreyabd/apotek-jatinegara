@@ -3,7 +3,6 @@
         <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between relative">
             <a href="/" class="text-mainColor font-TripBold text-3xl">Apotek</a>
 
-<<<<<<< HEAD
         <div class="flex gap-4 justify-center items-center relative">
             @guest
             <a href="login" class="text-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor h-[35px] px-3 rounded-lg">
