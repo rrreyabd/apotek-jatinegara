@@ -1,5 +1,5 @@
 {{-- SIDEBAR START --}}
-<nav class="bg-white p-8 w-[20%] shadow-md absolute left-0 top-0 min-h-[100vh] h-full z-10 shadow-semiBlack -translate-x-80 transition-transform duration-300 ease-in-out flex flex-col gap-4" id="sidebar">
+<nav class="bg-white p-8 w-[20%] shadow-md absolute left-0 top-0 h-[100%] z-10 shadow-semiBlack -translate-x-80 transition-transform duration-300 ease-in-out flex flex-col gap-4" id="sidebar">
     <div class="flex justify-between w-full">
         <p class="bg-mainColor text-white font-bold px-2 py-1 rounded-br-xl rounded-tl-xl text-lg">Jati Negara</p>
 
@@ -15,18 +15,25 @@
             <i class="mr-4 fa-solid fa-bag-shopping"></i>
             Produk
         </a>
-        <a href="" class="hover:text-mainColor">
+        <a href="/cashier/pesanan-online" class="hover:text-mainColor">
             <i class="mr-4 fa-solid fa-cart-shopping"></i>
             Pesanan Online
+        </a>
+        <a href="/cashier/pesanan-pending" class="hover:text-mainColor">
+            <i class="mr-4 fa-solid fa-spinner"></i>
+            Pesanan Pending
         </a>
         <a href="/cashier/riwayat-transaksi" class="hover:text-mainColor">
             <i class="mr-4 fa-solid fa-clock-rotate-left"></i>
             Riwayat Transaksi
         </a>
-        <a href="/logout" class="hover:text-mainColor">
-            <i class="mr-4 fa-solid fa-arrow-right-from-bracket"></i>
-            Logout
-        </a>
+        <form action="/logout" method="POST">
+            @csrf
+            <button type="submit" class="hover:text-mainColor">
+                <i class="mr-4 fa-solid fa-arrow-right-from-bracket"></i>
+                Logout
+            </button>
+        </form>
     </div>
 </nav>
 {{-- SIDEBAR END --}}

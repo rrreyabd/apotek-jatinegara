@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\ProductDescription;
 use App\Models\ProductDetail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,24 +19,14 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $produk_id = Product::orderBy('product_code', 'desc')->pluck('product_code')->first();
-        $number = intval(str_replace("P-", "", $produk_id)) + 1;
-
-        $details_id = ProductDetail::pluck('detail_id')->all();
-        $detail_id = fake()->unique()->randomElement($details_id);
-
-        $stock = rand(0,50);
+        $descriptions_id = ProductDescription::pluck('description_id')->all();
+        $description_id = fake()->unique()->randomElement($descriptions_id);
 
         return [
             'product_id' => fake()->uuid,
-            'product_code' => 'P-'. str_pad($number, 6, '0', STR_PAD_LEFT),
-            'detail_id' => $detail_id,
+            'description_id' => $description_id,
             'product_name' => fake()->words(5, true),
-            'product_expired'=> fake()->dateTime(),
-            'product_stock' => $stock,
-            'product_buy_price' => fake()->numberBetween(1000,100000),
-            'product_sell_price' => fake()->numberBetween(1000,100000),
-            'product_status'=> $stock == 0 ? 'tidak aktif' : 'aktif',
+            'product_status'=> fake()->randomElement(['aktif', 'tidak aktif']),
         ];
     }
 }

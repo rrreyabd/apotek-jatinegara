@@ -103,11 +103,19 @@
         </div>
 
         {{-- CART START --}}
-        <div class="w-[33%] bg-white py-10 px-8 flex flex-col justify-between gap-10">
+        <div class="w-[33%] bg-white py-10 px-8 flex flex-col justify-between gap-10 shadow-md">
             <div class="flex flex-col gap-4">
                 <p class="font-bold text-2xl">Detail Pesanan</p>
                 <hr class="border border-1 border-mediumGrey opacity-20">
                 
+                {{-- KONDISI TIDAK ADA ITEM DI KERANJANG --}}
+                @if (true)
+                <div class="h-[80vh] w-full flex justify-center items-center flex-col text-center gap-2">
+                    <i class="text-6xl text-mainColor fa-solid fa-cart-shopping"></i>
+                    <p class="font-semibold text-2xl text-mainColor">Tidak ada item di keranjang.</p>
+                </div>
+                {{-- KONDISI ADA ITEM DI KERANJANG --}}
+                @else
                 <div class="w-full flex flex-col gap-4">
                     @for ($i = 0; $i < 4; $i++)
                     <div class="flex gap-2">
@@ -143,8 +151,8 @@
                         </div>
                     </div>
                     @endfor
-
                 </div>
+                @endif
             </div>
             
             {{-- TOTAL START --}}

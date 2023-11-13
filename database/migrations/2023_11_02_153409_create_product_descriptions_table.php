@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_details', function (Blueprint $table) {
-            $table->uuid('detail_id')->primary();
+        Schema::create('product_descriptions', function (Blueprint $table) {
+            $table->uuid('description_id')->primary();
             $table->uuid('category_id');
             $table->foreign('category_id')
                 ->references('category_id')
                 ->on('categories')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('restrict');
             $table->uuid('group_id');
             $table->foreign('group_id')
                 ->references('group_id')
@@ -53,6 +54,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_details');
+        Schema::dropIfExists('product_descriptions');
     }
 };

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProductController;
 use App\Models\User;
@@ -8,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Models\BuyingInvoice;
+use App\Models\Cart;
 use App\Models\Cashier;
 use App\Models\Category;
 use App\Models\Customer;
@@ -72,6 +74,11 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/detail-riwayat-pesanan', [UserController::class,'detailRiwayatTransaksi'])->name('detail-riwayat-transaksi');
 
     Route::get('/produk', [ProductController::class,'produk'])->name('produk');
+
+    Route::get('/keranjang', [CartController::class,'keranjang'])->name('keranjang');
+    Route::post('/keranjang/jumlah', [CartController::class,'jumlahItem'])->name('jumlah-keranjang');
+    Route::post('/keranjang/hapus', [CartController::class,'hapusItem'])->name('hapus-keranjang');
+    Route::post('/keranjang/tambah', [CartController::class,'tambahItem'])->name('tambah-keranjang');
 });
 // akhir halaman user
 
@@ -83,6 +90,18 @@ Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
 
     Route::get('/cashier/riwayat-transaksi', function () {
         return view('kasir.riwayat-transaksi');
+    });
+
+    Route::get('/cashier/img', function () {
+        return view('kasir.show-image');
+    });
+
+    Route::get('/cashier/pesanan-pending', function () {
+        return view('kasir.pesanan-pending');
+    });
+
+    Route::get('/cashier/pesanan-online', function () {
+        return view('kasir.pesanan-online');
     });
     
 });

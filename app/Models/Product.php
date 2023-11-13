@@ -23,9 +23,14 @@ class Product extends Model
         'product_status',
     ];
 
+    public function description()
+    {
+        return $this->belongsTo(ProductDescription::class, 'description_id');
+    }
+
     public function detail()
     {
-        return $this->belongsTo(ProductDetail::class, 'detail_id');
+        return $this->hasMany(ProductDetail::class, 'product_id');
     }
 
     public function cart()
