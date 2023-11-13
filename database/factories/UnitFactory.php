@@ -18,7 +18,7 @@ class UnitFactory extends Factory
     {
         return [
             'unit_id' => fake()->uuid,
-            'unit' => fake()->words(mt_rand(1,2), true),
+            'unit' => fake()->unique()->words(mt_rand(1,2), true),
         ];
     }
 }

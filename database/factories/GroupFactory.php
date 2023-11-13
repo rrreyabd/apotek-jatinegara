@@ -17,7 +17,7 @@ class GroupFactory extends Factory
     public function definition(): array
     {
         return [
-            'group_id' => fake()->uuid,
+            'group_id' => fake()->unique()->uuid,
             'group' => fake()->words(mt_rand(1,2), true),
         ];
     }

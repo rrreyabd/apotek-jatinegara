@@ -18,7 +18,7 @@ return new class extends Migration
                 ->references('user_id')
                 ->on('users')
                 ->onUpdate('cascade')
-                ->onDelete('cascade'); ;
+                ->onDelete('cascade');
             $table->string('cashier_phone', 14)->notNullable();
             $table->enum('cashier_gender', ['pria', 'wanita'])->notNullable();
             $table->string('cashier_address', 150)->notNullable();
