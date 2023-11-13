@@ -112,7 +112,49 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->group(function () {
     Route::get('/owner', function () {
         return view('pemilik.index');
     });
+    Route::get('/owner/produk', function () {
+        return view('pemilik.list-produk');
+    });
     
+    Route::get('/owner/detail-produk', function () {
+        return view('pemilik.detail-produk');
+    });
+
+    Route::get('/owner/tambah-produk', function () {
+        return view('pemilik.tambah-produk');
+    });
+
+    Route::get('/owner/edit-produk', function () {
+        return view('pemilik.edit-produk');
+    });
+
+    Route::get('/owner/kasir', function () {
+        return view('pemilik.list-kasir');
+    });
+
+    Route::get('/owner/tambah-kasir', function () {
+        return view('pemilik.tambah-kasir');
+    });
+
+    Route::get('/owner/edit-kasir', function () {
+        return view('pemilik.edit-kasir');
+    });
+
+    Route::get('/owner/transaksi-penjualan', function () {
+        return view('pemilik.log-transaksi-penjualan');
+    });
+
+    Route::get('/owner/transaksi-pembelian', function () {
+        return view('pemilik.log-transaksi-pembelian');
+    });
+
+    Route::get('/owner/supplier', function () {
+        return view('pemilik.list-supplier');
+    });
+
+    Route::get('/owner/user', function () {
+        return view('pemilik.list-user');
+    });
 });
 // akhir halaman owner
 

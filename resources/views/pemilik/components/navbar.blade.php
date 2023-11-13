@@ -1,7 +1,7 @@
 <div class="flex justify-between">
     <div class="flex gap-8">
-         {{-- toggle --}}
-         <button onclick="sidebar()" class="p-3 px-4 rounded-lg shadow-md bg-white w-fit" style="transition: 0.25s;" id="buttonToggle">
+        {{-- toggle --}}
+        <button onclick="sidebar()" class="p-3 px-4 rounded-lg shadow-md bg-white w-fit" style="transition: 0.25s;" id="buttonToggle">
             <i class="fa-solid fa-bars" id="toggle"></i>
         </button>
 
@@ -13,19 +13,3 @@
         </form>
     </div>
 </div>
-
-<script>
-    const toggleSidebar = () => {
-        const sidebar = document.getElementById('sidebar');
-        const main = document.getElementById('mainContent');
-
-        if (sidebar.classList.contains('-translate-x-80')) {
-            sidebar.classList.remove('-translate-x-80')
-            main.classList.add('brightness-50')
-        } else {
-            sidebar.classList.add('-translate-x-80')
-            main.classList.remove('brightness-50')
-        }
-
-    }
-</script>
