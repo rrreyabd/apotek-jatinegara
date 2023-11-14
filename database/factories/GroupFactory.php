@@ -16,9 +16,11 @@ class GroupFactory extends Factory
      */
     public function definition(): array
     {
+        $groups = ['Bebas', 'Bebas Terbatas', 'Keras', 'Narkotika'];
+
         return [
             'group_id' => fake()->unique()->uuid,
-            'group' => fake()->words(mt_rand(1,2), true),
+            'group' => fake()->unique()->randomElement($groups),
         ];
     }
 }

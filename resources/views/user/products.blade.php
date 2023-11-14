@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Apotek | Produk</title>
     @vite('resources/css/app.css')
+    @livewireStyles
 
     {{-- FONT AWESOME --}}
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
@@ -368,7 +369,7 @@
                         @endif
                         <input type="hidden" name="minimum" value="">
                         <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
-                            <p>minimum: {{ request()->minimum }}</p>
+                            <p>minimum: {{ number_format(request()->minimum,0, ',', '.') }}</p>
                             <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
                         </div>
                     </form>
@@ -395,7 +396,7 @@
                         @endif
                         <input type="hidden" name="maksimum" value="">
                         <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
-                            <p>maksimum: {{ request()->maksimum }}</p>
+                            <p>maksimum: {{ number_format(request()->maksimum,0 ,',', '.') }}</p>
                             <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
                         </div>
                     </form>
@@ -406,7 +407,7 @@
                     @if ($products != NULL)
                     @foreach ($products as $product)
                     <div class="h-[350px] w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
-                        <a href="">
+                        <a href="/deskripsi/{{ Str::slug($product->product_name) }}">
                             <div class="px-2 w-full">
                                 <p class="font-semibold text-lg namaObat flex whitespace-normal break-words">{{ $product->product_name }}</p>
                             </div>
@@ -429,13 +430,11 @@
                             
                             <div class="w-[20%] h-full">
                                 @if ($product->product_status == 'aktif')
-                                <form action="/keranjang/tambah" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->product_id }}">
-                                <button type="submit" class="bg-mainColor h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
+                                <livewire:button-add-cart :user="auth()->user()->user_id" :product="$product->product_id"/>
+                                @else
+                                <button type="button" class="bg-lightGrey h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
                                     <i class="fa-solid fa-plus"></i>
-                                </button>
-                                </form>
+                                </button> 
                                 @endif
                             </div>
                         </div>
@@ -494,5 +493,6 @@
             }
         }
     </script>
+    @livewireScripts
 </body>
 </html>
