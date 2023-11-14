@@ -7,7 +7,7 @@
                 @if ($products_best_seller->first() != NULL)
                 @foreach ($products_best_seller as $product)
                 <div class="h-full w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
-                    <a href="" >
+                    <a href="/deskripsi/{{ Str::slug($product->first()->product_name) }}" >
                         <div class="px-2 w-full">
                             <p class="font-semibold text-lg namaObat flex whitespace-normal break-words">{{ $product->first()->product_name }}</p>
                         </div>
@@ -30,13 +30,11 @@
                         
                         <div class="w-[20%] h-full">
                             @if ($product->first()->product_status == "aktif")
-                            <form action="/keranjang/tambah" method="POST">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->first()->product_id }}">
-                            <button type="submit" class="bg-mainColor h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
+                            <livewire:button-add-cart :user="auth()->user()->user_id" :product="$product->first()->product_id"/>
+                            @else
+                            <button type="button" class="bg-lightGrey h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
                                 <i class="fa-solid fa-plus"></i>
-                            </button>
-                            </form>
+                            </button> 
                             @endif
                         </div>
                     </div>

@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $title }}</title>
     @vite('resources/css/app.css')
+    @livewireStyles
 
     {{-- FONT AWESOME --}}
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
@@ -26,6 +27,7 @@
     @include('user.components.banyak-dicari')
     
     @include('user.components.footer')
+    @livewireScripts
 </body>
 
 </html>
