@@ -93,11 +93,7 @@
                                 @foreach ($categories as $category)
                                     @php
                                         $jumlah = 0;
-                                        $description = $category->product_description;
-
-                                        foreach ($description as $d) {
-                                            $jumlah += $d->product->count();
-                                        }
+                                        $jumlah = $category->product_description->count();
                                     @endphp
                                 <div class="flex items-center text-mainColor text-lg gap-2">
                                     <input id="kategori{{ $i }}" type="radio" value="{{ $category->category }}" name="kategori" class="w-4 h-4 text-mainColor bg-gray-100" @if (request()->kategori == $category->category)
@@ -135,11 +131,7 @@
                                 @foreach ($groups as $group)
                                     @php
                                         $jumlah = 0;
-                                        $description = $group->product_description;
-
-                                        foreach ($description as $d) {
-                                            $jumlah += $d->product->count();
-                                        }
+                                        $jumlah = $group->product_description->count();
                                     @endphp
                                 <div class="flex items-center text-mainColor text-lg gap-2">
                                     <input id="golongan{{ $i }}" type="radio" value="{{ $group->group }}" name="golongan" class="w-4 h-4 text-mainColor bg-gray-100" @if (request()->golongan == $group->group)
@@ -177,11 +169,7 @@
                                 @foreach ($units as $unit)
                                     @php
                                         $jumlah = 0;
-                                        $description = $unit->product_description;
-
-                                        foreach ($description as $d) {
-                                            $jumlah += $d->product->count();
-                                        }
+                                        $jumlah = $unit->product_description->count();
                                     @endphp
                                 <div class="flex items-center text-mainColor text-lg gap-2">
                                     <input id="bentuk{{ $i }}" type="radio" value="{{ $unit->unit }}" name="bentuk" class="w-4 h-4 text-mainColor bg-gray-100" @if (request()->bentuk == $unit->unit)
@@ -429,13 +417,15 @@
                             </div>
                             
                             <div class="w-[20%] h-full">
-                                @if ($product->product_status == 'aktif')
-                                <livewire:button-add-cart :user="auth()->user()->user_id" :product="$product->product_id"/>
-                                @else
-                                <button type="button" class="bg-lightGrey h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button> 
-                                @endif
+                                @auth
+                                    @if ($product->product_status == 'aktif')
+                                        <livewire:button-add-cart :user="auth()->user()->user_id" :product="$product->product_id"/>
+                                    @else
+                                        <button type="button" class="bg-lightGrey h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button> 
+                                    @endif
+                                @endauth
                             </div>
                         </div>
                     </div>

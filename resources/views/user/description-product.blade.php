@@ -50,12 +50,16 @@
                     <p class="text-lg my-1">
                         Stok : {{ $description_product->product->detail()->orderBy('product_expired')->first()->product_stock }}
                     </p>
+                    @auth
                     <livewire:counter-product :stock="$description_product->product->detail()->orderBy('product_expired')->first()->product_stock" :user="auth()->user()->user_id" :product="$description_product->product->product_id" :status="$description_product->product->product_status"/>
                     @if (session('error'))
                         <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
                             * {{ session('error') }}
                         </div>
                     @endif
+                    @else
+                    <p class="text-red-500 mt-10 text-center text-xl">Untuk Pembelian Produk, User harus Melakukan <a href="/login" class="underline">Login</a> Terlebih Dahulu</p>
+                    @endauth
                 </div>
             </div>
             

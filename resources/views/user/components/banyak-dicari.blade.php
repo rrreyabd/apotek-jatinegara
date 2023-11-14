@@ -30,7 +30,9 @@
                         
                         <div class="w-[20%] h-full">
                             @if ($product->first()->product_status == "aktif")
+                            @auth
                             <livewire:button-add-cart :user="auth()->user()->user_id" :product="$product->first()->product_id"/>
+                            @endauth
                             @else
                             <button type="button" class="bg-lightGrey h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
                                 <i class="fa-solid fa-plus"></i>
