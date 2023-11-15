@@ -26,6 +26,8 @@
     @include('user.components.banyak-dicari')
     
     @include('user.components.footer')
+    
+</div>
 </body>
 
 </html>

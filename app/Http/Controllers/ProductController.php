@@ -246,4 +246,13 @@ class ProductController extends Controller
             "groups"=> $groups ?? [],
         ]);
     }
+
+    public function liveSearch(Request $request)
+{
+    $query = $request->input('query');
+
+    $products = Product::where('product_name', 'like', "%$query%")->get();
+
+    return response()->json($products);
+}
 }

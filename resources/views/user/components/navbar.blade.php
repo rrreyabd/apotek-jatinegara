@@ -2,10 +2,12 @@
     <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between">
         <a href="/" class="text-mainColor font-TripBold text-3xl">Apotek</a>
 
-        <form action="/produk" method="GET" class="relative">
-            <input type="text" name="cari" value="{{ request()->cari ?? "" }}" placeholder="Paracetamol"
+        <form action="/produk" method="GET" id="search-results"class="relative">
+            <label for="product_name"></label>
+            <input type="text" id="cari" name="cari" value="{{ request()->cari ?? "" }}" placeholder="Paracetamol"
                 class="px-3 py-2 w-[400px] rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack">
-            <button class="absolute right-4 top-2">
+            {{-- <input type="hidden" id="product_id" name=""> --}}
+                <button class="absolute right-4 top-2">
                 <i class="fa-solid fa-magnifying-glass text-2xl text-secondaryColor"></i>
             </button>
         </form>
@@ -154,4 +156,42 @@
             });
         }
     }
+</script>
+    
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>    
+    $(document).ready(function() {
+    $('#cari').autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: '{{ route('liveSearch') }}',
+                method: 'GET',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    query: request.term
+                },
+                dataType: 'json',
+                success: function(data) {
+                    response(data);
+                }
+            });
+        },
+        minLength: 1, // Atur jumlah karakter minimal sebelum live search dimulai
+        select: function(event, ui) {
+            $('#cari').val(ui.item.product_name); // Menampilkan label destinasi yang dipilih
+            $('#product_id').val(ui.item.product_id); // Menyimpan id destinasi yang dipilih pada input tersembunyi
+            return false;
+        }
+    }).data("ui-autocomplete")._renderItem = function(ul, item) {
+        return $("<li>")
+            .append("<div>" + item.product_name + "</div>")
+            .appendTo(ul);
+    }.bind(this);
+        $('#search-results').on('submit', function() {
+        var selectedProductId = $('#product_id').val();
+        $('#product_id').val(selectedProductId);
+        $('#cari').val($('#cari').val().trim()); // Saring nilai input
+    });
+});
 </script>
