@@ -14,7 +14,7 @@
 </head>
 
 <body class="font-Trip">
-    @include('user.components.secondNavbar')
+    @include('user.components.navbar')
 
     <div class="flex flex-col items-center mb-8">
 
