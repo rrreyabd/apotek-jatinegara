@@ -25,10 +25,10 @@
             <div class="md:flex justify-between">
                 <p class="text-3xl font-bold mb-2">List Kasir</p>
 
-                <a href="/owner/tambah-kasir" class="px-6 py-2.5 rounded-lg bg-mainColor text-white font-semibold">
+                <button onclick="showPopUpTambah()" class="px-6 py-2.5 rounded-lg bg-mainColor text-white font-semibold">
                     <i class="fa-solid fa-plus pe-2"></i>
                     Tambah Kasir
-                </a>
+                </button>
             </div>
 
             <div class="bg-white rounded-lg p-4 shadow-md overflow-x-auto">
@@ -59,14 +59,14 @@
                                 Jl. Sudirman no.200 Medan Selayang
                             </td>
                             <td>
-                                <a href="/owner/edit-kasir" class="p-2 bg-secondaryColor rounded mx-2"><i
-                                        class="fa-regular fa-pen-to-square" style="color: white;"></i></a>
+                                <button onclick="showPopUpEdit()" class="p-2 bg-secondaryColor rounded mx-2"><i
+                                        class="fa-regular fa-pen-to-square" style="color: white;"></i></button>
                                 <button onclick="showPopUpDelete()" class="p-2 bg-mediumRed rounded mx-2"><i
                                         class="fa-regular fa-trash-can" style="color: white;"></i></button>
 
                                 {{-- Pop up konfirmasi hapus start --}}
                                 <div class="absolute w-screen h-screen backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden"
-                                    id="popup">
+                                    id="popupHapus">
                                     <div
                                         class="w-[30%] h-[50%] bg-white rounded-2xl shadow-md p-8 flex flex-col gap-6 relative items-center">
                                         <div class="border-2 border-mainColor rounded-full w-fit">
@@ -86,6 +86,98 @@
                                     </div>
                                 </div>
                                 {{-- Pop up konfirmasi hapus end --}}
+
+                                {{-- pop up edit kasir start --}}
+                                <div class="top-0 left-0 hidden flex flex-col justify-center items-center absolute z-10 backdrop-blur-sm backdrop-brightness-75 rounded-xl w-full h-screen"
+                                    id="popupEdit">
+                                    <div class="w-fit flex flex-col justify-center">
+                                        <div class="bg-mainColor text-white font-semibold px-10 py-4 rounded-t-xl flex justify-between">
+                                            Edit Kasir
+                                            <button onclick="showPopUpEdit()">
+                                            <i class="fa-solid fa-xmark fa-xl" style="color: white"></i>
+                                            </button>
+                                        </div>
+                                        <div class="bg-white p-7 pt-4 rounded-b-xl">
+                                            <form action="" method="post">
+                                                <div class="flex gap-6 p-4">
+                                                    <table>
+                                                        <tr>
+                                                            <td class="py-5"><label for="namaUser">Nama User</label></td>
+                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="py-5"><label for="email">Email</label></td>
+                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="py-5"><label for="gender">Gender</label></td>
+                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="py-5"><label for="nohp">No. Handphone</label></td>
+                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="py-5"><label for="alamatKasir">Alamat</label></td>
+                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="flex justify-end">
+                                                    <button type="submit"
+                                                        class="p-2 px-4 me-4 bg-secondaryColor text-white font-semibold rounded-lg">Tambah</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- pop up edit kasir end --}}
+
+                                {{-- pop up tambah kasir start --}}
+                                <div class="top-0 left-0 hidden flex flex-col justify-center items-center absolute z-10 backdrop-blur-sm backdrop-brightness-75 rounded-xl w-full h-screen"
+                                    id="popupTambah">
+                                    <div class="w-fit flex flex-col justify-center">
+                                        <div class="bg-mainColor text-white font-semibold px-10 py-4 rounded-t-xl flex justify-between">
+                                            Tambah Kasir
+                                            <button onclick="showPopUpTambah()">
+                                            <i class="fa-solid fa-xmark fa-xl" style="color: white"></i>
+                                            </button>
+                                        </div>
+                                        <div class="bg-white p-7 pt-4 rounded-b-xl">
+                                            <form action="" method="post">
+                                                <div class="flex gap-6 p-4">
+                                                    <table>
+                                                        <tr>
+                                                            <td class="py-5"><label for="namaUser">Nama User</label></td>
+                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="py-5"><label for="email">Email</label></td>
+                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="py-5"><label for="gender">Gender</label></td>
+                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="py-5"><label for="nohp">No. Handphone</label></td>
+                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="py-5"><label for="alamatKasir">Alamat</label></td>
+                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="flex justify-end">
+                                                    <button type="submit"
+                                                        class="p-2 px-4 me-4 bg-secondaryColor text-white font-semibold rounded-lg">Tambah</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- pop up tambah kasir end --}}
                             </td>
                             </tr>
                             @endfor
@@ -102,7 +194,27 @@
 
     <script>
         const showPopUpDelete = () => {
-            const popup = document.getElementById('popup');
+            const popup = document.getElementById('popupHapus');
+
+            if (popup.classList.contains('hidden')) {
+                popup.classList.remove('hidden')
+            } else {
+                popup.classList.add('hidden')
+            }
+        }
+
+        const showPopUpEdit = () => {
+            const popup = document.getElementById('popupEdit');
+
+            if (popup.classList.contains('hidden')) {
+                popup.classList.remove('hidden')
+            } else {
+                popup.classList.add('hidden')
+            }
+        }
+
+        const showPopUpTambah = () => {
+            const popup = document.getElementById('popupTambah');
 
             if (popup.classList.contains('hidden')) {
                 popup.classList.remove('hidden')

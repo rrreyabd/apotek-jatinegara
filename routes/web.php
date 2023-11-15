@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProductController;
 use App\Models\User;
@@ -46,9 +47,8 @@ Route::controller(GoogleController::class)->group(function() {
 
 Route::get('/', [ProductController::class, 'home'])->name('home');
 
-Route::get('/produk', function () {
-        return view('user.products');
-});
+Route::get('/produk', [ProductController::class,'produk'])->name('produk');
+Route::get('/deskripsi/{product}', [ProductController::class,'deskripsiProduk'])->name('deskripsi-produk');
 // akhir halaman akses tanpa login
 
 // halama user, cashier, owner
@@ -73,12 +73,12 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/riwayat-pesanan', [UserController::class,'riwayatTransaksi'])->name('riwayat-transaksi');
     Route::get('/detail-riwayat-pesanan', [UserController::class,'detailRiwayatTransaksi'])->name('detail-riwayat-transaksi');
 
-    Route::get('/produk', [ProductController::class,'produk'])->name('produk');
-
     Route::get('/keranjang', [CartController::class,'keranjang'])->name('keranjang');
     Route::post('/keranjang/jumlah', [CartController::class,'jumlahItem'])->name('jumlah-keranjang');
     Route::post('/keranjang/hapus', [CartController::class,'hapusItem'])->name('hapus-keranjang');
     Route::post('/keranjang/tambah', [CartController::class,'tambahItem'])->name('tambah-keranjang');
+
+    Route::get('/booking', [CustomerController::class,'booking'])->name('booking');
 });
 // akhir halaman user
 
@@ -132,14 +132,6 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->group(function () {
         return view('pemilik.list-kasir');
     });
 
-    Route::get('/owner/tambah-kasir', function () {
-        return view('pemilik.tambah-kasir');
-    });
-
-    Route::get('/owner/edit-kasir', function () {
-        return view('pemilik.edit-kasir');
-    });
-
     Route::get('/owner/transaksi-penjualan', function () {
         return view('pemilik.log-transaksi-penjualan');
     });
@@ -154,6 +146,10 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->group(function () {
 
     Route::get('/owner/user', function () {
         return view('pemilik.list-user');
+    });
+
+    Route::get('/owner/pesanan-pending', function () {
+        return view('pemilik.pesanan-pending');
     });
 });
 // akhir halaman owner

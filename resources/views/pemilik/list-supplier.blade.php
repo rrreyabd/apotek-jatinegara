@@ -70,7 +70,7 @@
                             </div>
                             <div class="flex justify-end">
                                 <button type="submit"
-                                    class="p-2 px-4 bg-secondaryColor text-white font-semibold rounded-lg">Tambah</button>
+                                    class="p-2 px-4 me-4 bg-secondaryColor text-white font-semibold rounded-lg">Tambah</button>
                             </div>
                         </form>
                     </div>

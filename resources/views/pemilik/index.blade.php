@@ -14,12 +14,6 @@
 
     {{-- DATATABLES --}}
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-
-    {{-- <style>
-        * {
-            border: red 2px solid;
-        }
-    </style> --}}
 </head>
 
 <body class="font-Inter relative">
@@ -29,12 +23,12 @@
         <div class="flex flex-col gap-8">
             <div class="md:flex gap-4 items-center">
                 {{-- toggle --}}
-                <button onclick="sidebar()" class="p-3 px-4 rounded-lg shadow-md bg-white w-fit"
+                <button onclick="sidebar()" class="p-3 px-4 rounded-lg shadow-md bg-white w-fit z-10"
                     style="transition: 0.25s;" id="buttonToggle">
                     <i class="fa-solid fa-bars" id="toggle"></i>
                 </button>
 
-                <p class="text-3xl font-bold">Dashboard</p>
+                <p class="text-3xl font-bold absolute ms-16">Dashboard</p>
             </div>
 
             <div class="md:flex gap-6 justify-between">
@@ -87,7 +81,7 @@
                 </div>
             </div>
 
-            <div class="flex gap-6"> 
+            <div class="md:flex gap-6">
                 <div class="bg-white p-8 rounded-lg shadow-lg w-full flex flex-col items-center justify-center">
                     <p class="text-xl font-bold">Produk Populer</p>
 
@@ -97,10 +91,10 @@
                     <table>
                         <tbody>
                             @for ($i = 0; $i < 3; $i++) 
-                            <tr class="flex justify-between items-center gap-8">
+                            <tr class="md:flex justify-between items-center gap-8">
                                 <td>{{$i + 1}}</td>
-                                <td class="w-[160px] h-[140px]">
-                                    <img src="{{asset('img/obat1.jpg')}}" alt="" class="w-25 p-5">
+                                <td class="w-[160px] h-[140px] invisible">
+                                    <img src="{{asset('img/obat1.jpg')}}" alt="" class="sm:visible w-25 p-5">
                                 </td>
                                 <td>
                                     <p class="font-bold">Paracetamol 500 mg</p>
@@ -119,11 +113,16 @@
 
                     {{-- line --}}
                     <div class="w-[90%] shadow border border-mainColor my-3"></div>
+
+                    {{-- chart start --}}
+                    
+                    {{-- chart end --}}
+
                 </div>
             </div>
 
-            <p class="font-bold text-2xl">Transaksi Terakhir</p>
-            <input type="month" name="" id="tgl-transaksi" class="w-fit p-3 rounded-lg shadow-lg">
+            <p class="font-bold text-2xl mt-5">Transaksi Terakhir</p>
+            <input type="month" name="" id="tgl-transaksi" class="w-fit p-3 rounded-lg shadow-lg border-none">
 
             <div class="bg-white rounded-lg p-4 shadow-md overflow-x-auto">
                 <table id="myTable" class="table table-striped">
@@ -146,7 +145,7 @@
                             <td>INV-123321</td>
                             <td>Pembelian</td>
                             <td>Tunai</td>
-                            <td>Rp 
+                            <td>Rp
                                 {{-- {{ number_format($jumlah , 0, ',', '.') }} --}}
                             </td>
                             </tr>
@@ -162,12 +161,16 @@
         crossorigin="anonymous"></script>
     <script src=" {{asset('js/datatables.js')}}"></script>
 
+    {{-- CHART SCRIPT --}}
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src=" {{asset('js/chart.js')}}"></script>
+
     <script>
+        // disable future date
         var today = new Date();
         var year = today.getFullYear();
         var month = (today.getMonth() + 1).toString().padStart(2, '0');
         var maxDate = year + '-' + month;
-    
         document.getElementById('tgl-transaksi').setAttribute('max', maxDate);
     </script>
 </body>

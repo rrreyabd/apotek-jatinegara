@@ -21,35 +21,42 @@
     <main class="p-10 font-Inter bg-plat min-h-[100vh] h-full" id="mainContent">
         @include('pemilik.components.navbar')
 
-        <div class="flex flex-col gap-8 mt-10">
+        <p class="text-3xl font-bold mt-10 mb-4">Log Transaksi Pembalian</p>
+
+        <div class="flex flex-col gap-8">
             <div class="flex justify-between">
-            <p class="text-3xl font-bold">Log Transaksi Pembelian</p>
+                <div class="flex">
+                    <input type="month" name="" id="" class="w-fit p-3 rounded-lg shadow-lg border-none">
+                    <p class="mx-3 font-extrabold flex items-center text-2xl">-</p>
+                    <input type="month" name="" id="" class="w-fit p-3 rounded-lg shadow-lg border-none">
+                </div>
 
             {{-- FILTER START --}}
-            <div class="flex gap-8">    
-                @for ($i = 0; $i < 1; $i++)
-                <div class="relative inline-block text-left">
-                    <button id="dropdown-button{{$i}}" class="inline-flex justify-center gap-2 items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-2  focus:ring-mainColor">
+            @for ($i = 0; $i < 1; $i++) 
+            <div class="relative inline-block text-left">
+                    <button id="dropdown-button{{$i}}"
+                        class="inline-flex justify-center gap-4 items-center w-full px-4 h-full text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-2  focus:ring-mainColor">
                         Filter
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
-                    <div id="dropdown-menu{{$i}}" class="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div id="dropdown-menu{{$i}}"
+                        class="origin-top-left absolute bottom-16 right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                         <div class="py-2 p-2" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-button">
 
-                            @for ($j = 1; $j < 5; $j++)
-                            <form action="" method="GET">
+                            @for ($j = 1; $j < 5; $j++) <form action="" method="GET">
                                 <input type="hidden" name="" id="" value="">
-                                <button class="flex rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer" role="menuitem">
+                                <button
+                                    class="flex rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
+                                    role="menuitem">
                                     Option {{$j}}
                                 </button>
-                            </form>
-                            @endfor
+                                </form>
+                                @endfor
 
                         </div>
                     </div>
-                </div>
-                @endfor
             </div>
+            @endfor
             {{-- FILTER END --}}
         </div>
 
@@ -87,7 +94,7 @@
                                     <button class="border-2 border-secondaryColor rounded-md hover:bg-transparent hover:text-secondaryColor font-bold px-4 py-1 bg-secondaryColor text-white duration-300 transition-colors ease-in-out" type="button" onclick="toggleDetail()">Lihat</button>
                                 </div>
 
-                                {{-- MODAL DETAIL RIWAYAT TRANSAKSI START --}}
+                                {{-- MODAL DETAIL TRANSAKSI PEMBELIAN START --}}
                                 <div class="absolute w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal">
                                     <div class="w-[70%] h-fit max-h-full bg-white rounded-md shadow-md p-8 flex flex-col gap-6 overflow-auto">
                                         <div class="flex justify-between items-center">
@@ -163,7 +170,7 @@
     
                                     </div>
                                 </div>
-                                {{-- MODAL DETAIL RIWAYAT TRANSAKSI END --}}
+                                {{-- MODAL DETAIL TRANSAKSI PEMBELIAN END --}}
                             </td>
                             </tr>
                             @endfor

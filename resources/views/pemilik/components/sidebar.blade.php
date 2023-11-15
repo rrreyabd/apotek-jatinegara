@@ -42,7 +42,7 @@
 
         <div class="overflow-x-hidden text-mediumGrey my-4" style="transition: 0.3s;">
             <a href="/owner/produk" class="flex items-center text-lg">
-                <i class="fa-solid fa-pills me-3"></i>
+                <i class="fa-solid fa-bag-shopping me-3"></i>
                 <p>Produk</p>
             </a>
         </div>

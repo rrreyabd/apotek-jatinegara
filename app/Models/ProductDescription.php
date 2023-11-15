@@ -20,7 +20,7 @@ class ProductDescription extends Model
 
     public function product()
     {
-        return $this->hasMany(Product::class, 'description_id');
+        return $this->hasOne(Product::class, 'description_id');
     }
 
     public function category(){
