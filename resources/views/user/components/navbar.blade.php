@@ -4,15 +4,7 @@
             <a href="/" class="text-mainColor font-TripBold text-3xl">Apotek</a>
 
             @if (request()->url() == route('home'))
-            <form action="/produk" method="GET" id="search-results"class="relative">
-                <label for="product_name"></label>
-                <input type="text" id="cari" name="cari" value="{{ request()->cari ?? "" }}" placeholder="Paracetamol"
-                    class="px-3 py-2 w-[400px] rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack">
-                {{-- <input type="hidden" id="product_id" name=""> --}}
-                    <button class="absolute right-4 top-2">
-                    <i class="fa-solid fa-magnifying-glass text-2xl text-secondaryColor"></i>
-                </button>
-            </form>
+            <livewire:livesearch/>
             @endif
 
         <div class="flex gap-4 justify-center items-center relative">
@@ -122,14 +114,6 @@
 
     const menu = document.querySelector('#dropdownMenu');
 
-    document.addEventListener('click', (event) => {
-        if (event.target !== menu) {
-            menu.classList.add('hidden');
-            menu.classList.remove('opacity-100');
-            menu.classList.add('opacity-0');
-        }
-    });
-
     const logoutAlert = () => {
         const modal = document.getElementById('logoutAlertPopUp');
         const button = document.getElementById("btnLogout");
@@ -154,4 +138,70 @@
             });
         }
     }
+
+    var input = document.querySelector('#cari');
+    var livesearch = document.querySelector('#livesearch')
+
+    document.addEventListener('livewire:init', ()=>{
+        input.addEventListener('keydown',  function(){
+            var cari = input.value;
+            Livewire.dispatch('livesearch', {cari: cari})
+        })
+    })
+
+    document.addEventListener('click', (event) => {
+        if (event.target !== menu) {
+            menu.classList.add('hidden');
+            menu.classList.remove('opacity-100');
+            menu.classList.add('opacity-0');
+        }
+
+        if(event.target != input) {
+            livesearch.classList.add('hidden');
+            livesearch.classList.remove('opacity-100');
+            livesearch.classList.add('opacity-0');
+        }else{
+            livesearch.classList.remove('hidden');
+            livesearch.classList.add('opacity-100');
+            livesearch.classList.remove('opacity-0');
+        }
+    });
 </script>
+
+{{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>    
+    $(document).ready(function() {
+    $('#cari').autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: '{{ route('liveSearch') }}',
+                method: 'GET',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    query: request.term
+                },
+                dataType: 'json',
+                success: function(data) {
+                    response(data);
+                }
+            });
+        },
+        minLength: 1, // Atur jumlah karakter minimal sebelum live search dimulai
+        select: function(event, ui) {
+            $('#cari').val(ui.item.product_name); // Menampilkan label destinasi yang dipilih
+            $('#product_id').val(ui.item.product_id); // Menyimpan id destinasi yang dipilih pada input tersembunyi
+            return false;
+        }
+    }).data("ui-autocomplete")._renderItem = function(ul, item) {
+        return $("<li>")
+            .append("<div>" + item.product_name + "</div>")
+            .appendTo(ul);
+    }.bind(this);
+        $('#search-results').on('submit', function() {
+        var selectedProductId = $('#product_id').val();
+        $('#product_id').val(selectedProductId);
+        $('#cari').val($('#cari').val().trim()); // Saring nilai input
+    });
+});
+</script> --}}
