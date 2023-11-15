@@ -20,7 +20,7 @@
 
 </head>
 <body class="font-Inter relative">
-    @include('user.components.secondNavbar')
+    @include('user.components.navbar')
 
     <div class="flex flex-col items-center mb-8">
         <div class="w-[70vw] mt-8 flex gap-8">

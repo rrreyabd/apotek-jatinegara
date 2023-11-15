@@ -14,9 +14,9 @@ class UserController extends Controller
 {
     public function profile() {
         return view("user.profile-user",[
-            "username"=> auth()->user()->username ?? [],
-            "nomorhp"=> auth()->user()->customer->customer_phone ?? [],
-            "email"=> auth()->user()->email ?? [],
+            "username"=> auth()->user()->username ?? "",
+            "nomorhp"=> auth()->user()->customer->customer_phone ?? "",
+            "email"=> auth()->user()->email ?? "",
         ]);
     }
 
