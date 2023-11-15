@@ -26,12 +26,11 @@
             </a>
             @else
             {{-- JIKA USER SUDAH LOGIN --}}
-                @if (auth()->user()->role == 'user')
-                <a href="/keranjang" class="flex justify-center items-center h-[40px] w-[40px] relative">
-                    <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
-                    <span
-                        class="absolute bg-secondaryColor h-6 w-6 p-2 font-semibold flex justify-center items-center align-middle rounded-full left-6 bottom-6 text-white font-sans border-2 border-white text-[15px]">{{ auth()->user()->cart->count() }}</span>
-                </a>
+            @if (auth()->user()->role == 'user')
+            <a href="/keranjang" class="flex justify-center items-center h-[40px] w-[40px] relative">
+                <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
+                <livewire:cart-notif :count="auth()->user()->cart->count()" />
+            </a>
 
                 <button onclick="toggleProfile()"
                     class="border-2 border-mainColor h-[35px] w-[35px] rounded-full flex justify-center items-center overflow-hidden relative">

@@ -12,6 +12,7 @@ use App\Models\SellingInvoiceDetail;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -247,6 +248,7 @@ class ProductController extends Controller
         ]);
     }
 
+
     public function liveSearch(Request $request)
 {
     $query = $request->input('query');
@@ -255,4 +257,19 @@ class ProductController extends Controller
 
     return response()->json($products);
 }
+
+    public function deskripsiProduk(Request $request){
+        $products = Product::all();
+        
+        foreach($products as $product){
+            if(Str::slug($product->product_name) == $request->product){
+                $description_product = $product->description;
+                return view("user.description-product",[
+                    "description_product" => $description_product ?? [],
+                ]);
+            }
+        }
+
+        abort(404);
+    }
 }
