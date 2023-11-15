@@ -114,6 +114,15 @@
 
     const menu = document.querySelector('#dropdownMenu');
 
+    document.addEventListener('click', (event) => {
+        console.log(event);
+        if (event.target !== menu) {
+            menu.classList.add('hidden');
+            menu.classList.remove('opacity-100');
+            menu.classList.add('opacity-0');
+        }
+    });
+
     const logoutAlert = () => {
         const modal = document.getElementById('logoutAlertPopUp');
         const button = document.getElementById("btnLogout");
@@ -139,6 +148,9 @@
         }
     }
 
+</script>
+<script>
+
     var input = document.querySelector('#cari');
     var livesearch = document.querySelector('#livesearch')
 
@@ -150,11 +162,6 @@
     })
 
     document.addEventListener('click', (event) => {
-        if (event.target !== menu) {
-            menu.classList.add('hidden');
-            menu.classList.remove('opacity-100');
-            menu.classList.add('opacity-0');
-        }
 
         if(event.target != input) {
             livesearch.classList.add('hidden');
