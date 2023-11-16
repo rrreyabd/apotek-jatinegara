@@ -80,6 +80,11 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::post('/keranjang/tambah', [CartController::class,'tambahItem'])->name('tambah-keranjang');
 
     Route::get('/booking', [CustomerController::class,'booking'])->name('booking');
+    Route::post('/booking', [CustomerController::class,'booking_detail'])->name('booking-detail');
+    Route::post('/pembayaran', [CustomerController::class, 'pembayaran'])->name('pembayaran');
+
+    Route::get('/informasi_pembayaran/{file}/{id}', [CustomerController::class, 'informasi_pembayaran'])->name('informasi-pembayaran');
+    Route::get('/resep_dokter/{file}/{id}', [CustomerController::class, 'resep_dokter'])->name('resep-dokter');
 });
 // akhir halaman user
 
