@@ -13,7 +13,7 @@
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 </head>
 <body class="font-Inter bg-semiWhite">
-    @include('user.components.secondNavbar')
+    @include('user.components.navbar')
 
     <div class="flex justify-center">
         <div class="w-[80vw] py-10 flex justify-between">

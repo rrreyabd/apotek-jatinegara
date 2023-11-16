@@ -18,7 +18,7 @@
     </style>
 </head>
 <body class="font-Inter relative h-[100vh]">
-    @include('user.components.secondNavbar')
+    @include('user.components.navbar')
 
     <div class="flex flex-col items-center mb-16">
         <div class="w-[70vw] mt-8 flex flex-col gap-8">
@@ -72,7 +72,7 @@
 
                     <div class="flex flex-col w-full gap-2">
                         <label for="username">Username :</label>
-                        <input type="text" name="username" id="username" value="{{ $username }}" placeholder="Username"
+                        <input type="text" name="username" id="username" value="{{ $username ?? "" }}" placeholder="Username"
                         class="border-2 h-12 px-4 rounded-xl bg-lightGrey">
                         @error('username')
                         @if ($message == 'The username field format is invalid.')
@@ -89,7 +89,7 @@
 
                     <div class="flex flex-col w-full gap-2">
                         <label for="nohp">No Handphone :</label>
-                        <input type="text" name="nohp" id="nohp" value="{{ $nomorhp }}" placeholder="No Handphone"
+                        <input type="text" name="nohp" id="nohp" value="{{ $nomorhp ?? "" }}" placeholder="No Handphone"
                         class="border-2 h-12 px-4 rounded-xl bg-lightGrey">
                         @error('nohp')
                             <div class="text-md text-red-500 mt-1 ms-3 mb-0 text-left">
@@ -100,7 +100,7 @@
 
                     <div class="flex flex-col w-full gap-2">
                         <label for="email">Email :</label>
-                        <input type="text" name="email" id="email" value="{{ $email }}" placeholder="Email" disabled
+                        <input type="text" name="email" id="email" value="{{ $email ?? "" }}" placeholder="Email" disabled
                         class="border-2 h-12 px-4 rounded-xl bg-lightGrey text-slate-500">
                     </div>
 
