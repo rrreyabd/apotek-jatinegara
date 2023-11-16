@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cashier;
+use App\Models\SellingInvoice;
+use App\Models\SellingInvoiceDetail;
 use App\Http\Requests\StoreCashierRequest;
 use App\Http\Requests\UpdateCashierRequest;
+use App\Policies\SellingInvoiceDetailPolicy;
 
 class CashierController extends Controller
 {
@@ -35,14 +38,20 @@ class CashierController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Cashier $cashier)
+    public function riwayatTransaksi()
     {
-        //
+        $histories = SellingInvoice::with('sellingInvoiceDetail')
+            ->where('order_status', 'Berhasil')
+            ->orWhere('order_status','Offline')
+            ->orWhere('order_status','Gagal')
+            ->orWhere('order_status','Refund')
+            ->get();
+        $histories = $histories->reverse();
+            // dd($histories);
+    
+        return view('kasir.riwayat-transaksi', ['histories' => $histories]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Cashier $cashier)
     {
         //

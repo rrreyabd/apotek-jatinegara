@@ -26,6 +26,7 @@
             <div class="bg-white rounded-lg p-4 shadow-md">
                 <table id="myTable" class="table table-striped">
                     <thead>
+                        
                         <tr>
                             <th>No.</th>
                             <th>Nomor Invoice</th>
@@ -37,49 +38,74 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i < 6; $i++)               
+                        @php $i = 1;  @endphp
+                        @php $index = 1;  @endphp
+                        @foreach ($histories as $history)               
                         <tr>
-                            <td>{{$i + 1}}</td>
+                            <td>{{ $i }}</td>
                             <td>
-                                <span class="font-bold">INV-1234{{$i}}</span>
+                                <span class="font-bold">{{ $history->invoice_code }}</span>
                             </td>
-                            <td>Nama Penerima Nama Penerima  {{$i + 1}}</td>
-                            <td>24 Desember 2023</td>
-                            <td>RP 650.000</td>
+                            <td>{{$history->customer_name}}</td>
+                            <td>{{ $history->order_date }}</td>
+                                 @php
+                                    $totalPrice = 0; // Initialize the variable to store the total price
+                                @endphp
+                                @foreach ($history->sellingInvoiceDetail as $invoice)
+                                    @php
+                                    $totalPrice = $totalPrice + ($invoice->product_sell_price * $invoice->quantity); // Accumulate the price
+                                    @endphp
+                                @endforeach
+                            <td>{{ $totalPrice }}</td>
                             <td>
                                 <div class="w-full flex gap-2 items-center">
                                     {{-- GREEN = BERHASIL, YELLOW = REFUND, RED = GAGAL --}}
-                                    <i class="text-green-600 fa-solid fa-circle"></i>
-                                    <i class="text-yellow-600 fa-solid fa-circle"></i>
-                                    <i class="text-red-600 fa-solid fa-circle"></i>
-                                    <p class="font-bold">Berhasil</p>
+                                    @if ( $history->order_status == 'Berhasil' || $history->order_status == 'Offline')
+                                        <i class="text-green-600 fa-solid fa-circle"></i>
+                                    @elseif ($history->order_status == 'Refund')
+                                        <i class="text-yellow-600 fa-solid fa-circle"></i>
+                                    @elseif ($history->order_status == 'Gagal')
+                                        <i class="text-red-600 fa-solid fa-circle"></i>
+                                    @endif
+                                    <p class="font-bold">
+                                        {{ $history->order_status }}
+                                        {{-- @if ($history->order_status == 'Berhasil')
+                                            {{ 'Online' }}
+                                        @else {{ $history->order_status }}
+                                        @endif --}}
+                                    </p>
                                 </div>
                             </td>
                             <td>
                                 <div class="flex justify-center w-full">
-                                    <button class="border-2 border-secondaryColor rounded-md hover:bg-transparent hover:text-secondaryColor font-bold px-4 py-1 bg-secondaryColor text-white duration-300 transition-colors ease-in-out" type="button" onclick="toggleDetail()">Lihat</button>
+                                    <button class="border-2 border-secondaryColor rounded-md hover:bg-transparent hover:text-secondaryColor font-bold px-4 py-1 bg-secondaryColor text-white duration-300 transition-colors ease-in-out"
+                                    type="button" onclick="toggleDetail({{ $index }})" data-index="{{ $index }}">Lihat</button>
                                 </div>
+                             @php $i++; @endphp
 
                                 {{-- MODAL DETAIL RIWAYAT TRANSAKSI START --}}
-                                <div class="absolute w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal">
+                                <div class="absolute w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal{{ $index }}">                                    
                                     <div class="w-[70%] h-fit max-h-full bg-white rounded-md shadow-md p-8 flex flex-col gap-6 overflow-auto">
                                         <div class="flex justify-between items-center">
-                                            <button onclick="toggleDetail()" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
+                                            <button onclick="toggleDetail({{ $index }})" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
                                                 <i class="fa-solid fa-arrow-left"></i>
                                                 Kembali
                                             </button>
     
-                                            <p class="font-bold">INV-12345</p>
+                                            <p class="font-bold">{{ $history->invoice_code }}</p>
     
                                             <div class="flex gap-2 items-center">
                                                 {{-- GREEN = BERHASIL, YELLOW = REFUND, RED = GAGAL --}}
+                                                @if ( $history->order_status == 'Berhasil' || $history->order_status == 'Offline')
                                                 <i class="text-green-600 fa-solid fa-circle"></i>
-                                                <i class="text-yellow-600 fa-solid fa-circle"></i>
-                                                <i class="text-red-600 fa-solid fa-circle"></i>
-                                                <p class="font-bold">Berhasil</p>
+                                                @elseif ($history->order_status == 'Refund')
+                                                    <i class="text-yellow-600 fa-solid fa-circle"></i>
+                                                @elseif ($history->order_status == 'Gagal')
+                                                    <i class="text-red-600 fa-solid fa-circle"></i>
+                                                @endif
+                                                <p class="font-bold">{{ $history->order_status }}</p>
                                             </div>
                                         </div>
-    
                                         <div class="px-8 py-2 w-[100%] flex justify-between">
                                             <div class="w-[70%]">
                                                 <div class="flex flex-col gap-8">
@@ -91,20 +117,17 @@
                                                             <td class="w-[25%] pb-2 text-center">Harga</td>
                                                             <td class="w-[25%] pb-2">Total</td>
                                                         </tr>
+                                                            @php $j = 1; @endphp
+                                                        @foreach($history->sellingInvoiceDetail as $invoice)
                                                         <tr>
-                                                            <td class="py-2 text-center">1</td>
-                                                            <td class="py-2">Paracetamol 200 kg</td>
-                                                            <td class="py-2 text-center">4</td>
-                                                            <td class="py-2 text-center">Rp 5.000</td>
-                                                            <td class="py-2">Rp 20.000</td>
+                                                            <td class="py-2 text-center">{{ $j }}</td>
+                                                            <td class="py-2">{{ $invoice->product_name }}</td>
+                                                            <td class="py-2 text-center">{{ $invoice->quantity }}</td>
+                                                            <td class="py-2 text-center">{{ $invoice->product_sell_price }}</td>
+                                                            <td class="py-2">{{ $invoice->quantity * $invoice->product_sell_price}}</td>
                                                         </tr>
-                                                        <tr>
-                                                            <td class="py-2 text-center">2</td>
-                                                            <td class="py-2">Panadol 200 mg</td>
-                                                            <td class="py-2 text-center">3</td>
-                                                            <td class="py-2 text-center">Rp 2.500</td>
-                                                            <td class="py-2">Rp 7.500</td>
-                                                        </tr>
+                                                            @php $j++ @endphp
+                                                        @endforeach
                                                     </table>
                                                 </div>
     
@@ -113,19 +136,25 @@
                                                     <div class="flex font-bold gap-2">
                                                         <p class="w-28">Total Harga</p>
                                                         <p>:</p>
-                                                        <p class="text-secondaryColor">Rp 140.000</p>
+                                                        <p class="text-secondaryColor">
+                                                            {{ $totalPrice }}
+                                                        </p>
                                                     </div>
                                                     <div class="flex font-bold gap-2">
                                                         <p class="w-28">Kasir</p>
                                                         <p>:</p>
-                                                        <p class="text-mainColor">Go Youn Jung</p>
+                                                        <p class="text-mainColor">{{ $history->cashier_name }}</p>
                                                     </div>
                                                     {{-- ALASAN GAGAL KALAU ADA --}}
-                                                    <div class="flex font-bold gap-2">
-                                                        <p class="w-28">Alasan Gagal</p>                                
-                                                        <p>:</p>
-                                                        <p class="text-mainColor">Ngerjain Tubes</p>
-                                                    </div>
+                                                    @if($history->order_status == 'Gagal')
+                                                        <div class="flex font-bold gap-2">
+                                                            <p class="w-28">Alasan Gagal</p>                                
+                                                            <p>:</p>
+                                                            <p class="text-mainColor">{{ $history->reject_comment }}</p>
+                                                        </div>
+                                                    @else 
+                                                        <div></div>
+                                                    @endif
                                                 </div>
                                             </div>
     
@@ -134,27 +163,27 @@
                                                 <hr class="border-2 border-transparent border-b-mainColor">
                                                 <div class="py-2">
                                                     <p class="font-bold">Pelanggan :</p>
-                                                    <p>Bobby The Cat</p>
+                                                    <p>{{ $history->customer_name }}</p>
                                                     <p class="font-bold">Nomor HP :</p>
-                                                    <p>0812-1234-1234</p>
+                                                    <p>{{ $history->customer_phone }}</p>
                                                     <p class="font-bold">Tanggal Pengambilan :</p>
-                                                    <p>25 Oktober 2023 10:15:28</p>
+                                                    <p>{{ $history->order_date }}</p>
                                                     <p class="font-bold">Metode Pembayaran :</p>
-                                                    <p>BCA</p>
+                                                    <p>{{ $history->customer_bank }}</p>
                                                     <p class="font-bold">Bukti Pembayaran :</p>
-                                                    <a href="/cashier/img" target="_blank" class="text-blue-600 underline">hehehe.jpg</a>
+                                                    <a href="/cashier/img" target="_blank" class="text-blue-600 underline">{{ $history->customer_payment }}</a>
                                                     <p class="font-bold">Catatan :</p>
-                                                    <p>Kapan Tubes Selesai</p>
+                                                    <p>{{ $history->customer_request }}</p>
                                                 </div>
                                             </div>
                                         </div>
-    
                                     </div>
                                 </div>
                                 {{-- MODAL DETAIL RIWAYAT TRANSAKSI END --}}
                             </td>
                         </tr>
-                        @endfor
+                        @php $index++ @endphp
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -166,17 +195,17 @@
     <script src="{{ asset('js/datatables.js') }}"></script>
 
     <script>
-        const toggleDetail = () => {
-            const modal = document.getElementById('detailModal');
+        const toggleDetail = (index) => {
+            const modal = document.getElementById('detailModal' + index);
 
             if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden')
-                document.body.classList.add('h-[100vh]')
+                modal.classList.remove('hidden');
+                document.body.classList.add('h-[100vh]');
             } else {
-                modal.classList.add('hidden')
-                document.body.classList.remove('h-[100vh]')
+                modal.classList.add('hidden');
+                document.body.classList.remove('h-[100vh]');
             }
-        }
+        };
     </script>
 </body>
 </html>

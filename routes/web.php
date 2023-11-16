@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CashierController;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
@@ -88,9 +89,7 @@ Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
         return view('kasir.index');
     });
 
-    Route::get('/cashier/riwayat-transaksi', function () {
-        return view('kasir.riwayat-transaksi');
-    });
+    Route::get('/cashier/riwayat-transaksi', [CashierController::class, 'riwayatTransaksi'])->name('riwayat-transaksi-kasir');
 
     Route::get('/cashier/img', function () {
         return view('kasir.show-image');
