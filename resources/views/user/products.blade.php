@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Apotek | Produk</title>
     @vite('resources/css/app.css')
+    @livewireStyles
 
     {{-- FONT AWESOME --}}
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
@@ -19,7 +20,7 @@
 
 </head>
 <body class="font-Inter relative">
-    @include('user.components.secondNavbar')
+    @include('user.components.navbar')
 
     <div class="flex flex-col items-center mb-8">
         <div class="w-[70vw] mt-8 flex gap-8">
@@ -92,11 +93,7 @@
                                 @foreach ($categories as $category)
                                     @php
                                         $jumlah = 0;
-                                        $description = $category->product_description;
-
-                                        foreach ($description as $d) {
-                                            $jumlah += $d->product->count();
-                                        }
+                                        $jumlah = $category->product_description->count();
                                     @endphp
                                 <div class="flex items-center text-mainColor text-lg gap-2">
                                     <input id="kategori{{ $i }}" type="radio" value="{{ $category->category }}" name="kategori" class="w-4 h-4 text-mainColor bg-gray-100" @if (request()->kategori == $category->category)
@@ -134,11 +131,7 @@
                                 @foreach ($groups as $group)
                                     @php
                                         $jumlah = 0;
-                                        $description = $group->product_description;
-
-                                        foreach ($description as $d) {
-                                            $jumlah += $d->product->count();
-                                        }
+                                        $jumlah = $group->product_description->count();
                                     @endphp
                                 <div class="flex items-center text-mainColor text-lg gap-2">
                                     <input id="golongan{{ $i }}" type="radio" value="{{ $group->group }}" name="golongan" class="w-4 h-4 text-mainColor bg-gray-100" @if (request()->golongan == $group->group)
@@ -176,11 +169,7 @@
                                 @foreach ($units as $unit)
                                     @php
                                         $jumlah = 0;
-                                        $description = $unit->product_description;
-
-                                        foreach ($description as $d) {
-                                            $jumlah += $d->product->count();
-                                        }
+                                        $jumlah = $unit->product_description->count();
                                     @endphp
                                 <div class="flex items-center text-mainColor text-lg gap-2">
                                     <input id="bentuk{{ $i }}" type="radio" value="{{ $unit->unit }}" name="bentuk" class="w-4 h-4 text-mainColor bg-gray-100" @if (request()->bentuk == $unit->unit)
@@ -368,7 +357,7 @@
                         @endif
                         <input type="hidden" name="minimum" value="">
                         <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
-                            <p>minimum: {{ request()->minimum }}</p>
+                            <p>minimum: {{ number_format(request()->minimum,0, ',', '.') }}</p>
                             <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
                         </div>
                     </form>
@@ -395,7 +384,7 @@
                         @endif
                         <input type="hidden" name="maksimum" value="">
                         <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
-                            <p>maksimum: {{ request()->maksimum }}</p>
+                            <p>maksimum: {{ number_format(request()->maksimum,0 ,',', '.') }}</p>
                             <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
                         </div>
                     </form>
@@ -406,7 +395,7 @@
                     @if ($products != NULL)
                     @foreach ($products as $product)
                     <div class="h-[350px] w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
-                        <a href="">
+                        <a href="/deskripsi/{{ Str::slug($product->product_name) }}">
                             <div class="px-2 w-full">
                                 <p class="font-semibold text-lg namaObat flex whitespace-normal break-words">{{ $product->product_name }}</p>
                             </div>
@@ -428,15 +417,15 @@
                             </div>
                             
                             <div class="w-[20%] h-full">
-                                @if ($product->product_status == 'aktif')
-                                <form action="/keranjang/tambah" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->product_id }}">
-                                <button type="submit" class="bg-mainColor h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
-                                </form>
-                                @endif
+                                @auth
+                                    @if ($product->product_status == 'aktif')
+                                        <livewire:button-add-cart :user="auth()->user()->user_id" :product="$product->product_id"/>
+                                    @else
+                                        <button type="button" class="bg-lightGrey h-[40px] w-[40px] rounded-full text-white cursor-pointer flex justify-center items-center">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button> 
+                                    @endif
+                                @endauth
                             </div>
                         </div>
                     </div>
@@ -494,5 +483,6 @@
             }
         }
     </script>
+    @livewireScripts
 </body>
 </html>

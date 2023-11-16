@@ -72,8 +72,10 @@ class CartController extends Controller
                 'cart_id' => Str::uuid(),
                 'user_id' => auth()->user()->user_id,
                 'product_id' => $request->product_id,
-                'quantity' => 1
+                'quantity' => $request->quantity ?? 1,
             ]);
+        }else{
+            return redirect()->back()->with('error', 'Product Telah Berada Dalam Keranjang/Lebih Dari 30 Produk');
         }
         
         return redirect()->back();

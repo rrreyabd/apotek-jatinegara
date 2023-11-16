@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Apotek | Keranjang</title>
     @vite('resources/css/app.css')
+    @livewireStyles
 
     {{-- FONT AWESOME --}}
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
@@ -14,7 +15,7 @@
 </head>
 
 <body class="font-Trip">
-    @include('user.components.secondNavbar')
+    @include('user.components.navbar')
 
     <div class="flex flex-col items-center mb-8">
 
@@ -61,6 +62,7 @@
                             $jumlah = 0;
                         @endphp
                         <tbody class="border-t">
+                            @isset($carts)
                             @foreach ($carts as $cart)
                             <tr>
                                 <th scope="row" class="w-1/12">
@@ -93,65 +95,35 @@
                                 </th>
                                 <th>
                                     <div class="sm:flex sm:grid-cols-3 gap-4 justify-center">
-                                        <form action="/keranjang/jumlah" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="quantity" value="{{ $cart->quantity }}">
-                                            <input type="hidden" name="operasi" value="kurang">
-                                            <input type="hidden" name="cart_id" value="{{ $cart->cart_id }}">
-                                            @if ($cart->quantity <= 1)
-                                                <button type="submit" class="inline-flex items-center justify-center p-3.5 rounded-lg shadow-lg text-sm font-medium h-6 w-6 text-gray-500 bg-white border border-gray-300 focus:ring-2 focus:ring-mainColor focus:ring-opacity-25 opacity-50" type="button" disabled>
-                                                    <i class="fa-solid fa-minus"></i>
-                                                </button>
-                                            @else
-                                                <button type="submit" class="inline-flex items-center justify-center p-3.5 rounded-lg shadow-lg text-sm font-medium h-6 w-6 text-gray-500 bg-white border border-gray-300 focus:ring-2 focus:ring-mainColor focus:ring-opacity-25" type="button">
-                                                    <i class="fa-solid fa-minus"></i>
-                                                </button>
-                                            @endif
-                                        </form>
-                                        <div>
-                                            <input type="number" class="w-10 text-center px-1 py-1 m-0" value="{{ $cart->quantity }}" readonly>
+                                        <livewire:count-product-cart :price="$cart->product->detail()->orderBy('product_expired')->first()->product_sell_price" :cart="$cart->cart_id" :stock="$cart->product->detail()->orderBy('product_expired')->first()->product_stock" :quantity="$cart->quantity" :keranjang="true"/>
                                         </div>
-                                        <form action="/keranjang/jumlah" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="quantity" value="{{ $cart->quantity }}">
-                                            <input type="hidden" name="operasi" value="tambah">
-                                            <input type="hidden" name="cart_id" value="{{ $cart->cart_id }}">
-                                            @if ($cart->quantity >= $cart->product->detail()->orderBy('product_expired')->first()->product_stock)
-                                                <button type="submit" class="inline-flex items-center justify-center h-6 w-6 p-3.5 rounded-lg shadow-lg text-sm font-medium text-white bg-mainColor border border-gray-300 focus:ring-2 focus:ring-mainColor focus:ring-opacity-25 opacity-50" type="button" disabled>
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </button>
-                                            @else
-                                                <button type="submit" class="inline-flex items-center justify-center h-6 w-6 p-3.5 rounded-lg shadow-lg text-sm font-medium text-white bg-mainColor border border-gray-300 focus:ring-2 focus:ring-mainColor focus:ring-opacity-25" type="button">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </button>
-                                            @endif
-                                        </form>
-
-                                    </div>
-                                </th>
-                                <th>
-                                    <p class="font-semibold text-lg">Rp {{ number_format($cart->product->detail()->orderBy('product_expired')->first()->product_sell_price * $cart->quantity , 0, ',', '.') }}</p>
-                                </th>
-                            </tr>
-                            @php
+                                    </th>
+                                    <th>
+                                        <livewire:product-price-cart :cart="$cart->cart_id" :price="$cart->product->detail()->orderBy('product_expired')->first()->product_sell_price" :quantity="$cart->quantity"/>
+                                        </th>
+                                    </tr>
+                                @php
                                 $jumlah += $cart->product->detail()->orderBy('product_expired')->first()->product_sell_price * $cart->quantity
-                            @endphp
+                                @endphp
                             @endforeach
+                            @endisset
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <p class="text-end font-semibold me-10">
-                Total harga : <span class="text-lg">Rp {{ number_format($jumlah , 0, ',', '.') }}</span></p>
+            @isset($cart)
+                <livewire:product-total-price :user="$cart->user_id" :total="$jumlah" />
+            @endisset
 
             <div class="flex justify-end items-end my-3 me-10">
-                <a href="" class="p-2 px-7 rounded-lg shadow-lg text-white font-semibold bg-secondaryColor hover:bg-orange-400">Booking</a>
+                <a href="/booking" class="p-2 px-7 rounded-lg shadow-lg text-white font-semibold bg-secondaryColor hover:bg-orange-400">Booking</a>
             </div>
         </div>
     </div>
 
     @include('user.components.footer')
+    @livewireScripts
 </body>
 
 </html>
