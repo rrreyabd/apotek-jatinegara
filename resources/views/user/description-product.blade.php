@@ -15,7 +15,7 @@
 </head>
 
 <body class="font-Inter">
-    @include('user.components.secondNavbar')
+    @include('user.components.navbar')
 
     <div class="flex flex-col items-center mb-8">
 

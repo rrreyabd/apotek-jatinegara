@@ -3,20 +3,9 @@
         <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between relative">
             <a href="/" class="text-mainColor font-TripBold text-3xl">Apotek</a>
 
-<<<<<<< HEAD
-        <form action="/produk" method="GET" class="relative">
-            <input type="text" name="cari" value="{{ request()->cari ?? "" }}" placeholder="Paracetamol"
-                class="px-3 py-2 w-[400px] rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack
-                placeholder:text-sm text-md">
-            <button class="absolute right-4 top-2">
-                <i class="fa-solid fa-magnifying-glass text-2xl text-secondaryColor"></i>
-            </button>
-        </form>
-=======
             @if (request()->url() == route('home'))
             <livewire:livesearch/>
             @endif
->>>>>>> b46dfcc3f502ee05e0c91e923278ca891bfe8ee4
 
         <div class="flex gap-4 justify-center items-center relative">
             @guest
@@ -69,7 +58,7 @@
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
 
-                    <a href="riwayat" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                    <a href="/riwayat-pesanan" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
                         <div class="flex gap-2 items-center">
                             <i class="fa-solid fa-list"></i>
                             <p>Riwayat Pesanan</p>
