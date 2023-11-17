@@ -9,6 +9,9 @@ use App\Models\SellingInvoiceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\notifikasi_pembelian;
+use App\Models\User;
 
 class CustomerController extends Controller
 {
@@ -50,6 +53,8 @@ class CustomerController extends Controller
         ]);
     }
     public function pembayaran(Request $request){
+        $status = false;
+
         $validated_data = $request->validate([
             'paymentMethod'=> ['required'],
             'buktiPembayaran' => ['required', 'file', 'max: 5120'],
@@ -100,13 +105,27 @@ class CustomerController extends Controller
                 // selesai menghapus product dari cart
             }
 
+            $alamatEmails = User::where('role', 'cashier')->get();
+
+            foreach($alamatEmails as $alamatEmail){
+                Mail::to($alamatEmail)->send(new notifikasi_pembelian());
+            }
+
+            $status = true;
+
             DB::commit();
         } catch (\Exception $e) {
+            $status = false;
+
             DB::rollback();
             throw $e;
         }
-
-        return redirect('/')->with('status', "pembayaran-berhasil", 'berhasil')->with('invoice_code', 'INV-'. str_pad($number, 6, '0', STR_PAD_LEFT))->with('customer_name', $request->nama);
+        
+        if ($status){
+            return redirect('/')->with('status', "pembayaran-berhasil")->with('invoice_code', 'INV-'. str_pad($number, 6, '0', STR_PAD_LEFT))->with('customer_name', $request->nama);
+        }else{
+            return redirect('/')->with('status', "pembayaran-gagal");
+        }
     }
 
     public function informasi_pembayaran(Request $request){
