@@ -14,14 +14,15 @@
 </head>
 
 <body class="font-Trip">
-    @include('user.components.secondNavbar')
+    @include('user.components.navbar')
 
     <div class="flex flex-col items-center mb-8">
 
         <div class="w-[70vw] mt-8 flex flex-col">
             <div class="flex gap-4">
                 {{-- back button --}}
-                <a href="/"
+
+                <a href=""
                     class="flex justify-start items-center rounded-3xl shadow-md h-[40px] px-3 text-center text-lg text-gray-500 font-semibold">
                     <svg xmlns="http://www.w3.org/2000/svg" class="pe-1" width="24" height="24" viewBox="0 0 24 24"
                         stroke-width="2" stroke="currentColor" fill="none">
@@ -47,7 +48,6 @@
                     </button>
                 </form>
 
-                {{-- dropdown filter --}}
                 <button onclick="toggleStatus()" class="w-fit rounded-lg border-2 border-mainColor p-1.5 px-3 mt-7">{{ request()->status ?? "Status Pesanan" }} &#9660;</button>
 
                 {{-- STATUS DROPDOWN START --}}
@@ -84,6 +84,7 @@
                                 <th>Total Belanja</th>
                             </tr>
                         </thead>
+                   
                         <tbody class="shadow-lg rounded-lg">
                             @foreach ($products_purcase as $product_purcase)
                             <tr class="p-3 border-[1px] border-black h-[55px]">
@@ -118,6 +119,27 @@
             </div>
         </div>
     </div>
+
+       {{-- pagination --}}
+       <div class="w-full flex justify-end items-center h-[20vh]">
+        <div class="flex gap-8 items-center">
+            <a href="" class="font-normal hover:font-semibold transition duration-300 ease-in-out">
+                <i class="fa-solid fa-chevron-left"></i>
+            </a>
+            <a href="" class="font-normal hover:font-semibold transition duration-300 ease-in-out">1</a>
+            <!-- tambahkan class pageActive untuk page yang sedang dibuka -->
+            <a href=""
+                class="font-normal hover:font-semibold transition duration-300 ease-in-out pageActive">2</a>
+            <a href=""
+                class="font-normal hover:font-semibold transition duration-300 ease-in-out ">3</a>
+            <p class="unselectable">...</p>
+            <a href="" class="font-normal hover:font-semibold transition duration-300 ease-in-out">7</a>
+            <a href="" class="font-normal hover:font-semibold transition duration-300 ease-in-out">
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+
 
     <script>
         const toggleStatus = () => {

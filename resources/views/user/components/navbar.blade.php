@@ -1,7 +1,9 @@
 <nav class="shadow-lg h-16 w-full flex justify-center bg-white z-50 fixed" id="navbar">
-    <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between">
-        <a href="/" class="text-mainColor font-TripBold text-3xl">Apotek</a>
+    <div class="relative w-full flex justify-center">
+        <div class="w-full md:w-[95vw] lg:w-[80vw] xl:w-[70vw] h-full flex items-center justify-between relative">
+            <a href="/" class="text-mainColor font-TripBold text-3xl">Apotek</a>
 
+<<<<<<< HEAD
         <form action="/produk" method="GET" class="relative">
             <input type="text" name="cari" value="{{ request()->cari ?? "" }}" placeholder="Paracetamol"
                 class="px-3 py-2 w-[400px] rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack
@@ -10,33 +12,35 @@
                 <i class="fa-solid fa-magnifying-glass text-2xl text-secondaryColor"></i>
             </button>
         </form>
+=======
+            @if (request()->url() == route('home'))
+            <livewire:livesearch/>
+            @endif
+>>>>>>> b46dfcc3f502ee05e0c91e923278ca891bfe8ee4
 
         <div class="flex gap-4 justify-center items-center relative">
             @guest
-            {{-- JIKA USER BELUM LOGIN --}}
-            <a href="login"
-                class="text-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor h-[35px] px-3 rounded-lg">
+            <a href="login" class="text-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor h-[35px] px-3 rounded-lg">
                 Masuk
             </a>
 
-            <a href="register"
-                class="bg-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor text-white h-[35px] px-3 rounded-lg">
+            <a href="register" class="bg-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor text-white h-[35px] px-3 rounded-lg">
                 Daftar
             </a>
             @else
             {{-- JIKA USER SUDAH LOGIN --}}
-            @if (auth()->user()->role == 'user')
-            <a href="/keranjang" class="flex justify-center items-center h-[40px] w-[40px] relative">
-                <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
-                <livewire:cart-notif :count="auth()->user()->cart->count()" />
-            </a>
+                @if (auth()->user()->role == 'user')
+                <a href="/keranjang" class="flex justify-center items-center h-[40px] w-[40px] relative">
+                    <i class="fa-solid fa-cart-shopping text-3xl text-mainColor"></i>
+                    <livewire:cart-notif :count="auth()->user()->cart->count()" />
+                </a>
 
                 <button onclick="toggleProfile()"
                     class="border-2 border-mainColor h-[35px] w-[35px] rounded-full flex justify-center items-center overflow-hidden relative">
                     <i class="fa-solid fa-user text-3xl absolute top-1 text-mainColor"></i>
                 </button>
                 @elseif (auth()->user()->role == 'cashier' || auth()->user()->role == 'owner')
-                <a href="/{{ auth()->user()->role }}" class="bg-mainColor text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
+                <a href="/dashboard" class="bg-mainColor text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
                     Dashboard
                 </a>
 
@@ -65,7 +69,7 @@
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
 
-                    <a href="/riwayat-pesanan" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                    <a href="riwayat" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
                         <div class="flex gap-2 items-center">
                             <i class="fa-solid fa-list"></i>
                             <p>Riwayat Pesanan</p>
@@ -78,23 +82,22 @@
                     </div>
                 </div>
                 {{-- USER DROPDOWN END --}}
-
-            @endguest   
+                @endguest   
+            </div>
         </div>
+        {{-- LOGOUT ALERT START --}}
+        <form action="/logout" method="POST" class="w-screen h-screen opacity-0 absolute top-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="logoutAlertPopUp">
+            @csrf
+            <div class="bg-white h-fit w-[30%] rounded-lg shadow-sm shadow-semiBlack py-10 px-8 flex flex-col gap-4 items-center text-center">
+                <i class="text-7xl text-mainColor fa-solid fa-circle-question"></i>
+                <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin ingin keluar dari akun Anda?</p>
+                <button onclick="logoutAlert()" type="button" class="bg-mainColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Kembali</button>
+                <button type="submit" class="bg-mediumRed w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack" disabled id="btnLogout">Keluar</button>
+            </div>
+        </form>  
+        {{-- LOGOUT ALERT END --}}
     </div>
 </nav>
-
-{{-- LOGOUT ALERT START --}}
-<form action="/logout" method="POST" class="w-screen h-full opacity-0 absolute top-0 left-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="logoutAlertPopUp">
-    @csrf
-    <div class="bg-white h-fit w-[30%] rounded-lg shadow-sm shadow-semiBlack py-10 px-8 flex flex-col gap-4 items-center text-center">
-        <i class="text-7xl text-mainColor fa-solid fa-circle-question"></i>
-        <p class="text-2xl font-bold w-[80%]">Apakah Anda yakin ingin keluar dari akun Anda?</p>
-        <button onclick="logoutAlert()" type="button" class="bg-mainColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Kembali</button>
-        <button type="submit" class="bg-mediumRed w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack" disabled id="btnLogout">Keluar</button>
-    </div>
-</form>  
-{{-- LOGOUT ALERT END --}}
 
 {{-- agar position fixed navbar tidak diambil content dibawahnya  --}}
 <div class="h-16 w-full"></div>
@@ -123,6 +126,7 @@
     const menu = document.querySelector('#dropdownMenu');
 
     document.addEventListener('click', (event) => {
+        console.log(event);
         if (event.target !== menu) {
             menu.classList.add('hidden');
             menu.classList.remove('opacity-100');
@@ -154,4 +158,68 @@
             });
         }
     }
+
 </script>
+<script>
+
+    var input = document.querySelector('#cari');
+    var livesearch = document.querySelector('#livesearch')
+
+    document.addEventListener('livewire:init', ()=>{
+        input.addEventListener('keydown',  function(){
+            var cari = input.value;
+            Livewire.dispatch('livesearch', {cari: cari})
+        })
+    })
+
+    document.addEventListener('click', (event) => {
+
+        if(event.target != input) {
+            livesearch.classList.add('hidden');
+            livesearch.classList.remove('opacity-100');
+            livesearch.classList.add('opacity-0');
+        }else{
+            livesearch.classList.remove('hidden');
+            livesearch.classList.add('opacity-100');
+            livesearch.classList.remove('opacity-0');
+        }
+    });
+</script>
+
+{{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>    
+    $(document).ready(function() {
+    $('#cari').autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: '{{ route('liveSearch') }}',
+                method: 'GET',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    query: request.term
+                },
+                dataType: 'json',
+                success: function(data) {
+                    response(data);
+                }
+            });
+        },
+        minLength: 1, // Atur jumlah karakter minimal sebelum live search dimulai
+        select: function(event, ui) {
+            $('#cari').val(ui.item.product_name); // Menampilkan label destinasi yang dipilih
+            $('#product_id').val(ui.item.product_id); // Menyimpan id destinasi yang dipilih pada input tersembunyi
+            return false;
+        }
+    }).data("ui-autocomplete")._renderItem = function(ul, item) {
+        return $("<li>")
+            .append("<div>" + item.product_name + "</div>")
+            .appendTo(ul);
+    }.bind(this);
+        $('#search-results').on('submit', function() {
+        var selectedProductId = $('#product_id').val();
+        $('#product_id').val(selectedProductId);
+        $('#cari').val($('#cari').val().trim()); // Saring nilai input
+    });
+});
+</script> --}}

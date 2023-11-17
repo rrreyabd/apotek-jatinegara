@@ -14,7 +14,7 @@
 </head>
 
 <body class="font-Trip">
-    @include('user.components.secondNavbar')
+    @include('user.components.navbar')
 
     
     <div class="flex flex-col items-center mb-8">
@@ -65,7 +65,10 @@
                     <div>
                         <p>Tanggal Pemesanan : {{ date('d M Y',strtotime($purcase->order_date)) }}</p>
                         <p class="my-2">No. Handphone : {{ $purcase->customer_phone }}</p> 
-                        <p>Resep Dokter : {{ $purcase->customer_file ?? "-" }}</p>
+                        <p>Resep Dokter : 
+                        @if ($purcase->customer_file)
+                            <a class="underline" href="/resep_dokter/{{ $purcase->customer_file }}/{{ $purcase->selling_invoice_id }}">{{ $purcase->customer_file }}</a>
+                        @endif</p>
                         </div>
                     <div>
                         <p>Nama Penerima : {{ $purcase->customer_name }}</p> 
@@ -81,7 +84,7 @@
 
             <div class="sm:flex my-7 mb-3 text-xl ">
             <p class="font-semibold me-2">Informasi Pembayaran:</p>
-            <a href="" class="underline me-1 text-lg">
+            <a href="/informasi_pembayaran/{{ $purcase->customer_payment }}/{{ $purcase->selling_invoice_id }}" class="underline me-1 text-lg">
                 <i class="fa-solid fa-note-sticky"></i>
                 {{ $purcase->customer_payment }}</a>
                 <p class="text-lg">({{ $purcase->customer_bank }})</p>

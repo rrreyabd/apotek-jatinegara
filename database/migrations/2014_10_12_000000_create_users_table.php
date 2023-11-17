@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['owner', 'cashier', 'user']);
             $table->timestamps();
-            // $table->rememberToken();
+            $table->rememberToken();
         });
     }
 
