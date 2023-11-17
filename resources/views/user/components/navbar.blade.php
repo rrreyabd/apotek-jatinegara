@@ -149,13 +149,13 @@
     }
 
 </script>
-<script>
 
+<script>
     var input = document.querySelector('#cari');
     var livesearch = document.querySelector('#livesearch')
 
     document.addEventListener('livewire:init', ()=>{
-        input.addEventListener('keydown',  function(){
+        input.addEventListener('keyup',  function(){
             var cari = input.value;
             Livewire.dispatch('livesearch', {cari: cari})
         })

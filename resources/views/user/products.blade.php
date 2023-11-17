@@ -240,7 +240,7 @@
                         @if (request()->maksimum)
                             <input type="hidden" name="maksimum" value="{{ request()->maksimum }}">
                         @endif
-                        <input type="text" name="cari" value="{{ request()->cari }}" placeholder="Cari nama produk di sini..."
+                        <input autocomplete="off" type="text" id="cari" name="cari" value="{{ request()->cari }}" placeholder="Cari nama produk di sini..."
                         class="h-12 w-96 shadow-md rounded-md px-4">
 
                         <button type="submit" class="absolute right-3 top-3 text-xl">
@@ -391,7 +391,11 @@
                     @endif
                 </div>
 
-                <div class="flex flex-wrap justify-start gap-4">
+                <div id="liveshow" class="hidden flex flex-wrap justify-start gap-4">
+                    <livewire:liveshow-product :filter="request()->filter" :kategori="request()->kategori" :golongan="request()->golongan" :bentuk="request()->bentuk" :minimum="request()->minimum" :maksimum="request()->maksimum"/>
+                </div>
+
+                <div id="product-list" class="flex flex-wrap justify-start gap-4">
                     @if ($products != NULL)
                     @foreach ($products as $product)
                     <div class="h-[350px] w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
@@ -433,9 +437,11 @@
                     @endif
                 </div>
 
-                <!-- PAGINATION START -->
-                {{ $products ? $products->links() : "" }}
-                <!-- PAGINATION END -->
+                <div id="pagination">
+                    <!-- PAGINATION START -->
+                    {{ $products ? $products->links() : "" }}
+                    <!-- PAGINATION END -->
+                </div>
             </div>
         </div>
     </div>
@@ -443,21 +449,6 @@
     @include('user.components.footer')
 
     <script>
-        // const showFilter = () => {
-        //     const filter = document.querySelector('#filter'),
-        //           icon = document.getElementById('filterIcon');
-
-        //     if (filter.classList.contains('hidden')) {
-        //         filter.classList.remove('hidden')
-        //         icon.classList.remove('fa-plus')
-        //         icon.classList.add('fa-minus')
-        //     } else {
-        //         filter.classList.add('hidden')
-        //         icon.classList.remove('fa-minus')
-        //         icon.classList.add('fa-plus')
-        //     }
-        // }
-
         const showFilter = (filterId, iconId) => {
             const filter = document.getElementById(filterId);
             const icon = document.getElementById(iconId);
@@ -482,6 +473,30 @@
                 obatElements[i].textContent = obatText.slice(0, 17) + "...";
             }
         }
+    </script>
+
+    <script>
+        var input = document.querySelector('#cari');
+        var liveshow = document.querySelector('#liveshow');
+        var productList = document.querySelector('#product-list');
+        var pagination = document.querySelector('#pagination');
+        var cari;
+        
+        document.addEventListener('livewire:init', ()=>{
+                input.addEventListener('keyup',  function(){
+                    if(input.value == ""){
+                        productList.classList.remove('hidden');
+                        pagination.classList.remove('hidden');
+                        liveshow.classList.add('hidden');
+                    }else{
+                        productList.classList.add('hidden');
+                        pagination.classList.add('hidden');
+                        liveshow.classList.remove('hidden');
+                        cari = input.value;
+                        Livewire.dispatch('liveshow', {cari: cari})
+                    }
+                })
+        })
     </script>
     @livewireScripts
 </body>
