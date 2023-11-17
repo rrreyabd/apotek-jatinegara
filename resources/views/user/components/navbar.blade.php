@@ -29,7 +29,7 @@
                     <i class="fa-solid fa-user text-3xl absolute top-1 text-mainColor"></i>
                 </button>
                 @elseif (auth()->user()->role == 'cashier' || auth()->user()->role == 'owner')
-                <a href="/dashboard" class="bg-mainColor text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
+                <a href="/{{ auth()->user()->role }}" class="bg-mainColor text-white flex justify-center items-center h-[40px] w-[100px] rounded-lg relative">
                     Dashboard
                 </a>
 
@@ -58,7 +58,7 @@
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
 
-                    <a href="riwayat" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                    <a href="riwayat-pesanan" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
                         <div class="flex gap-2 items-center">
                             <i class="fa-solid fa-list"></i>
                             <p>Riwayat Pesanan</p>
