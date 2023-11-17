@@ -92,3 +92,8 @@ input[type="radio"] {
         background-position: 200% center;
     }
 }
+
+.table-scroll {
+    height: 100px !important;
+    overflow: scroll;
+}

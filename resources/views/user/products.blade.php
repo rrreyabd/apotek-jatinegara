@@ -36,7 +36,7 @@
                             </div>
 
                             <hr class="border-1 border border-[#cccccc]">
-                            <div class="bg-lightGrey w-full h-[200px] rounded-md shadow-md shadow-gray-300 px-10 leading-relaxed flex flex-col text-mediumGrey font-bold text-lg justify-center">
+                            <div class="bg-lightGrey w-full h-fit rounded-md shadow-md shadow-gray-300 py-4 px-10 leading-relaxed flex flex-col text-mediumGrey font-bold text-lg justify-center">
                                 @php
                                     $filters = ['Popular', 'Nama A - Z', 'Nama Z - A', 'Harga Rendah - Tinggi', 'Harga Tinggi - Rendah', 'Hapus Filter']
                                 @endphp
@@ -241,10 +241,10 @@
                             <input type="hidden" name="maksimum" value="{{ request()->maksimum }}">
                         @endif
                         <input type="text" name="cari" value="{{ request()->cari }}" placeholder="Cari nama produk di sini..."
-                        class="h-12 w-96 shadow-md rounded-md px-4">
+                        class="h-12 w-96 shadow-md outline-semiBlack outline-2 rounded-md px-4">
 
                         <button type="submit" class="absolute right-3 top-3 text-xl">
-                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <i class="fa-solid fa-magnifying-glass text-mainColor"></i>
                         </button>
                     </form>
 
@@ -303,7 +303,7 @@
                         @endif
                         <input type="hidden" name="golongan" value="">
                         <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
-                            <p>golongan: {{ request()->golongan }}</p>
+                            <p>Golongan: {{ request()->golongan }}</p>
                             <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
                         </div>
                     </form>
@@ -330,7 +330,7 @@
                         @endif
                         <input type="hidden" name="bentuk" value="">
                         <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
-                            <p>bentuk: {{ request()->bentuk }}</p>
+                            <p>Bentuk: {{ request()->bentuk }}</p>
                             <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
                         </div>
                     </form>
@@ -357,7 +357,7 @@
                         @endif
                         <input type="hidden" name="minimum" value="">
                         <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
-                            <p>minimum: {{ number_format(request()->minimum,0, ',', '.') }}</p>
+                            <p>Minimum: {{ number_format(request()->minimum,0, ',', '.') }}</p>
                             <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
                         </div>
                     </form>
@@ -384,7 +384,7 @@
                         @endif
                         <input type="hidden" name="maksimum" value="">
                         <div class="w-fit py-2 bg-mainColor flex items-center px-3 text-white rounded-md gap-2">
-                            <p>maksimum: {{ number_format(request()->maksimum,0 ,',', '.') }}</p>
+                            <p>Maksimum: {{ number_format(request()->maksimum,0 ,',', '.') }}</p>
                             <button type="submit" class="bg-red-500 w-6 h-6 flex items-center justify-center rounded-full font-semibold">&#10005;</button>
                         </div>
                     </form>
@@ -394,7 +394,7 @@
                 <div class="flex flex-wrap justify-start gap-4">
                     @if ($products != NULL)
                     @foreach ($products as $product)
-                    <div class="h-[350px] w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
+                    <div class="h-fit w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
                         <a href="/deskripsi/{{ Str::slug($product->product_name) }}">
                             <div class="px-2 w-full">
                                 <p class="font-semibold text-lg namaObat flex whitespace-normal break-words">{{ $product->product_name }}</p>
@@ -432,7 +432,7 @@
                     @endforeach
                     @endif
                 </div>
-
+                
                 <!-- PAGINATION START -->
                 {{ $products ? $products->links() : "" }}
                 <!-- PAGINATION END -->
@@ -479,7 +479,7 @@
             const obatText = obatElements[i].textContent;
 
             if (obatText.length > 20) {
-                obatElements[i].textContent = obatText.slice(0, 17) + "...";
+                obatElements[i].textContent = obatText.slice(0, 16) + "..";
             }
         }
     </script>

@@ -4,7 +4,8 @@
 
         <form action="/produk" method="GET" class="relative">
             <input type="text" name="cari" value="{{ request()->cari ?? "" }}" placeholder="Paracetamol"
-                class="px-3 py-2 w-[400px] rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack">
+                class="px-3 py-2 w-[400px] rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack
+                placeholder:text-sm text-md">
             <button class="absolute right-4 top-2">
                 <i class="fa-solid fa-magnifying-glass text-2xl text-secondaryColor"></i>
             </button>

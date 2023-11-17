@@ -14,7 +14,7 @@
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="font-Trip">
+<body class="font-Inter">
     @include('user.components.secondNavbar')
 
     <div class="flex flex-col items-center mb-8">
@@ -68,7 +68,7 @@
 
             <div class="gap-8 md:grid-cols-2 py-7">
                 <div class="flex items-start">
-                    <p class="  rounded-lg p-1.5 px-4 mb-5 text-white text-lg font-semibold bg-mainColor">Detail Produk</p>
+                    <p class="  rounded-lg p-1 px-4 mb-5 text-white text-lg font-semibold bg-mainColor">Detail Produk</p>
                 </div>
 
                 <table>
@@ -109,19 +109,19 @@
             <div class="w-fill shadow border border-neutral-200"></div>
 
             <div class="gap-8 md:grid-cols-2 py-4">
-                <div class="py-2">
+                <div class="pb-2">
                     <div class="flex items-start">
-                        <p class="rounded-lg p-1.5 px-4 text-white text-lg font-semibold bg-mainColor">Dosis</p>
+                        <p class="rounded-lg py-1 px-4 text-white text-lg font-semibold bg-mainColor">Dosis</p>
                     </div>
-                    <p class="py-3 text-gray-500 ms-5">{{$description_product->product_dosage}}
+                    <p class="py-3 text-mediumGrey ms-5">{{$description_product->product_dosage}}
                     </p>
                 </div>
                 @if ($description_product->product_indication)
-                <div class="py-2">
+                <div class="pb-2">
                     <div class="flex items-start">
-                        <p class="rounded-lg p-1.5 px-4 text-white text-lg font-semibold bg-mainColor">Indikasi Umum</p>
+                        <p class="rounded-lg p-1 px-4 text-white text-lg font-semibold bg-mainColor">Indikasi Umum</p>
                     </div>
-                    <p class="py-3 text-gray-500 ms-5">{{$description_product->product_indication }}</p>
+                    <p class="py-3 text-mediumGrey ms-5">{{$description_product->product_indication }}</p>
                 </div>
                 @endif
 
