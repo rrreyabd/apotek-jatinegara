@@ -47,7 +47,7 @@
                                 <span class="font-bold">{{ $history->invoice_code }}</span>
                             </td>
                             <td>{{$history->customer_name}}</td>
-                            <td>{{ $history->order_date }}</td>
+                            <td>{{ date('d M Y',strtotime($history->order_complete)) }}</td>
                                  @php
                                     $totalPrice = 0; // Initialize the variable to store the total price
                                 @endphp
@@ -56,7 +56,7 @@
                                     $totalPrice = $totalPrice + ($invoice->product_sell_price * $invoice->quantity); // Accumulate the price
                                     @endphp
                                 @endforeach
-                            <td>{{ $totalPrice }}</td>
+                            <td>Rp {{ number_format($totalPrice, 0, ',', '.') }}</td>
                             <td>
                                 <div class="w-full flex gap-2 items-center">
                                     {{-- GREEN = BERHASIL, YELLOW = REFUND, RED = GAGAL --}}
@@ -137,7 +137,7 @@
                                                         <p class="w-28">Total Harga</p>
                                                         <p>:</p>
                                                         <p class="text-secondaryColor">
-                                                            {{ $totalPrice }}
+                                                            Rp {{ number_format($totalPrice, 0, ',', '.') }}
                                                         </p>
                                                     </div>
                                                     <div class="flex font-bold gap-2">
@@ -167,7 +167,7 @@
                                                     <p class="font-bold">Nomor HP :</p>
                                                     <p>{{ $history->customer_phone }}</p>
                                                     <p class="font-bold">Tanggal Pengambilan :</p>
-                                                    <p>{{ $history->order_date }}</p>
+                                                    <p>{{ date('d M Y',strtotime($history->order_complete)) }}</p>
                                                     <p class="font-bold">Metode Pembayaran :</p>
                                                     <p>{{ $history->customer_bank }}</p>
                                                     <p class="font-bold">Bukti Pembayaran :</p>
