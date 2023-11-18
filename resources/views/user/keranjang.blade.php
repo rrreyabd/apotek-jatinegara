@@ -12,9 +12,15 @@
     {{-- FONT AWESOME --}}
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
+
+    <style>
+        tr {
+            border-bottom: 1px solid rgba(0, 0, 0, .3);
+        }
+    </style>
 </head>
 
-<body class="font-Trip">
+<body class="font-Inter">
     @include('user.components.navbar')
 
     <div class="flex flex-col items-center mb-8">
@@ -23,39 +29,41 @@
             <div class="flex gap-4">
                 {{-- back button --}}
                 <a href="/"
-                    class="flex justify-start items-center rounded-3xl shadow-md h-[40px] px-3 text-center text-lg text-gray-500 font-semibold">
+                    class="flex justify-start items-center text-lg text-gray-500 font-semibold">
                     <svg xmlns="http://www.w3.org/2000/svg" class="pe-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M9 14l-4 -4l4 -4"></path>
                         <path d="M5 10h11a4 4 0 1 1 0 8h-1"></path>
                     </svg>
-                    Kembali</a>
+                    <p>Kembali</p>
+                </a>
             </div>
 
             <p class="py-7 text-sm text-red-500">*Jumlah maksimum barang 30</p>
 
             <div class="md:flex md:grid-cols-2 justify-between">
-                <p class="font-semibold text-2xl mb-3">Keranjang anda</p>
+                <p class="font-semibold text-4xl">Keranjang anda</p>
                 <form action="/keranjang/hapus" method="POST">
                     @csrf
-                    <input type="hidden" name="hapus" value="semua">
-                    <button type="submit" class="rounded-lg flex p-2 border border-mainColor hover:bg-mainColor text-mainColor hover:text-white">
-                    <i class="fa-regular fa-trash-can p-1 pe-2"></i>  
-                    Kosongkan keranjang</button>
+                    <input type="hidden" name="hapus" value="semua">                    
+                    <button type="submit" class="rounded-lg flex p-2 border border-mainColor hover:bg-mainColor text-mainColor hover:text-white transition-colors duration-300 ease-in-out">
+                        <i class="fa-regular fa-trash-can p-1 pe-2"></i>  
+                        <p class="font-semibold">Kosongkan keranjang</p> 
+                    </button>
                 </form>
             </div>
 
             {{-- table --}}
-            <div class="shadow-lg rounded-lg w-full h-fit my-7">
-                <div class="overflow-x-auto p-5">
+            <div class="rounded-md w-full h-fit my-7">
+                <div class="overflow-x-auto py-5">
                     <table class="w-full">
                         <thead class="bg-white">
-                            <tr>
-                                <th></th>
-                                <th scope="col">Produk</th>
-                                <th scope="col">Harga</th>
-                                <th scope="col">Jumlah</th>
-                                <th scope="col">Total</th>
+                            <tr class="bg-mainColor text-white h-[5vh] rounded-tl-md rounded-tr-md">
+                                <th>HAPUS</th>
+                                <th scope="col">PRODUK</th>
+                                <th scope="col">HARGA</th>
+                                <th scope="col">JUMLAH</th>
+                                <th scope="col">TOTAL</th>
                             </tr>
                         </thead>
                         @php
@@ -71,37 +79,37 @@
                                         <input type="hidden" name="hapus" value="satuan">
                                         <input type="hidden" name="cart_id" value="{{ $cart->cart_id }}">
                                         <button type="submit" class="w-[50px] h-[50px]">
-                                            <i class="fa-solid fa-trash w-1/8 text-start my-auto text-red-500"></i>
+                                            <i class="fa-solid fa-x w-1/8 text-start my-auto text-red-500"></i>
                                         </button>
                                     </form>
                                 </th>
-                                <th scope="row" class="w-1/3">
+                                <th scope="row" class="w-5/12">
                                     <div class="sm:flex sm:grid-cols-3 gap-4 justify-center my-5">
-                                        <div class="w-1/4">
-                                            <img src="{{asset('img/obat1.jpg/')}}" alt="" class="w-[100px]">
+                                        <div class="w-2/5">
+                                            <img src="{{asset('img/obat1.jpg/')}}" alt="" class="w-full">
                                         </div>
-                                        <div class="w-1/2 text-sm text-start">
+                                        <div class="w-3/5 text-start flex flex-col gap-1">
+                                            <p class="font-semibold text-wrap">{{ $cart->product->product_name }}</p>
+                                            <p class="font-normal">Kategori : {{ $cart->product->description->category->category }}</p> 
+                                            <p class="font-normal">Exp : {{ date('d M Y',strtotime($cart->product->detail()->orderBy('product_expired')->first()->product_expired)) }}</p> 
                                             @if ($cart->product->description->product_type == "resep dokter")
-                                            <span class="bg-red-500 rounded-md px-2 py-1 text-white">Resep</span>
+                                            <span class="text-sm font-semibold bg-red-500 rounded-md w-fit px-2 py-1 text-white">Resep</span>
                                             @endif
-                                            <p class="font-semibold my-1 mt-3 text-wrap">{{ $cart->product->product_name }}</p>
-                                            <p class="font-light">Kategori : {{ $cart->product->description->category->category }}</p> 
-                                            <p class="font-light">Exp : {{ date('d M Y',strtotime($cart->product->detail()->orderBy('product_expired')->first()->product_expired)) }}</p> 
                                         </div>
                                     </div>
                                 </th>
-                                <th scope="row" class="w-1/12">
+                                <th scope="row" class="w-2/12">
                                     <p class="font-semibold text-lg">Rp {{ number_format($cart->product->detail()->orderBy('product_expired')->first()->product_sell_price , 0, ',', '.') }}</p>
                                 </th>
-                                <th>
+                                <th class="w-2/12">
                                     <div class="sm:flex sm:grid-cols-3 gap-4 justify-center">
                                         <livewire:count-product-cart :price="$cart->product->detail()->orderBy('product_expired')->first()->product_sell_price" :cart="$cart->cart_id" :stock="$cart->product->detail()->orderBy('product_expired')->first()->product_stock" :quantity="$cart->quantity" :keranjang="true"/>
-                                        </div>
+                                    </div>
+                                </th>
+                                <th class="w-2/12">
+                                    <livewire:product-price-cart :cart="$cart->cart_id" :price="$cart->product->detail()->orderBy('product_expired')->first()->product_sell_price" :quantity="$cart->quantity"/>
                                     </th>
-                                    <th>
-                                        <livewire:product-price-cart :cart="$cart->cart_id" :price="$cart->product->detail()->orderBy('product_expired')->first()->product_sell_price" :quantity="$cart->quantity"/>
-                                        </th>
-                                    </tr>
+                                </tr>
                                 @php
                                 $jumlah += $cart->product->detail()->orderBy('product_expired')->first()->product_sell_price * $cart->quantity
                                 @endphp
