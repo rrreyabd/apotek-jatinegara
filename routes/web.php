@@ -34,10 +34,9 @@ use App\Models\Supplier;
 
 
 Route::get('/test', function () {
-    $produk_id = SellingInvoice::orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();
-        $number = intval(str_replace("INV-", "", $produk_id)) + 1;
+    $alamat = User::where('role', 'cashier')->get();
 
-    echo('INV-'. str_pad($number, 6, '0', STR_PAD_LEFT));
+    dd($alamat);
 });
 
 // halaman akses tanpa login
@@ -80,6 +79,11 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::post('/keranjang/tambah', [CartController::class,'tambahItem'])->name('tambah-keranjang');
 
     Route::get('/booking', [CustomerController::class,'booking'])->name('booking');
+    Route::post('/booking', [CustomerController::class,'booking_detail'])->name('booking-detail');
+    Route::post('/pembayaran', [CustomerController::class, 'pembayaran'])->name('pembayaran');
+
+    Route::get('/informasi_pembayaran/{file}/{id}', [CustomerController::class, 'informasi_pembayaran'])->name('informasi-pembayaran');
+    Route::get('/resep_dokter/{file}/{id}', [CustomerController::class, 'resep_dokter'])->name('resep-dokter');
 });
 // akhir halaman user
 
@@ -109,7 +113,45 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->group(function () {
     Route::get('/owner', function () {
         return view('pemilik.index');
     });
+    Route::get('/owner/produk', function () {
+        return view('pemilik.list-produk');
+    });
     
+    Route::get('/owner/detail-produk', function () {
+        return view('pemilik.detail-produk');
+    });
+
+    Route::get('/owner/tambah-produk', function () {
+        return view('pemilik.tambah-produk');
+    });
+
+    Route::get('/owner/edit-produk', function () {
+        return view('pemilik.edit-produk');
+    });
+
+    Route::get('/owner/kasir', function () {
+        return view('pemilik.list-kasir');
+    });
+
+    Route::get('/owner/transaksi-penjualan', function () {
+        return view('pemilik.log-transaksi-penjualan');
+    });
+
+    Route::get('/owner/transaksi-pembelian', function () {
+        return view('pemilik.log-transaksi-pembelian');
+    });
+
+    Route::get('/owner/supplier', function () {
+        return view('pemilik.list-supplier');
+    });
+
+    Route::get('/owner/user', function () {
+        return view('pemilik.list-user');
+    });
+
+    Route::get('/owner/pesanan-pending', function () {
+        return view('pemilik.pesanan-pending');
+    });
 });
 // akhir halaman owner
 
