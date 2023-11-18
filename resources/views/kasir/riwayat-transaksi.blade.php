@@ -39,7 +39,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i < 6; $i++)               
+                        @for ($i = 0; $i < 50; $i++)               
                         <tr>
                             <td>
                                 <span class="text-center"> {{$i + 1}} </span>
@@ -65,9 +65,9 @@
                                 </div>
 
                                 {{-- MODAL DETAIL RIWAYAT TRANSAKSI START --}}
-                                <div class="absolute w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal">
+                                <div class="absolute w-full h-[100%] top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal">
                                     <div class="w-[70%] h-fit max-h-full bg-white rounded-md shadow-md p-8 flex flex-col gap-6 overflow-auto">
-                                        <div class="flex justify-between items-center"
+                                        <div class="flex justify-between items-center">
                                             <button onclick="toggleDetail()" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
                                                 <i class="fa-solid fa-arrow-left"></i>
                                                 Kembali
@@ -87,24 +87,26 @@
                                         <div class="px-8 py-2 w-[100%] flex justify-between">
                                             <div class="w-[70%]">
                                                 <div class="flex flex-col gap-8">
-                                                    <table class="w-full overflow-auto h-[10vh]">
-                                                        <tr class="border-2 border-b-mainColor border-transparent text-mainColor font-bold w-[100%]">
-                                                            <td class="w-[10%] pb-2 text-center">No</td>
-                                                            <td class="w-[30%] pb-2">Nama</td>
-                                                            <td class="w-[10%] pb-2 text-center">Jumlah</td>
-                                                            <td class="w-[25%] pb-2 text-center">Harga</td>
-                                                            <td class="w-[25%] pb-2">Total</td>
-                                                        </tr>
-                                                        @for ($j = 0; $j < 20; $j++)
-                                                        <tr>
-                                                            <td class="py-2 text-center">1</td>
-                                                            <td class="py-2">Paracetamol 200 kg</td>
-                                                            <td class="py-2 text-center">4</td>
-                                                            <td class="py-2 text-center">Rp 5.000</td>
-                                                            <td class="py-2">Rp 20.000</td>
-                                                        </tr>
-                                                        @endfor
-                                                    </table>
+                                                    <div class="overflow-y-auto h-96">
+                                                        <table class="w-full h-full overflow-scroll">
+                                                            <tr class="border-2 border-b-mainColor border-transparent text-mainColor font-bold w-[100%]">
+                                                                <td class="w-[10%] pb-2 text-center">No</td>
+                                                                <td class="w-[30%] pb-2">Nama</td>
+                                                                <td class="w-[10%] pb-2 text-center">Jumlah</td>
+                                                                <td class="w-[25%] pb-2 text-center">Harga</td>
+                                                                <td class="w-[25%] pb-2">Total</td>
+                                                            </tr>
+                                                            @for ($j = 0; $j < 20; $j++)
+                                                            <tr>
+                                                                <td class="py-2 text-center">1</td>
+                                                                <td class="py-2">Paracetamol 200 kg</td>
+                                                                <td class="py-2 text-center">4</td>
+                                                                <td class="py-2 text-center">Rp 5.000</td>
+                                                                <td class="py-2">Rp 20.000</td>
+                                                            </tr>
+                                                            @endfor
+                                                        </table>
+                                                    </div>
                                                 </div>
     
                                                 <div class="flex flex-col gap-2 py-2">
@@ -170,10 +172,8 @@
 
             if (modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden')
-                document.body.classList.add('h-[100vh]')
             } else {
                 modal.classList.add('hidden')
-                document.body.classList.remove('h-[100vh]')
             }
         }
     </script>
