@@ -90,14 +90,12 @@ Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
     });
 
     Route::get('/cashier/riwayat-transaksi', [CashierController::class, 'riwayatTransaksi'])->name('riwayat-transaksi-kasir');
+    Route::get('/cashier/pesanan-pending', [CashierController::class, 'pendingOrder'])->name('pesanan-pending-kasir');
+    Route::get('/cashier/pesanan-pending/{id}', [CashierController::class, 'updateStatus'])->name('successOrder');
 
     Route::get('/cashier/img', function () {
         return view('kasir.show-image');
-    });
-
-    Route::get('/cashier/pesanan-pending', function () {
-        return view('kasir.pesanan-pending');
-    });
+    }); 
 
     Route::get('/cashier/pesanan-online', function () {
         return view('kasir.pesanan-online');
