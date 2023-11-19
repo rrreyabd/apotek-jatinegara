@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\notifikasi_pembelian;
+use App\Models\Product;
 use App\Models\User;
 
 class CustomerController extends Controller
@@ -30,8 +31,8 @@ class CustomerController extends Controller
         if($request->resep_dokter != NULL){
             $validated_data = $request->validate([
                 'nama' => ['required', 'string', 'min:5', 'max:255'],
-                'nomor_telepon' => ['numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
-                'resep_dokter' => ['required', 'file','mimes:pdf,doc, docx, jpeg, jpg, png, raw, bmp', 'max: 5120'],
+                'nomor_telepon' => ['required','numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
+                'resep_dokter' => ['required', 'file', 'max: 5120' ,'mimes:pdf,doc,docx,png,jpeg,jpg'],
             ]);
         }else{
             $validated_data = $request->validate([
@@ -57,7 +58,7 @@ class CustomerController extends Controller
 
         $validated_data = $request->validate([
             'paymentMethod'=> ['required'],
-            'buktiPembayaran' => ['required', 'file', 'mimes:pdf,doc, docx, jpeg, jpg, png, raw, bmp', 'max: 5120'],
+            'buktiPembayaran' => ['required', 'file', 'max: 5120','mimes:pdf,doc,docx,png,jpeg,jpg'],
         ]);
 
         $produk_id = SellingInvoice::orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();
@@ -76,12 +77,12 @@ class CustomerController extends Controller
                 'selling_invoice_id'=> $uuid,
                 'invoice_code' => 'INV-'. str_pad($number, 6, '0', STR_PAD_LEFT),
                 'customer_id' => auth()->user()->user_id,
-                'customer_name' => $request->nama,
-                'customer_phone' => $request->nomor_telepon,
-                'customer_file' => $request->resep_dokter,
-                'customer_request'=> $request->catatan ?? "",
-                'customer_bank' => $request->paymentMethod,
-                'customer_payment'=> str_replace("bukti-pembayaran/", "",$validated_data['buktiPembayaran']),
+                'recipient_name' => $request->nama,
+                'recipient_phone' => $request->nomor_telepon,
+                'recipient_file' => $request->resep_dokter,
+                'recipient_request'=> $request->catatan ?? "",
+                'recipient_bank' => $request->paymentMethod,
+                'recipient_payment'=> str_replace("bukti-pembayaran/", "",$validated_data['buktiPembayaran']),
                 'order_date' => NOW(),
                 'order_status' => $request->status,
             ]);
@@ -97,6 +98,10 @@ class CustomerController extends Controller
                     'quantity' => $produk->quantity,
                 ]);
                 // selesai memasukan product ke invoice_detail
+
+                $produk->product->detail()->orderBy('product_expired')->first()->update([
+                    'product_stock' => $produk->product->detail()->orderBy('product_expired')->first()->product_stock - $produk->quantity,
+                ]);
             }
             
             foreach($produks as $produk){
