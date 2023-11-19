@@ -64,30 +64,30 @@
                 <div class="flex grid-cols-3 gap-4 justify-between p-5 overflow-x-auto">
                     <div>
                         <p>Tanggal Pemesanan : {{ date('d M Y',strtotime($purcase->order_date)) }}</p>
-                        <p class="my-2">No. Handphone : {{ $purcase->customer_phone }}</p> 
+                        <p class="my-2">No. Handphone : {{ $purcase->recipient_phone }}</p> 
                         <p>Resep Dokter : 
-                        @if ($purcase->customer_file)
-                            <a class="underline" href="/resep_dokter/{{ $purcase->customer_file }}/{{ $purcase->selling_invoice_id }}">{{ $purcase->customer_file }}</a>
+                        @if ($purcase->recipient_file)
+                            <a class="underline" href="/resep_dokter/{{ $purcase->recipient_file }}/{{ $purcase->selling_invoice_id }}">{{ $purcase->recipient_file }}</a>
                         @endif</p>
                         </div>
                     <div>
-                        <p>Nama Penerima : {{ $purcase->customer_name }}</p> 
+                        <p>Nama Penerima : {{ $purcase->recipient_name }}</p> 
                         <p class="my-2">Batas Pengambilan : {{ date('d M Y',strtotime($purcase->order_date . '3 days ')) }}</p>
                         <p>Tanggal Pengambilan : {{ date('d M Y',strtotime($purcase->order_complete)) }}</p>
                     </div>
                     <div class="w-1/3">
                         <p>Catatan Tambahan</p>
-                        <div class="bg-white shadow-lg rounded-lg p-2 mt-1 overflow-y-scroll h-16">{{ $purcase->customer_request ?? "-" }}</div>
+                        <div class="bg-white shadow-lg rounded-lg p-2 mt-1 overflow-y-scroll h-16">{{ $purcase->recipient_request ?? "-" }}</div>
                     </div>
                 </div>
             </div>
 
             <div class="sm:flex my-7 mb-3 text-xl ">
             <p class="font-semibold me-2">Informasi Pembayaran:</p>
-            <a href="/informasi_pembayaran/{{ $purcase->customer_payment }}/{{ $purcase->selling_invoice_id }}" class="underline me-1 text-lg">
+            <a href="/informasi_pembayaran/{{ $purcase->recipient_payment }}/{{ $purcase->selling_invoice_id }}" class="underline me-1 text-lg">
                 <i class="fa-solid fa-note-sticky"></i>
-                {{ $purcase->customer_payment }}</a>
-                <p class="text-lg">({{ $purcase->customer_bank }})</p>
+                {{ $purcase->recipient_payment }}</a>
+                <p class="text-lg">({{ $purcase->recipient_bank }})</p>
             </div>
 
             @if ($purcase->reject_comment)
