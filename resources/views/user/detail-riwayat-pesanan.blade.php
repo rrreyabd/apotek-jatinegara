@@ -44,17 +44,17 @@
                 @endif
                     text-white font-semibold">{{ $purcase->order_status }}</p>
 
-                @if ($purcase->refund_file)
-                    {{-- keluarin gambar --}}
-                    <button class="underline me-1 text-lg">
-                        <i class="fa-solid fa-note-sticky"></i>
-                        Refund_{{ $purcase->invoice_code }}
-                    </button>
-                @else
+                @if ($purcase->order_status == 'Berhasil')
                     {{-- masuk ke halaman struk --}}
-                    <a href="/cetak-struk?{{ $purcase->selling_invoice_id }}" class="underline me-1 text-lg">
+                    <a target="_blank" href="/cetak-struk/{{ $purcase->selling_invoice_id }}" class="underline me-1 text-lg">
                         <i class="fa-solid fa-note-sticky"></i>
                         {{ $purcase->invoice_code }}
+                    </a>
+                    @elseif ($purcase->order_status == 'Refund')
+                    {{-- keluarin gambar --}}
+                    <a href="/refund/{{ $purcase->refund_file }}/{{ $purcase->selling_invoice_id }}" class="underline me-1 text-lg">
+                        <i class="fa-solid fa-note-sticky"></i>
+                        Refund_{{ $purcase->invoice_code }}
                     </a>
                 @endif
             </div>

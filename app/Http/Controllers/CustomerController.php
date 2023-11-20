@@ -99,9 +99,23 @@ class CustomerController extends Controller
                 ]);
                 // selesai memasukan product ke invoice_detail
 
+                $stock = $produk->product->detail()->orderBy('product_expired')->first()->product_stock - $produk->quantity;
+
+                // mengurangi stock
                 $produk->product->detail()->orderBy('product_expired')->first()->update([
-                    'product_stock' => $produk->product->detail()->orderBy('product_expired')->first()->product_stock - $produk->quantity,
+                    'product_stock' => $stock,
                 ]);
+                // akhir mengurangi stock
+
+                if($stock == 0){
+                    if($produk->product->detail()->count() <= 1){
+                        $produk->product->update([
+                            'product_status' => 'tidak aktif',
+                        ]);
+                    }else{
+                        $produk->product->detail()->orderBy('product_expired')->first()->delete();
+                    }
+                }
             }
             
             foreach($produks as $produk){
@@ -148,6 +162,23 @@ class CustomerController extends Controller
             'root' => 'resep-dokter',
             'file'=> $request->file,
             'id'=> $request->id,
+        ]);
+    }
+
+    public function refund(Request $request){
+        return view('user.show-image',[
+            'title' => 'Refund',
+            'root' => 'refund',
+            'file'=> $request->file,
+            'id'=> $request->id,
+        ]);
+    }
+
+    public function cetak_struk(Request $request) {
+        $invoice = SellingInvoice::where('selling_invoice_id', $request->id)->first();
+        // dd($invoice);
+        return view('user.invoice', [
+            'invoice'=> $invoice,
         ]);
     }
 }
