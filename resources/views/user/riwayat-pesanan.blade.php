@@ -84,7 +84,7 @@
                                 <th>Total Belanja</th>
                             </tr>
                         </thead>
-                   
+                    
                         <tbody class="shadow-lg rounded-lg">
                             @foreach ($products_purcase as $product_purcase)
                             <tr class="p-3 border-[1px] border-black h-[55px]">
@@ -119,27 +119,6 @@
             </div>
         </div>
     </div>
-
-       {{-- pagination --}}
-       <div class="w-full flex justify-end items-center h-[20vh]">
-        <div class="flex gap-8 items-center">
-            <a href="" class="font-normal hover:font-semibold transition duration-300 ease-in-out">
-                <i class="fa-solid fa-chevron-left"></i>
-            </a>
-            <a href="" class="font-normal hover:font-semibold transition duration-300 ease-in-out">1</a>
-            <!-- tambahkan class pageActive untuk page yang sedang dibuka -->
-            <a href=""
-                class="font-normal hover:font-semibold transition duration-300 ease-in-out pageActive">2</a>
-            <a href=""
-                class="font-normal hover:font-semibold transition duration-300 ease-in-out ">3</a>
-            <p class="unselectable">...</p>
-            <a href="" class="font-normal hover:font-semibold transition duration-300 ease-in-out">7</a>
-            <a href="" class="font-normal hover:font-semibold transition duration-300 ease-in-out">
-                <i class="fa-solid fa-chevron-right"></i>
-            </a>
-        </div>
-    </div>
-
 
     <script>
         const toggleStatus = () => {
