@@ -58,7 +58,10 @@
                         </div>
                     @endif
                     @else
-                    <p class="text-red-500 mt-10 text-center text-xl">Untuk Pembelian Produk, User harus Melakukan <a href="/login" class="underline">Login</a> Terlebih Dahulu</p>
+                    <div class="flex items-center gap-8 mt-8">
+                    <i class="fa-solid fa-triangle-exclamation fa-2xl text-mediumRed"></i>
+                    <p class="text-mediumRed text-lg font-medium">Mohon untuk <a href="/login" class="underline font-bold">login</a> terlebih dahulu sebelum melakukan pemesanan produk.</p>
+                    </div>
                     @endauth
                 </div>
             </div>

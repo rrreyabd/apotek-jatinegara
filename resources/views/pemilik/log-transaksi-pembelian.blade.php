@@ -25,7 +25,7 @@
 
         <div class="flex flex-col gap-8">
             <div class="flex justify-between">
-                <div class="flex">
+                <div class="sm:flex">
                     <input type="month" name="" id="" class="w-fit p-3 rounded-lg shadow-lg border-none">
                     <p class="mx-3 font-extrabold flex items-center text-2xl">-</p>
                     <input type="month" name="" id="" class="w-fit p-3 rounded-lg shadow-lg border-none">
@@ -35,7 +35,7 @@
             @for ($i = 0; $i < 1; $i++) 
             <div class="relative inline-block text-left">
                     <button id="dropdown-button{{$i}}"
-                        class="inline-flex justify-center gap-4 items-center w-full px-4 h-full text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-2  focus:ring-mainColor">
+                        class="inline-flex justify-center gap-4 items-center w-full px-4 py-2 sm:h-full text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-2  focus:ring-mainColor">
                         Filter
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
@@ -128,7 +128,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="flex flex-col gap-8 mt-8">
+                                                <div class="flex flex-col gap-8 mt-8 overflow-y-auto h-72">
                                                     <table class="w-full">
                                                         <tr class="border-2 border-b-mainColor border-transparent text-mainColor font-bold w-[100%] justify-between">
                                                             <td class="pb-2 text-center">No</td>
@@ -138,22 +138,16 @@
                                                             <td class="pb-2 text-center">Harga</td>
                                                             <td class="pb-2">Total</td>
                                                         </tr>
+                                                        @for ($j = 1; $j <= 50; $j++)
                                                         <tr>
-                                                            <td class="py-2 text-center">1</td>
+                                                            <td class="py-2 text-center">{{$j}}</td>
                                                             <td class="py-2">Paracetamol 200 kg</td>
                                                             <td class="py-2 text-center">4</td>
                                                             <td class="py-2 text-center">Rp 5.000</td>
                                                             <td class="py-2 text-center"">Rp 20.000</td>
                                                             <td class="py-2">Rp 20.000</td>
                                                         </tr>
-                                                        <tr>
-                                                            <td class="py-2 text-center">2</td>
-                                                            <td class="py-2">Panadol 200 mg</td>
-                                                            <td class="py-2 text-center">3</td>
-                                                            <td class="py-2 text-center">Rp 2.500</td>
-                                                            <td class="py-2 text-center"">Rp 7.500</td>
-                                                            <td class="py-2">Rp 20.000</td>
-                                                        </tr>
+                                                        @endfor
                                                     </table>
                                                 </div>
     
