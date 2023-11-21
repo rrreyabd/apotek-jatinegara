@@ -29,6 +29,52 @@
                     <i class="fa-solid fa-plus pe-2"></i>
                     Tambah Kasir
                 </button>
+
+                {{-- MODAL TAMBAH KASIR START --}}
+                <div class="top-0 left-0 hidden flex flex-col justify-center items-center absolute z-10 backdrop-blur-sm backdrop-brightness-75 rounded-xl w-full h-screen"
+                id="popupTambah">
+                <div class="w-fit flex flex-col justify-center">
+                    <div class="bg-mainColor text-white font-semibold px-10 py-4 rounded-t-xl flex justify-between">
+                        Tambah Kasir
+                        <button onclick="showPopUpTambah()">
+                        <i class="fa-solid fa-xmark fa-xl" style="color: white"></i>
+                        </button>
+                    </div>
+                    <div class="bg-white p-7 pt-4 rounded-b-xl">
+                        <form action="" method="post">
+                            <div class="flex gap-6 p-4">
+                                <table>
+                                    <tr>
+                                        <td class="py-5"><label for="namaUser">Nama User</label></td>
+                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-5"><label for="email">Email</label></td>
+                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-5"><label for="gender">Gender</label></td>
+                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-5"><label for="nohp">No. Handphone</label></td>
+                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-5"><label for="alamatKasir">Alamat</label></td>
+                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="submit"
+                                    class="p-2 px-4 me-4 bg-secondaryColor text-white font-semibold rounded-lg">Tambah</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{-- MODAL TAMBAH KASIR END --}}
             </div>
 
             <div class="bg-white rounded-lg p-4 shadow-md overflow-x-auto">
@@ -87,7 +133,7 @@
                                 </div>
                                 {{-- Pop up konfirmasi hapus end --}}
 
-                                {{-- pop up edit kasir start --}}
+                                {{-- MODAL EDIT KASIR START --}}
                                 <div class="top-0 left-0 hidden flex flex-col justify-center items-center absolute z-10 backdrop-blur-sm backdrop-brightness-75 rounded-xl w-full h-screen"
                                     id="popupEdit">
                                     <div class="w-fit flex flex-col justify-center">
@@ -125,59 +171,13 @@
                                                 </div>
                                                 <div class="flex justify-end">
                                                     <button type="submit"
-                                                        class="p-2 px-4 me-4 bg-secondaryColor text-white font-semibold rounded-lg">Tambah</button>
+                                                        class="p-2 px-6 me-4 bg-secondaryColor text-white font-semibold rounded-lg">Edit</button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
-                                {{-- pop up edit kasir end --}}
-
-                                {{-- pop up tambah kasir start --}}
-                                <div class="top-0 left-0 hidden flex flex-col justify-center items-center absolute z-10 backdrop-blur-sm backdrop-brightness-75 rounded-xl w-full h-screen"
-                                    id="popupTambah">
-                                    <div class="w-fit flex flex-col justify-center">
-                                        <div class="bg-mainColor text-white font-semibold px-10 py-4 rounded-t-xl flex justify-between">
-                                            Tambah Kasir
-                                            <button onclick="showPopUpTambah()">
-                                            <i class="fa-solid fa-xmark fa-xl" style="color: white"></i>
-                                            </button>
-                                        </div>
-                                        <div class="bg-white p-7 pt-4 rounded-b-xl">
-                                            <form action="" method="post">
-                                                <div class="flex gap-6 p-4">
-                                                    <table>
-                                                        <tr>
-                                                            <td class="py-5"><label for="namaUser">Nama User</label></td>
-                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="py-5"><label for="email">Email</label></td>
-                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="py-5"><label for="gender">Gender</label></td>
-                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="py-5"><label for="nohp">No. Handphone</label></td>
-                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="py-5"><label for="alamatKasir">Alamat</label></td>
-                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                                <div class="flex justify-end">
-                                                    <button type="submit"
-                                                        class="p-2 px-4 me-4 bg-secondaryColor text-white font-semibold rounded-lg">Tambah</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                {{-- pop up tambah kasir end --}}
+                                {{-- MODAL EDIT KASIR END --}}
                             </td>
                             </tr>
                             @endfor
