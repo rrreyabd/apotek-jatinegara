@@ -42,16 +42,16 @@
                     @if ($description_product->product_type == "resep dokter")
                     <span class="bg-red-500 rounded-md px-2 py-1 text-white text-sm font-semibold">Resep</span>
                     @endif
-                    <p class="font-semibold text-2xl my-3">{{ $description_product->product->product_name }}</p>
-                    <p class="font-semibold text-2xl text-orange-400 my-2">Rp {{ number_format($description_product->product->detail()->orderBy('product_expired')->first()->product_sell_price, 0, ',', '.') }} <span class="text-black text-base">/ {{ $description_product->unit->unit }}</span></p>
+                    <p class="font-semibold text-2xl my-3">{{ $description_product->product_name }}</p>
+                    <p class="font-semibold text-2xl text-orange-400 my-2">Rp {{ number_format($description_product->product_sell_price, 0, ',', '.') }} <span class="text-black text-base">/ {{ $description_product->unit }}</span></p>
                     <p class="text-lg my-3 text-gray-500">
                         {{$description_product->product_description}}
                     </p>
                     <p class="text-lg my-1">
-                        Stok : {{ $description_product->product->detail()->orderBy('product_expired')->first()->product_stock }}
+                        Stok : {{ $description_product->product_stock }}
                     </p>
                     @auth
-                    <livewire:counter-product :stock="$description_product->product->detail()->orderBy('product_expired')->first()->product_stock" :user="auth()->user()->user_id" :product="$description_product->product->product_id" :status="$description_product->product->product_status"/>
+                    <livewire:counter-product :stock="$description_product->product_stock" :user="auth()->user()->user_id" :product="$description_product->product_id" :status="$description_product->product_status"/>
                     @if (session('error'))
                         <div class="text-sm text-red-500 mt-1 ms-3 mb-0 text-left">
                             * {{ session('error') }}
@@ -83,17 +83,17 @@
                     <tr>
                         <td class="pt-5">Golongan Obat</td> 
                         <td class="pt-5">:</td>
-                        <td class="pt-5 ps-5">{{ $description_product->group->group }}</td>
+                        <td class="pt-5 ps-5">{{ $description_product->group }}</td>
                     </tr>
                     <tr>
                         <td class="pt-5">Kategori Obat</td> 
                         <td class="pt-5">:</td>
-                        <td class="pt-5 ps-5">{{ $description_product->category->category }}</td>
+                        <td class="pt-5 ps-5">{{ $description_product->category }}</td>
                     </tr>
                     <tr>
                         <td class="pt-5">Tanggal Kadaluwarsa</td>
                         <td class="pt-5">:</td>
-                        <td class="pt-5 ps-5">{{ date('d F Y',strtotime($description_product->product->detail()->orderBy('product_expired')->first()->product_expired)) }}</td>
+                        <td class="pt-5 ps-5">{{ date('d F Y',strtotime($description_product->product_expired)) }}</td>
                     </tr>
                     <tr>
                         <td class="pt-5">No. Izin Edar (BPOM)</td>

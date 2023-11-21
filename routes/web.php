@@ -96,6 +96,8 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
     Route::get('/cashier', [ProductController::class,'produk_cashier'])->name('cashier_product');
 
+    Route::post('/cashier/hapuskeranjang', [CartController::class,'hapus_keranjang'])->name('hapus_keranjang');
+
     Route::get('/cashier/riwayat-transaksi', function () {
         return view('kasir.riwayat-transaksi');
     });

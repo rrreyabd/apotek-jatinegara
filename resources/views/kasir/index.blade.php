@@ -133,14 +133,14 @@
                         <p> <span class="text-secondaryColor font-bold leading-tight break-all">Rp. {{
                                 number_format($item->detail()->orderBy('product_expired')->first()->product_sell_price,
                                 0,
-                                ',', '.') }}</span> / {{ $item->description->unit->unit }} </p>
+                                ',', '.') }}</span> / </p>
+                        <p> {{ $item->description->unit->unit }}</p>
                         <p class="font-semibold leading-tight break-all">Stok : {{
                             $item->detail()->orderBy('product_expired')->first()->product_stock }}</p>
                     </div>
                     @auth
                         @if ($item->product_status == 'aktif')
-                        <button wire:click="cashier_count({{ '$item->product_id' }})"
-                            class="text-white font-semibold bg-mainColor w-full py-1 rounded-md">Tambah</button>
+                        <livewire:buttonAddCartCashier :user="auth()->user()->user_id" :product="$item->product_id"/>
                         @else
                             <button type="button" disabled
                                 class="text-mediumGrey font-semibold bg-lightGrey w-full py-1 rounded-md">Tambah</button>
@@ -158,11 +158,63 @@
         </div>
 
         {{-- CART START --}}
-        <livewire:cartdisplay :user="auth()->user()->user_id" :product="$item->product_id"/>
+        <livewire:cartdisplay/>
         {{-- CART END --}}
+
+        <form action="/cashier/hapuskeranjang" method="POST" class="w-screen h-screen opacity-0 absolute top-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="cartAlertPopUp">
+            @csrf
+            <input type="hidden" name="hapus" value="semua">    
+            <div class="bg-white h-fit w-[30%] rounded-lg shadow-sm shadow-semiBlack py-10 px-8 flex flex-col gap-4 items-center text-center">
+                <i class="text-7xl text-mainColor fa-solid fa-circle-question"></i>
+                <p class="text-2xl font-bold w-[80%]">Apakah Anda Yakin Ingin Menghapus Seluruh Data Keranjang ?</p>
+                <button onclick="cartAlert()" type="button" class="bg-mainColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Kembali</button>
+                <button type="submit" class="bg-mediumRed w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack" disabled id="cartLogout">Hapus</button>
+            </div>
+        </form>
     </main>
     @livewireScripts
     <script>
+        const cartAlert = () => {
+        const modal = document.getElementById('cartAlertPopUp');
+        const button = document.getElementById("cartLogout");
+
+        if (modal.classList.contains('hidden')) {
+            button.disabled = false;
+            requestAnimationFrame(() => {
+                modal.classList.remove('hidden');
+                document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
+                requestAnimationFrame(() => {
+                    modal.classList.add('opacity-100');
+                });
+            });
+        } else {
+            button.disabled = true;
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-100');
+                document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
+                requestAnimationFrame(() => {
+                    modal.classList.add('hidden');
+                });
+            });
+        }
+    }
+    </script>
+
+    <script>
+        const toggleSidebar = () => {
+            const sidebar = document.getElementById('sidebar');
+            const main = document.getElementById('mainContent');
+
+            if (sidebar.classList.contains('-translate-x-80')) {
+                sidebar.classList.remove('-translate-x-80')
+                main.classList.add('brightness-50')
+            } else {
+                sidebar.classList.add('-translate-x-80')
+                main.classList.remove('brightness-50')
+            }
+
+        }
+
         function initializeDropdown(buttonId, menuId) {
             const dropdownButton = document.getElementById(buttonId);
             const dropdownMenu = document.getElementById(menuId);
@@ -203,20 +255,6 @@
             if (obatText.length > 18) {
                 obatElement[i].textContent = obatText.slice(0, 38) + "...";
             }
-        }
-
-        const toggleSidebar = () => {
-            const sidebar = document.getElementById('sidebar');
-            const main = document.getElementById('mainContent');
-
-            if (sidebar.classList.contains('-translate-x-80')) {
-                sidebar.classList.remove('-translate-x-80')
-                main.classList.add('brightness-50')
-            } else {
-                sidebar.classList.add('-translate-x-80')
-                main.classList.remove('brightness-50')
-            }
-
         }
     </script>
 </body>

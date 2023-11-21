@@ -80,4 +80,9 @@ class CartController extends Controller
         
         return redirect()->back();
     }
+
+    public function hapus_keranjang() {
+        Cart::where('user_id', auth()->user()->user_id)->delete();
+        return redirect()->back();
+    }
 }

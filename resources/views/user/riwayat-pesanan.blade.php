@@ -22,7 +22,7 @@
             <div class="flex gap-4">
                 {{-- back button --}}
 
-                <a href=""
+                <a href="/"
                     class="flex justify-start items-center rounded-3xl shadow-md h-[40px] px-3 text-center text-lg text-gray-500 font-semibold">
                     <svg xmlns="http://www.w3.org/2000/svg" class="pe-1" width="24" height="24" viewBox="0 0 24 24"
                         stroke-width="2" stroke="currentColor" fill="none">
