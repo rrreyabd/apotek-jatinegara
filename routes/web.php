@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Livewire\ProductPagination;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GoogleController;
@@ -94,9 +94,7 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
 
 // Halaman Cashier
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
-    Route::get('/cashier', function () {
-        return view('kasir.index');
-    });
+    Route::get('/cashier', [ProductController::class,'produk_cashier'])->name('cashier_product');
 
     Route::get('/cashier/riwayat-transaksi', function () {
         return view('kasir.riwayat-transaksi');
