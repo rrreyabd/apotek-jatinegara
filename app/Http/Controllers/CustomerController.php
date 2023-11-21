@@ -31,7 +31,7 @@ class CustomerController extends Controller
             $validated_data = $request->validate([
                 'nama' => ['required', 'string', 'min:5', 'max:255'],
                 'nomor_telepon' => ['numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
-                'resep_dokter' => ['required', 'file','mimes:pdf,doc, docx, jpeg, jpg, png, raw, bmp', 'max: 5120'],
+                'resep_dokter' => ['required', 'file', 'max: 5120'],
             ]);
         }else{
             $validated_data = $request->validate([
@@ -57,7 +57,7 @@ class CustomerController extends Controller
 
         $validated_data = $request->validate([
             'paymentMethod'=> ['required'],
-            'buktiPembayaran' => ['required', 'file', 'mimes:pdf,doc, docx, jpeg, jpg, png, raw, bmp', 'max: 5120'],
+            'buktiPembayaran' => ['required', 'file', 'max: 5120'],
         ]);
 
         $produk_id = SellingInvoice::orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();

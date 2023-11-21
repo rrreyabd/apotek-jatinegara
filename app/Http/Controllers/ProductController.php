@@ -275,11 +275,19 @@ class ProductController extends Controller
 
     public function produk_cashier(Request $request)
     {
+        $searchTerm = $request->input('search');
+
+        if ($searchTerm === "") {
+            $product = Product::orderBy('product_status')->paginate(8);
+        } else {
+            $product = Product::orderBy('product_status')->where(function ($query) use ($searchTerm) {
+                $query->where(DB::raw("product_name"), "LIKE", "%" . $searchTerm . "%");
+            })->paginate(8);
+        }
         $categories = Category::orderBy('category')->get();
         $groups = Group::orderBy('group')->get();
         $units = Unit::orderBy('unit')->get();
 
-        $all_product = Product::paginate(8);
 
         return view("kasir.index", [
             "products"=> $product ?? NULL,

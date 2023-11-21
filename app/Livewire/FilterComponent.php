@@ -3,26 +3,63 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Model\Products;
+use App\Models\Product;
+use Illuminate\Support\Arr;
 
 class FilterComponent extends Component
 {
-    public $options;
-    public $selectedOption;
-    public $filteredResults;
+    public $filterOptions = [];
+    public $selectedOptions = [];
+    public $filteredProducts = [];
 
-    public function mount($choice)
+    protected $listeners = ['filterUpdated' => 'updateFilterOptions'];
+
+    public function mount($filterOptions)
     {
-        if (choice == 'category' ) {
-            $this->options = Product::pluck('','')->toArray();
-        }
-        $this->options = Product::pluck('name', 'id')->toArray();
+        $this->filterOptions = $filterOptions;
+        $this->updateFilteredProducts(); // Initialize with all products
     }
+
     public function render()
     {
-        $this->filteredResults = Product::when($this->selectedOption, function ($query) {
-            return $query->where('column_name', $this->selectedOption);
-        })->get();
         return view('livewire.filter-component');
+    }
+
+    public function filter($filter, $option)
+    {
+        $this->selectedOptions[$filter][] = $option;
+        $this->updateFilteredProducts();
+    }
+
+    public function removeFilter($filter, $option)
+    {
+        $this->selectedOptions[$filter] = array_diff($this->selectedOptions[$filter], [$option]);
+        $this->updateFilteredProducts();
+    }
+
+    private function updateFilteredProducts()
+    {
+        if (empty($this->selectedOptions)) {
+            $this->filteredProducts = Product::all();
+        } else {
+            $query = Product::query();
+
+            foreach ($this->selectedOptions as $filter => $options) {
+                foreach ($options as $option) {
+                    $filterArray = json_decode($option, true);
+                    if ($filterArray) {
+                        $query->whereIn($filter, Arr::flatten([$filterArray[$filter]]));
+                    }
+                }
+            }
+
+            $this->filteredProducts = $query->get();
+        }
+    }
+
+    public function updateFilterOptions($filterOptions)
+    {
+        $this->filterOptions = $filterOptions;
+        $this->updateFilteredProducts();
     }
 }
