@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Unit::factory(10)->create();
         \App\Models\Group::factory(4)->create();
         \App\Models\Supplier::factory(10)->create();
-        for ($i=0; $i < 100; $i++) { 
+        for ($i=0; $i < 40; $i++) { 
             \App\Models\ProductDescription::factory(1)->create();
             \App\Models\Product::factory(1)->create();
             \App\Models\ProductDetail::factory(1)->create();

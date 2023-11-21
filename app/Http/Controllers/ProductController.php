@@ -31,7 +31,7 @@ class ProductController extends Controller
 
                     foreach(collect($product_last_purcase) as $p){
                         if(Product::where('product_name', $p->product_name)->where('product_status',  'aktif')->first() != NULL){
-                            $products[] = Product::where('product_name', $p->product_name)->get();
+                            $products[] = DB::table('product_view')->where('product_name', $p->product_name)->get();
                         }
                     }
                 } else {
@@ -53,7 +53,7 @@ class ProductController extends Controller
                 foreach($products_best_seller as $p){
                     if(Product::where('product_name', $p->product_name)->where('product_status',  'aktif')->first() != NULL){
                         // echo(collect(Product::where('product_name', $p->product_name)->first()));
-                        $product_best_seller[] = Product::where('product_name', $p->product_name)->get();
+                        $product_best_seller[] = DB::table('product_view')->where('product_name', $p->product_name)->get();
                     }
                 }
             } else {
@@ -248,24 +248,13 @@ class ProductController extends Controller
         ]);
     }
 
-
-    public function liveSearch(Request $request)
-{
-    $query = $request->input('query');
-
-    $products = Product::where('product_name', 'like', "%$query%")->get();
-
-    return response()->json($products);
-}
-
     public function deskripsiProduk(Request $request){
-        $products = Product::all();
+        $products = DB::table('product_view')->get();
         
         foreach($products as $product){
             if(Str::slug($product->product_name) == $request->product){
-                $description_product = $product->description;
                 return view("user.description-product",[
-                    "description_product" => $description_product ?? [],
+                    "description_product" => $product ?? [],
                 ]);
             }
         }

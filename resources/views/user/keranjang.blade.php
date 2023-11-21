@@ -42,15 +42,11 @@
             <p class="py-7 text-sm text-red-500">*Jumlah maksimum barang 30</p>
 
             <div class="md:flex md:grid-cols-2 justify-between">
-                <p class="font-semibold text-4xl">Keranjang anda</p>
-                <form action="/keranjang/hapus" method="POST">
-                    @csrf
-                    <input type="hidden" name="hapus" value="semua">                    
-                    <button type="submit" class="rounded-lg flex p-2 border border-mainColor hover:bg-mainColor text-mainColor hover:text-white transition-colors duration-300 ease-in-out">
+                <p class="font-semibold text-4xl">Keranjang anda</p>                
+                    <button type="button" onclick="cartAlert()" class="rounded-lg flex p-2 border border-mainColor hover:bg-mainColor text-mainColor hover:text-white transition-colors duration-300 ease-in-out">
                         <i class="fa-regular fa-trash-can p-1 pe-2"></i>  
                         <p class="font-semibold">Kosongkan keranjang</p> 
                     </button>
-                </form>
             </div>
 
             {{-- table --}}
@@ -130,8 +126,45 @@
         </div>
     </div>
 
+    <form action="/keranjang/hapus" method="POST" class="w-screen h-screen opacity-0 absolute top-0 backdrop-blur-md z-50 hidden flex justify-center items-center transition duration-300 ease-in-out backdrop-brightness-50" id="cartAlertPopUp">
+        @csrf
+        <input type="hidden" name="hapus" value="semua">    
+        <div class="bg-white h-fit w-[30%] rounded-lg shadow-sm shadow-semiBlack py-10 px-8 flex flex-col gap-4 items-center text-center">
+            <i class="text-7xl text-mainColor fa-solid fa-circle-question"></i>
+            <p class="text-2xl font-bold w-[80%]">Apakah Anda Yakin Ingin Menghapus Seluruh Data Keranjang ?</p>
+            <button onclick="cartAlert()" type="button" class="bg-mainColor px-4 w-52 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack">Kembali</button>
+            <button type="submit" class="bg-mediumRed w-52 px-4 py-2 text-white font-bold rounded-md shadow-md shadow-semiBlack" disabled id="btnCart">Hapus</button>
+        </div>
+    </form>  
+
     @include('user.components.footer')
     @livewireScripts
+    <script>
+        const cartAlert = () => {
+        const modals = document.getElementById('cartAlertPopUp');
+        const buttons = document.getElementById("btnCart");
+
+        if (modals.classList.contains('hidden')) {
+            buttons.disabled = false;
+            requestAnimationFrame(() => {
+                modals.classList.remove('hidden');
+                document.body.classList.add('max-h-[100vh]', 'overflow-hidden');
+                requestAnimationFrame(() => {
+                    modals.classList.add('opacity-100');
+                });
+            });
+        } else {
+            buttons.disabled = true;
+            requestAnimationFrame(() => {
+                modals.classList.remove('opacity-100');
+                document.body.classList.remove('max-h-[100vh]', 'overflow-hidden');
+                requestAnimationFrame(() => {
+                    modals.classList.add('hidden');
+                });
+            });
+        }
+    }
+    </script>
 </body>
 
 </html>

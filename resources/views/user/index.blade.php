@@ -30,8 +30,8 @@
 
     @if (session('status') == 'pembayaran-berhasil')
         {{-- Pop up pembayaran start --}}
-        <div class="absolute w-screen h-[100%] backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 overflow-x-auto" id="popup">
-            <div class="w-[30%] h-[60%] bg-white rounded-2xl shadow-md p-8 flex flex-col gap-6 relative">
+        <div class="absolute w-screen h-[100vh] backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 overflow-x-auto" id="popup">
+            <div class="w-[30%] h-fit bg-white rounded-2xl shadow-md p-8 flex flex-col gap-6 relative">
                 <div class="flex flex-col items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="text-secondaryColor icon icon-tabler icon-tabler-discount-check-filled" width="80" height="80" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -94,11 +94,11 @@
 
             if (popup.classList.contains('hidden')) {
                 popup.classList.remove('hidden')
-                document.body.classList.add('h-[100vh]')
+                document.body.classList.add('h-screen')
                 document.body.classList.add('overflow-hidden')
             } else {
                 popup.classList.add('hidden')
-                document.body.classList.remove('h-[100vh]')
+                document.body.classList.remove('h-screen')
                 document.body.classList.remove('overflow-hidden')
             }
         }
