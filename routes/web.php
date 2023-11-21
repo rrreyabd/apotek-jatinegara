@@ -3,6 +3,7 @@ use App\Http\Livewire\ProductPagination;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\printPDFController;
 use App\Http\Controllers\ProductController;
 use App\Models\User;
 use Illuminate\Support\Arr;
@@ -83,6 +84,11 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
 
     Route::get('/informasi_pembayaran/{file}/{id}', [CustomerController::class, 'informasi_pembayaran'])->name('informasi-pembayaran');
     Route::get('/resep_dokter/{file}/{id}', [CustomerController::class, 'resep_dokter'])->name('resep-dokter');
+    Route::get('/refund/{file}/{id}', [CustomerController::class, 'refund'])->name('refund');
+
+    Route::get('/cetak-struk/{id}', [CustomerController::class,'cetak_struk'])->name('cetak_struk');
+
+    Route::get('/generate-pdf/{id}', [printPDFController::class, 'generatePdf']);
 });
 // akhir halaman user
 
