@@ -35,6 +35,6 @@ class CartButton extends Component
 
     public function render()
     {
-        return view('livewire.cart-button');
+        return view('livewire.cartdisplay');
     }
 }

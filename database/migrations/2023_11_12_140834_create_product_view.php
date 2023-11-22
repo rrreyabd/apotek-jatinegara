@@ -52,6 +52,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_view');
+        DB::statement('DROP VIEW product_view;');
+
     }
 };
