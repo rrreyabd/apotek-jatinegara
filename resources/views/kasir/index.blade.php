@@ -123,10 +123,12 @@
                             class="w-full" alt="">
                     </div>
 
-                    <p class="w-full font-semibold text-base namaObat leading-tight break-words">{{ $item->product_name
+                    <p class="w-full font-semibold text-base namaObat leading-tight break-words">{{ Str::limit($item->product_name, 30, "...")
                         }}</p>
                     @if ($item->description->product_type == "resep dokter")
-                    <p class="bg-red-600 text-white w-fit px-2 py-1 text-sm rounded-md font-semibold">Resep</p>
+                    <p class="bg-red-600 h-7 text-white w-fit px-2 py-1 text-sm rounded-md font-semibold">Resep</p>
+                    @else
+                    <div class="h-7"></div>
                     @endif
 
                     <div class="flex flex-col">
@@ -134,7 +136,7 @@
                                 number_format($item->detail()->orderBy('product_expired')->first()->product_sell_price,
                                 0,
                                 ',', '.') }}</span> / </p>
-                        <p> {{ $item->description->unit->unit }}</p>
+                        <p class="h-[3.2rem]"> {{ $item->description->unit->unit }}</p>
                         <p class="font-semibold leading-tight break-all">Stok : {{
                             $item->detail()->orderBy('product_expired')->first()->product_stock }}</p>
                     </div>
@@ -247,15 +249,15 @@
         }
 
         // Script untuk membatasi jumlah karakter di nama obat
-        const obatElement = document.getElementsByClassName("namaObat");
+        // const obatElement = document.getElementsByClassName("namaObat");
 
-        for (let i = 0; i < obatElement.length; i++) {
-            const obatText = obatElement[i].textContent;
+        // for (let i = 0; i < obatElement.length; i++) {
+        //     const obatText = obatElement[i].textContent;
 
-            if (obatText.length > 18) {
-                obatElement[i].textContent = obatText.slice(0, 38) + "...";
-            }
-        }
+        //     if (obatText.length > 18) {
+        //         obatElement[i].textContent = obatText.slice(0, 18) + "...";
+        //     }
+        // }
     </script>
 </body>
 

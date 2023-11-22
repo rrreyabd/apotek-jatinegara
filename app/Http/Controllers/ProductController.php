@@ -43,11 +43,7 @@ class ProductController extends Controller
         // akhir last purcase
         
         // banyak dicari
-            // ubah jadi view
-            $products_best_seller = SellingInvoiceDetail::select('product_name', DB::raw('COUNT(*) as jumlah_kemunculan'))
-            ->groupBy('product_name')
-            ->OrderBy('jumlah_kemunculan', 'DESC')
-            ->get();
+            $products_best_seller = DB::table('bestsellerproduct_view')->get();
 
             if ($products_best_seller->count() > 0) {
                 foreach($products_best_seller as $p){
@@ -280,7 +276,7 @@ class ProductController extends Controller
 
         return view("kasir.index", [
             "products"=> $product ?? NULL,
-            "all_products" => $all_product ?? [],
+            // "all_products" => $all_product ?? [],
             "categories"=> $categories ?? [],
             "units"=> $units ?? [],
             "groups"=> $groups ?? [],
