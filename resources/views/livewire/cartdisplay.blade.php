@@ -81,7 +81,6 @@
     </div>
 
     {{-- TOTAL START --}}
-    <form action="" method="" class="flex flex-col gap-4">
         <p class="font-bold text-2xl">Total Pesanan</p>
         <hr class="border border-1 border-mediumGrey opacity-20">
 
@@ -97,8 +96,7 @@
             </div>
         </div>
 
-        <button type="submit" class="w-full py-2 bg-mainColor text-white font-bold text-lg rounded-md">Bayar</button>
-    </form>
+        <button wire:click="checkout" class="w-full py-2 bg-mainColor text-white font-bold text-lg rounded-md">Bayar</button>
     {{-- TOTAL END --}}
     
 </div>

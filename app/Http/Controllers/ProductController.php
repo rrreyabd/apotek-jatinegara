@@ -258,28 +258,19 @@ class ProductController extends Controller
         abort(404);
     }
 
-    public function produk_cashier(Request $request)
+    public function produk_cashier()
     {
-        $searchTerm = $request->input('search');
-
-        if ($searchTerm === "") {
-            $product = Product::orderBy('product_status')->paginate(8);
-        } else {
-            $product = Product::orderBy('product_status')->where(function ($query) use ($searchTerm) {
-                $query->where(DB::raw("product_name"), "LIKE", "%" . $searchTerm . "%");
-            })->paginate(8);
-        }
+        $product = Product::orderBy('product_status')->paginate(8);
         $categories = Category::orderBy('category')->get();
         $groups = Group::orderBy('group')->get();
         $units = Unit::orderBy('unit')->get();
 
-
         return view("kasir.index", [
             "products"=> $product ?? NULL,
-            // "all_products" => $all_product ?? [],
             "categories"=> $categories ?? [],
             "units"=> $units ?? [],
             "groups"=> $groups ?? [],
         ]);
     }
+    
 }
