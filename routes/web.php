@@ -74,7 +74,7 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/detail-riwayat-pesanan', [UserController::class,'detailRiwayatTransaksi'])->name('detail-riwayat-transaksi');
 
     Route::get('/keranjang', [CartController::class,'keranjang'])->name('keranjang');
-    Route::post('/keranjang/jumlah', [CartController::class,'jumlahItem'])->name('jumlah-keranjang');
+    // Route::post('/keranjang/jumlah', [CartController::class,'jumlahItem'])->name('jumlah-keranjang');
     Route::post('/keranjang/hapus', [CartController::class,'hapusItem'])->name('hapus-keranjang');
     Route::post('/keranjang/tambah', [CartController::class,'tambahItem'])->name('tambah-keranjang');
 
