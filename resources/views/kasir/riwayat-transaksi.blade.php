@@ -13,7 +13,6 @@
 
     {{-- DATATABLES --}}
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    
 </head>
 <body class="font-Inter relative">
     @include("kasir.components.sidebar")
@@ -26,7 +25,6 @@
             <div class="bg-white rounded-lg p-4 shadow-md">
                 <table id="myTable" class="table table-striped">
                     <thead>
-                        
                         <tr>
                             <th>
                                 <span class="text-center"> No. </span>
@@ -44,10 +42,11 @@
                         @php $index = 1;  @endphp
                         @foreach ($histories as $history)               
                         <tr>
+                            <td>{{ $i }}</td>
                             <td>
                                 <span class="font-bold">{{ $history->invoice_code }}</span>
                             </td>
-                            <td>{{$history->customer_name}}</td>
+                            <td>{{$history->recipient_name}}</td>
                             <td>{{ date('d M Y',strtotime($history->order_complete)) }}</td>
                                  @php
                                     $totalPrice = 0; // Initialize the variable to store the total price
@@ -85,11 +84,7 @@
                              @php $i++; @endphp
 
                                 {{-- MODAL DETAIL RIWAYAT TRANSAKSI START --}}
-<<<<<<< HEAD
                                 <div class="absolute w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal{{ $index }}">                                    
-=======
-                                <div class="absolute w-full h-[100%] top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal">
->>>>>>> 5fec22df019b5bb0101b1beb82e488e248581b75
                                     <div class="w-[70%] h-fit max-h-full bg-white rounded-md shadow-md p-8 flex flex-col gap-6 overflow-auto">
                                         <div class="flex justify-between items-center">
                                             <button onclick="toggleDetail({{ $index }})" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
@@ -114,7 +109,6 @@
                                         <div class="px-8 py-2 w-[100%] flex justify-between">
                                             <div class="w-[70%]">
                                                 <div class="flex flex-col gap-8">
-<<<<<<< HEAD
                                                     <table class="w-full">
                                                         <tr class="border-2 border-b-mainColor border-transparent text-mainColor font-bold w-[100%]">
                                                             <td class="w-[10%] pb-2 text-center">No</td>
@@ -135,28 +129,6 @@
                                                             @php $j++ @endphp
                                                         @endforeach
                                                     </table>
-=======
-                                                    <div class="overflow-y-auto h-96">
-                                                        <table class="w-full h-full overflow-scroll">
-                                                            <tr class="border-2 border-b-mainColor border-transparent text-mainColor font-bold w-[100%]">
-                                                                <td class="w-[10%] pb-2 text-center">No</td>
-                                                                <td class="w-[30%] pb-2">Nama</td>
-                                                                <td class="w-[10%] pb-2 text-center">Jumlah</td>
-                                                                <td class="w-[25%] pb-2 text-center">Harga</td>
-                                                                <td class="w-[25%] pb-2">Total</td>
-                                                            </tr>
-                                                            @for ($j = 0; $j < 20; $j++)
-                                                            <tr>
-                                                                <td class="py-2 text-center">1</td>
-                                                                <td class="py-2">Paracetamol 200 kg</td>
-                                                                <td class="py-2 text-center">4</td>
-                                                                <td class="py-2 text-center">Rp 5.000</td>
-                                                                <td class="py-2">Rp 20.000</td>
-                                                            </tr>
-                                                            @endfor
-                                                        </table>
-                                                    </div>
->>>>>>> 5fec22df019b5bb0101b1beb82e488e248581b75
                                                 </div>
     
                                                 <div class="flex flex-col gap-2 py-2">
@@ -191,17 +163,17 @@
                                                 <hr class="border-2 border-transparent border-b-mainColor">
                                                 <div class="py-2">
                                                     <p class="font-bold">Pelanggan :</p>
-                                                    <p>{{ $history->customer_name }}</p>
+                                                    <p>{{ $history->recipient_name }}</p>
                                                     <p class="font-bold">Nomor HP :</p>
-                                                    <p>{{ $history->customer_phone }}</p>
+                                                    <p>{{ $history->recipient_phone }}</p>
                                                     <p class="font-bold">Tanggal Pengambilan :</p>
                                                     <p>{{ date('d M Y',strtotime($history->order_complete)) }}</p>
                                                     <p class="font-bold">Metode Pembayaran :</p>
-                                                    <p>{{ $history->customer_bank }}</p>
+                                                    <p>{{ $history->recipient_bank }}</p>
                                                     <p class="font-bold">Bukti Pembayaran :</p>
-                                                    <a href="/cashier/img" target="_blank" class="text-blue-600 underline">{{ $history->customer_payment }}</a>
+                                                    <a href="/cashier/img" target="_blank" class="text-blue-600 underline">{{ $history->recipient_payment }}</a>
                                                     <p class="font-bold">Catatan :</p>
-                                                    <p>{{ $history->customer_request }}</p>
+                                                    <p>{{ $history->recipient_request }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -227,17 +199,11 @@
             const modal = document.getElementById('detailModal' + index);
 
             if (modal.classList.contains('hidden')) {
-<<<<<<< HEAD
                 modal.classList.remove('hidden');
                 document.body.classList.add('h-[100vh]');
             } else {
                 modal.classList.add('hidden');
                 document.body.classList.remove('h-[100vh]');
-=======
-                modal.classList.remove('hidden')
-            } else {
-                modal.classList.add('hidden')
->>>>>>> 5fec22df019b5bb0101b1beb82e488e248581b75
             }
         };
     </script>
