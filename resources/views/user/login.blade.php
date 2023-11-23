@@ -73,8 +73,8 @@
                 <button
                 class="w-[350px] h-[50px] p-4 m-0 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack bg-secondaryColor font-TripBold text-white flex justify-center items-center text-xl"
                 type="submit">Masuk</button>
-
-                <p class="p-0 m-0">------- Atau -------</p>
+    
+                <p class="p-0 m-0">━━━━━━━━━ Atau ━━━━━━━━━</p>
 
                 <a href="{{ route('auth.goole') }}"
                 class="w-[350px] h-[50px] p-4 m-0 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack bg-white font-TripBold flex justify-center items-center text-xl"
