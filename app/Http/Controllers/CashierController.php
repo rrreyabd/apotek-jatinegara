@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cashier;
+use App\Models\SellingInvoice;
+use App\Models\Product;
+use App\Models\SellingInvoiceDetail;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreCashierRequest;
 use App\Http\Requests\UpdateCashierRequest;
+use App\Policies\SellingInvoiceDetailPolicy;
 
 class CashierController extends Controller
 {
@@ -35,21 +40,52 @@ class CashierController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Cashier $cashier)
+    public function riwayatTransaksi()
     {
-        //
+        $histories = SellingInvoice::with('sellingInvoiceDetail')
+            ->where('order_status', 'Berhasil')
+            ->orWhere('order_status','Offline')
+            ->orWhere('order_status','Gagal')
+            ->orWhere('order_status','Refund')
+            ->get();
+        $histories = $histories->reverse();
+            // dd($histories);
+    
+        return view('kasir.riwayat-transaksi', ['histories' => $histories]);
+    }
+    public function pendingOrder()
+    {
+        $pendingOrders = SellingInvoice::with('sellingInvoiceDetail')
+            ->where('order_status', 'Menunggu Pengambilan')
+            ->orderBy('order_date', 'desc')
+            ->get();
+            // dd($pendingOrders);
+    
+        return view('kasir.pesanan-pending', ['pendingOrders' => $pendingOrders,]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
+    public function updateStatus(Request $request, $id){
+        try {
+            $order = SellingInvoice::findOrFail($id);
+            
+            // Ubah status menjadi 'Berhasil'
+            $order->order_status = 'Berhasil';
+            $order->save();
+    
+            // Redirect ke halaman atau tindakan yang sesuai
+            return redirect()->back()->with('success', 'Status berhasil diperbarui.');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+            return redirect()->back()->with('error', 'Pesanan tidak ditemukan.');
+        }
+    }
     public function edit(Cashier $cashier)
     {
         //
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage.p
      */
     public function update(UpdateCashierRequest $request, Cashier $cashier)
     {

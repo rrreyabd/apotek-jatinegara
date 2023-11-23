@@ -52,7 +52,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('DROP VIEW product_view;');
-
+        $sql = "DROP VIEW product_view";
+        DB::statement($sql);
     }
 };

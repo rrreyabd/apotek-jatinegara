@@ -13,7 +13,7 @@
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="font-Trip">
+<body class="font-Inter">
     @include('user.components.navbar')
 
     <div class="flex flex-col items-center mb-8">
@@ -42,13 +42,13 @@
                         <input type="hidden" name="status" value="{{ request()->status }}">
                     @endif
                     <input type="text" name="cari" placeholder="INV-******" value="{{ request()->cari ?? "" }}"
-                        class="px-3 py-2 w-full rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack">
+                        class="pl-4 pr-10 py-2 w-full rounded-md shadow-sm shadow-semiBlack border border-1 border-semiBlack">
                     <button type="submit" class="absolute right-2 top-2">
                         <i class="fa-solid fa-magnifying-glass text-2xl text-secondaryColor"></i>
                     </button>
                 </form>
 
-                <button onclick="toggleStatus()" class="w-fit rounded-lg border-2 border-mainColor p-1.5 px-3 mt-7">{{ request()->status ?? "Status Pesanan" }} &#9660;</button>
+                <button onclick="toggleStatus()" class="w-fit rounded-lg border-2 border-mainColor p-1.5 px-3 mt-7">{{ request()->status ?? "Status Pesanan" }} <i class="fa-solid fa-chevron-down"></i></button>
 
                 {{-- STATUS DROPDOWN START --}}
                 <div class="absolute top-[21rem] bg-white shadow-md shadow-semiBlack w-64 h-fit rounded-md cursor-pointer hidden overflow-hidden font-medium opacity-0 transition-opacity duration-200 ease-in-out" id="dropdownMenu2">
@@ -77,20 +77,20 @@
                     <table class="w-full mt-5 ">
                         <thead>
                             <tr>
-                                <th>No. Invoice</th>
-                                <th>Tanggal Belanja</th>
-                                <th>Keterangan</th>
-                                <th>Status</th>
-                                <th>Total Belanja</th>
+                                <th class="pb-2">No. Invoice</th>
+                                <th class="pb-2">Tanggal Belanja</th>
+                                <th class="pb-2">Keterangan</th>
+                                <th class="pb-2">Status</th>
+                                <th class="pb-2">Total Belanja</th>
                             </tr>
                         </thead>
                     
-                        <tbody class="shadow-lg rounded-lg">
+                        <tbody class="shadow-lg">
                             @foreach ($products_purcase as $product_purcase)
                             <tr class="p-3 border-[1px] border-black h-[55px]">
                                 <th>{{ $product_purcase->invoice_code }}</th>
                                 <th class="font-light">{{ date('d M Y',strtotime($product_purcase->order_date)) }}</th>
-                                <th><a href="/detail-riwayat-pesanan?pesanan={{ $product_purcase->selling_invoice_id }}" class="text-blue-600 underline font-light">Lihat Detail</a></th>
+                                <th><a href="/detail-riwayat-pesanan?pesanan={{ $product_purcase->selling_invoice_id }}" class="text-blue-600 underline font-semibold">Lihat Detail</a></th>
                                 <th class="py-3 flex justify-center items-center">
                                     <p class="
                                     @if($product_purcase->order_status == 'Berhasil') bg-green-700 
@@ -98,7 +98,7 @@
                                     bg-secondaryColor
                                     @elseif ($product_purcase->order_status == 'Gagal' || $product_purcase->order_status == 'Refund')
                                     bg-red-500
-                                    @endif py-1 px-4 rounded-lg text-white font-semibold">{{ $product_purcase->order_status }}</p>
+                                    @endif w-56 py-1 px-4 rounded-lg text-white font-semibold">{{ $product_purcase->order_status }}</p>
                                 </th>
                                 @php
                                     $totalBelanja = 0;

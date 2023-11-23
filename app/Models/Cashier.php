@@ -17,7 +17,6 @@ class Cashier extends Model
     {
         return $this->belongsTo(User::class ,'user_id');
     }
-
     protected $fillable = [
         'cashier_id',
         'user_id',

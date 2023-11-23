@@ -12,13 +12,13 @@
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 
 </head>
-<body class="font-Trip bg-gradient-to-br from-mainColor to-tertiaryColor h-[100vh] flex justify-center items-center">
+<body class="font-Inter bg-gradient-to-br from-mainColor to-tertiaryColor h-[100vh] flex justify-center items-center">
     
     <form action="/login" method="POST">
         @csrf
         <div class="bg-white w-[80vw] h-[80vh] rounded-3xl shadow-xl flex p-4">
             <div class="w-[55%] flex justify-center items-center">
-                <img src="{{ asset('img/login.png/') }}" width="500" alt="" draggable="false">
+                <img src="{{ asset('img/login.png/') }}" width="450" alt="" draggable="false">
             </div>
             
             <div class="w-[45%] flex flex-col items-center gap-4 justify-center">
@@ -73,8 +73,8 @@
                 <button
                 class="w-[350px] h-[50px] p-4 m-0 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack bg-secondaryColor font-TripBold text-white flex justify-center items-center text-xl"
                 type="submit">Masuk</button>
-
-                <p class="p-0 m-0">------- Atau -------</p>
+    
+                <p class="p-0 m-0">━━━━━━━━━ Atau ━━━━━━━━━</p>
 
                 <a href="{{ route('auth.goole') }}"
                 class="w-[350px] h-[50px] p-4 m-0 rounded-2xl shadow-sm shadow-semiBlack border border-1 border-semiBlack bg-white font-TripBold flex justify-center items-center text-xl"
