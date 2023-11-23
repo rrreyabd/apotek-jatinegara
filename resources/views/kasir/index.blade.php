@@ -12,6 +12,33 @@
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 
+    <style>
+        body::-webkit-scrollbar {
+            display: none
+        }
+        /* width */
+        #cartProduct::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        /* Track */
+        #cartProduct::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 5px;
+        }
+        
+        /* Handle */
+        #cartProduct::-webkit-scrollbar-thumb {
+            background: #1A8889;
+            border-radius: 5px;
+        }
+        
+        /* Handle on hover */
+        #cartProduct::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+
     @livewireStyles
 </head>
 
@@ -112,17 +139,6 @@
         for (let i = 0; i < 4; i++) {
             initializeDropdown('dropdown-button' + i, 'dropdown-menu' + i);
         }
-
-        // Script untuk membatasi jumlah karakter di nama obat
-        // const obatElement = document.getElementsByClassName("namaObat");
-
-        // for (let i = 0; i < obatElement.length; i++) {
-        //     const obatText = obatElement[i].textContent;
-
-        //     if (obatText.length > 18) {
-        //         obatElement[i].textContent = obatText.slice(0, 18) + "...";
-        //     }
-        // }
     </script>
 </body>
 
