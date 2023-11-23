@@ -85,29 +85,29 @@
                                             <img src="{{asset('img/obat1.jpg/')}}" alt="" class="w-full">
                                         </div>
                                         <div class="w-3/5 text-start flex flex-col gap-1">
-                                            <p class="font-semibold text-wrap">{{ $cart->product->product_name }}</p>
-                                            <p class="font-normal">Kategori : {{ $cart->product->description->category->category }}</p> 
-                                            <p class="font-normal">Exp : {{ date('d M Y',strtotime($cart->product->detail()->orderBy('product_expired')->first()->product_expired)) }}</p> 
-                                            @if ($cart->product->description->product_type == "resep dokter")
+                                            <p class="font-semibold text-wrap">{{ $cart->product_name }}</p>
+                                            <p class="font-normal">Kategori : {{ $cart->category }}</p> 
+                                            <p class="font-normal">Exp : {{ date('d M Y',strtotime($cart->product_expired)) }}</p> 
+                                            @if ($cart->product_type == "resep dokter")
                                             <span class="text-sm font-semibold bg-red-500 rounded-md w-fit px-2 py-1 text-white">Resep</span>
                                             @endif
                                         </div>
                                     </div>
                                 </th>
                                 <th scope="row" class="w-2/12">
-                                    <p class="font-semibold text-lg">Rp {{ number_format($cart->product->detail()->orderBy('product_expired')->first()->product_sell_price , 0, ',', '.') }}</p>
+                                    <p class="font-semibold text-lg">Rp {{ number_format($cart->product_sell_price , 0, ',', '.') }}</p>
                                 </th>
                                 <th class="w-2/12">
                                     <div class="sm:flex sm:grid-cols-3 gap-4 justify-center">
-                                        <livewire:count-product-cart :price="$cart->product->detail()->orderBy('product_expired')->first()->product_sell_price" :cart="$cart->cart_id" :stock="$cart->product->detail()->orderBy('product_expired')->first()->product_stock" :quantity="$cart->quantity" :keranjang="true"/>
+                                        <livewire:count-product-cart :price="$cart->product_sell_price" :cart="$cart->cart_id" :stock="$cart->product_stock" :quantity="$cart->quantity" :keranjang="true"/>
                                     </div>
                                 </th>
                                 <th class="w-2/12">
-                                    <livewire:product-price-cart :cart="$cart->cart_id" :price="$cart->product->detail()->orderBy('product_expired')->first()->product_sell_price" :quantity="$cart->quantity"/>
+                                    <livewire:product-price-cart :cart="$cart->cart_id" :totalprice="$cart->total_harga"/>
                                     </th>
                                 </tr>
                                 @php
-                                $jumlah += $cart->product->detail()->orderBy('product_expired')->first()->product_sell_price * $cart->quantity
+                                $jumlah += $cart->total_harga
                                 @endphp
                             @endforeach
                             @endisset
@@ -118,11 +118,18 @@
 
             @isset($cart)
                 <livewire:product-total-price :user="$cart->user_id" :total="$jumlah" />
+
+                <div class="flex justify-end items-end my-3 me-10">
+                    <a href="/booking" class="p-2 px-7 rounded-lg shadow-lg text-white font-semibold bg-secondaryColor hover:bg-orange-400">Booking</a>
+                </div>
+            @else
+                <p class="text-center text-4xl font-bold mb-20 text-red-400">Keranjang Kosong</p>
+
+                <div class="flex justify-end items-end my-3 me-10">
+                    <button disabled class="p-2 px-7 rounded-lg shadow-lg text-white font-semibold bg-slate-400">Booking</button>
+                </div>
             @endisset
 
-            <div class="flex justify-end items-end my-3 me-10">
-                <a href="/booking" class="p-2 px-7 rounded-lg shadow-lg text-white font-semibold bg-secondaryColor hover:bg-orange-400">Booking</a>
-            </div>
         </div>
     </div>
 

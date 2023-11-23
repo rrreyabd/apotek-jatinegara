@@ -39,28 +39,28 @@
 
                         <div class="flex flex-col justify-between text-sm">
                             <div class="w-[25vw]">
-                                <p class="font-bold">{{ $cart->product->product_name }}</p>
-                                <p>Kategori : {{ $cart->product->description->category->category }}</p>
+                                <p class="font-bold">{{ $cart->product_name }}</p>
+                                <p>Kategori : {{ $cart->category }}</p>
                             </div>
 
-                            @if ($cart->product->description->product_type == "resep dokter")
+                            @if ($cart->product_type == "resep dokter")
                                 @php
                                     $resep = true;
                                 @endphp
                                 <p class="bg-red-600 text-white w-fit px-2 font-semibold text-xs py-1 rounded-md">Perlu Resep</p>
                             @endif
                             
-                            <p>EXP :  <span class="font-semibold">{{ date('d F Y',strtotime($cart->product->detail()->orderBy('product_expired')->first()->product_expired)) }}</span></p>
+                            <p>EXP :  <span class="font-semibold">{{ date('d F Y',strtotime($cart->product_expired)) }}</span></p>
                         </div>
                     </div>
 
                     <div class="text-end w-[10vw]">
-                        <p>{{ $cart->quantity }} x Rp.{{ number_format($cart->product->detail()->orderBy('product_expired')->first()->product_sell_price, 0, ',', '.') }}</p>
-                        <p>Total : Rp.{{ number_format($cart->product->detail()->orderBy('product_expired')->first()->product_sell_price * $cart->quantity, 0, ',', '.') }}</p>
+                        <p>{{ $cart->quantity }} x Rp.{{ number_format($cart->product_sell_price, 0, ',', '.') }}</p>
+                        <p>Total : Rp.{{ number_format($cart->total_harga, 0, ',', '.') }}</p>
                     </div>
                 </div>
                 @php
-                    $jumlah += $cart->product->detail()->orderBy('product_expired')->first()->product_sell_price * $cart->quantity;
+                    $jumlah += $cart->total_harga;
                 @endphp
                 @endforeach
 
@@ -87,14 +87,14 @@
                         {{ $message }}
                     </div>
                 @enderror
-                <input type="text" name="nama" placeholder="Nama Pengambil Pesanan" value="{{ $cart->user->username }}" required class="h-12 px-4 rounded-2xl shadow-md">
+                <input type="text" name="nama" placeholder="Nama Pengambil Pesanan" value="{{ auth()->user()->username }}" required class="h-12 px-4 rounded-2xl shadow-md">
                 @error('nama')
                     <div class="text-sm text-red-200 ms-3 mb-0 text-left">
                         {{ $message }}
                     </div>
                 @enderror
                 
-                <input type="number" name="nomor_telepon" placeholder="No. HP" value="{{ $cart->user->customer->customer_phone }}" required class="h-12 px-4 rounded-2xl shadow-md">
+                <input type="number" name="nomor_telepon" placeholder="No. HP" value="{{ auth()->user()->customer->customer_phone }}" required class="h-12 px-4 rounded-2xl shadow-md">
                 @error('nomor_telepon')
                     <div class="text-sm text-red-200 ms-3 mb-0 text-left">
                         {{ $message }}
@@ -104,7 +104,7 @@
                 @if ($resep)
                     <div class="flex flex-col gap-2">
                         <label for="resepDokter" class="h-12 px-4 rounded-2xl shadow-md shadow-mediumGrey h-10 px-3 text-sm bg-white cursor-pointer flex gap-2 justify-start items-center">
-                            <input type="file" name="resep_dokter" id="resepDokter" onchange="updateLabel()" class="hidden" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg" required>
+                            <input type="file" name="resep_dokter" id="resepDokter" onchange="updateLabel()" class="hidden" accept=".pdf, .png, .jpg, .jpeg" required>
                             
                             <div class="w-7 h-7 rounded-full bg-mainColor text-white flex items-center justify-center">
                                 <i class="fa-solid fa-download"></i>
