@@ -1,8 +1,9 @@
 <?php
-
+use App\Http\Livewire\ProductPagination;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\printPDFController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CashierController;
 use App\Models\User;
@@ -84,14 +85,19 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
 
     Route::get('/informasi_pembayaran/{file}/{id}', [CustomerController::class, 'informasi_pembayaran'])->name('informasi-pembayaran');
     Route::get('/resep_dokter/{file}/{id}', [CustomerController::class, 'resep_dokter'])->name('resep-dokter');
+    Route::get('/refund/{file}/{id}', [CustomerController::class, 'refund'])->name('refund');
+
+    Route::get('/cetak-struk/{id}', [CustomerController::class,'cetak_struk'])->name('cetak_struk');
+
+    Route::get('/generate-pdf/{id}', [printPDFController::class, 'generatePdf']);
 });
 // akhir halaman user
 
 // Halaman Cashier
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
-    Route::get('/cashier', function () {
-        return view('kasir.index');
-    });
+    Route::get('/cashier', [ProductController::class,'produk_cashier'])->name('cashier_product');
+
+    Route::post('/cashier/hapuskeranjang', [CartController::class,'hapus_keranjang'])->name('hapus_keranjang');
 
     Route::get('/cashier/riwayat-transaksi', [CashierController::class, 'riwayatTransaksi'])->name('riwayat-transaksi-kasir');
     Route::get('/cashier/pesanan-pending', [CashierController::class, 'pendingOrder'])->name('pesanan-pending-kasir');

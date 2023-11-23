@@ -31,7 +31,7 @@ class ProductController extends Controller
 
                     foreach(collect($product_last_purcase) as $p){
                         if(Product::where('product_name', $p->product_name)->where('product_status',  'aktif')->first() != NULL){
-                            $products[] = Product::where('product_name', $p->product_name)->get();
+                            $products[] = DB::table('product_view')->where('product_name', $p->product_name)->get();
                         }
                     }
                 } else {
@@ -43,17 +43,13 @@ class ProductController extends Controller
         // akhir last purcase
         
         // banyak dicari
-            // ubah jadi view
-            $products_best_seller = SellingInvoiceDetail::select('product_name', DB::raw('COUNT(*) as jumlah_kemunculan'))
-            ->groupBy('product_name')
-            ->OrderBy('jumlah_kemunculan', 'DESC')
-            ->get();
+            $products_best_seller = DB::table('bestsellerproduct_view')->get();
 
             if ($products_best_seller->count() > 0) {
                 foreach($products_best_seller as $p){
                     if(Product::where('product_name', $p->product_name)->where('product_status',  'aktif')->first() != NULL){
                         // echo(collect(Product::where('product_name', $p->product_name)->first()));
-                        $product_best_seller[] = Product::where('product_name', $p->product_name)->get();
+                        $product_best_seller[] = DB::table('product_view')->where('product_name', $p->product_name)->get();
                     }
                 }
             } else {
@@ -248,28 +244,42 @@ class ProductController extends Controller
         ]);
     }
 
-
-    public function liveSearch(Request $request)
-{
-    $query = $request->input('query');
-
-    $products = Product::where('product_name', 'like', "%$query%")->get();
-
-    return response()->json($products);
-}
-
     public function deskripsiProduk(Request $request){
-        $products = Product::all();
+        $products = DB::table('product_view')->get();
         
         foreach($products as $product){
             if(Str::slug($product->product_name) == $request->product){
-                $description_product = $product->description;
                 return view("user.description-product",[
-                    "description_product" => $description_product ?? [],
+                    "description_product" => $product ?? [],
                 ]);
             }
         }
 
         abort(404);
+    }
+
+    public function produk_cashier(Request $request)
+    {
+        $searchTerm = $request->input('search');
+
+        if ($searchTerm === "") {
+            $product = Product::orderBy('product_status')->paginate(8);
+        } else {
+            $product = Product::orderBy('product_status')->where(function ($query) use ($searchTerm) {
+                $query->where(DB::raw("product_name"), "LIKE", "%" . $searchTerm . "%");
+            })->paginate(8);
+        }
+        $categories = Category::orderBy('category')->get();
+        $groups = Group::orderBy('group')->get();
+        $units = Unit::orderBy('unit')->get();
+
+
+        return view("kasir.index", [
+            "products"=> $product ?? NULL,
+            // "all_products" => $all_product ?? [],
+            "categories"=> $categories ?? [],
+            "units"=> $units ?? [],
+            "groups"=> $groups ?? [],
+        ]);
     }
 }

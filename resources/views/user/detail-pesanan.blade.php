@@ -104,7 +104,7 @@
                 @if ($resep)
                     <div class="flex flex-col gap-2">
                         <label for="resepDokter" class="h-12 px-4 rounded-2xl shadow-md shadow-mediumGrey h-10 px-3 text-sm bg-white cursor-pointer flex gap-2 justify-start items-center">
-                            <input type="file" name="resep_dokter" id="resepDokter" onchange="updateLabel()" class="hidden" required>
+                            <input type="file" name="resep_dokter" id="resepDokter" onchange="updateLabel()" class="hidden" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg" required>
                             
                             <div class="w-7 h-7 rounded-full bg-mainColor text-white flex items-center justify-center">
                                 <i class="fa-solid fa-download"></i>

@@ -1,22 +1,6 @@
 @if ($paginator->hasPages())
-    <div class="w-full flex justify-end items-center h-[20vh]">
-        {{-- showing result --}}
-        <div>
-            <p class="text-sm text-gray-700 leading-5 w-52">
-                {{ "Menampilkan " }}
-                @if ($paginator->firstItem())
-                    <span class="font-medium">{{ $paginator->firstItem() }}</span>
-                    {{ " Sampai " }}
-                    <span class="font-medium">{{ $paginator->lastItem() }}</span>
-                @else
-                    {{ $paginator->count() }}
-                @endif
-                    {{ " Items " }}
-            </p>
-        </div>
-        {{-- end showing result --}}
-
-        <div class="w-full flex justify-end items-center h-[20vh]">
+    <div class="w-full flex flex-col justify-center items-center py-4 gap-8">
+        <div class="w-full flex justify-center items-center h-fit">
             <div class="flex gap-8 items-center">
                 {{-- Previous Page Link --}}
                 @if ($paginator->onFirstPage())
@@ -62,5 +46,21 @@
                 @endif
             </div>
         </div>
+
+        {{-- showing result --}}
+        <div>
+            <p class="text-sm text-gray-700 leading-5 w-52">
+                {{ "Menampilkan " }}
+                @if ($paginator->firstItem())
+                    <span class="font-medium">{{ $paginator->firstItem() }}</span>
+                    {{ " Sampai " }}
+                    <span class="font-medium">{{ $paginator->lastItem() }}</span>
+                @else
+                    {{ $paginator->count() }}
+                @endif
+                    {{ " Items " }}
+            </p>
+        </div>
+        {{-- end showing result --}}
     </div>
 @endif

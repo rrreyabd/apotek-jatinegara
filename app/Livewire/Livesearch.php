@@ -12,7 +12,7 @@ class Livesearch extends Component
     public $cari;
 
     public function livesearch($cari){
-            $this->product = Product::where("product_name", "Like", "%". $cari ."%")->pluck('product_name')->take(10);
+            $this->product = Product::where("product_name", "Like", "%". $cari ."%")->take(10)->get();
     }
     
     public function render()

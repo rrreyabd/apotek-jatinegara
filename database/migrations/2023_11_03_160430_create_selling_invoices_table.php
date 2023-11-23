@@ -16,12 +16,12 @@ return new class extends Migration
             $table->string('invoice_code', 20)->unique();
             $table->string('cashier_name', 100)->nullable();
             $table->char('customer_id',36);
-            $table->string('customer_name',100)->nullable();
-            $table->string('customer_phone',14)->nullable();
-            $table->string('customer_file')->nullable();
-            $table->longText('customer_request')->nullable();
-            $table->string('customer_bank')->nullable();
-            $table->string('customer_payment')->nullable();
+            $table->string('recipient_name',100)->nullable();
+            $table->string('recipient_phone',14)->nullable();
+            $table->string('recipient_file')->nullable();
+            $table->longText('recipient_request')->nullable();
+            $table->string('recipient_bank')->nullable();
+            $table->string('recipient_payment')->nullable();
             $table->timestamp('order_date');
             $table->timestamp('order_complete')->nullable();
             $table->string('refund_file')->nullable();

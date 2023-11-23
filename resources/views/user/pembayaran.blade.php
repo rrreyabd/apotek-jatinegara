@@ -72,7 +72,7 @@
                     <p class="text-xl font-bold text-white textShadow">Bukti Pembayaran</p>
 
                     <label for="buktiPembayaran" class="w-[24vw] shadow-sm shadow-mediumGrey h-10 px-3 rounded-full text-sm bg-white cursor-pointer flex gap-2 justify-start items-center">
-                        <input type="file" onchange="updateLabel()" name="buktiPembayaran" required id="buktiPembayaran" class="hidden">
+                        <input type="file" onchange="updateLabel()" name="buktiPembayaran" required id="buktiPembayaran" class="hidden" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg">
                         
                         <div class="w-7 h-7 rounded-full bg-mainColor text-white flex items-center justify-center">
                             <i class="fa-solid fa-download"></i>

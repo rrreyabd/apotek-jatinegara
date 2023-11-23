@@ -90,8 +90,8 @@
                                         </div>
     
                                         <div class="px-8 py-2 w-[100%] flex justify-between">
-                                            <div class="w-[70%]">
-                                                <table class="w-full">
+                                            <div class="overflow-y-auto h-72 w-[70%]">
+                                                <table class="w-full h-full overflow-scroll">
                                                     <tr class="border-2 border-b-mainColor border-transparent text-mainColor font-bold w-[100%]">
                                                         <td class="w-[10%] pb-2 text-center">No</td>
                                                         <td class="w-[50%] pb-2">Nama</td>

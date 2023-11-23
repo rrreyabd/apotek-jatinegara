@@ -9,9 +9,16 @@
         </button>
     </form>
 
-    <div id="livesearch" class="absolute top-14 text-xl w-[25rem] shadow-lg">
+    <div id="livesearch" class="absolute top-16 overflow-hidden rounded-md bg-white -z-10 w-[25rem]">
         @foreach ($products as $product)
-        <a href="/produk?cari={{ $product }}" class="block py-1 border border-black bg-white px-5 w-full rounded-lg hover:bg-mainColor">{{ Str::limit($product, 34, "...") }}</a>
+        <a href="/produk?cari={{ $product->product_name }}" class="py-1 border border-black border-opacity-10 px-5 w-full  hover:bg-lightGrey flex gap-2 items-center">
+            <img src="{{ asset('img/obat1.jpg')}}" alt="" class="w-14">
+            <div class="flex flex-col">
+                <p class="font-semibold"> {{ Str::limit($product->product_name, 34, "") }} </p>
+                <p class="font-semibold"> Rp {{ number_format($product->detail()->orderBy('product_expired')->first()->product_sell_price) }} </p>
+            </div>
+        
+        </a>
         @endforeach
     </div>
 </div>
