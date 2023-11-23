@@ -12,13 +12,13 @@
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 
 </head>
-<body class="font-Trip bg-gradient-to-br from-mainColor to-tertiaryColor h-[100vh] flex justify-center items-center">
+<body class="font-Inter bg-gradient-to-br from-mainColor to-tertiaryColor h-[100vh] flex justify-center items-center">
     
     <form action="/login" method="POST">
         @csrf
         <div class="bg-white w-[80vw] h-[80vh] rounded-3xl shadow-xl flex p-4">
             <div class="w-[55%] flex justify-center items-center">
-                <img src="{{ asset('img/login.png/') }}" width="500" alt="" draggable="false">
+                <img src="{{ asset('img/login.png/') }}" width="450" alt="" draggable="false">
             </div>
             
             <div class="w-[45%] flex flex-col items-center gap-4 justify-center">

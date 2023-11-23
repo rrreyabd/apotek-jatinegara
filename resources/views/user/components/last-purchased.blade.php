@@ -2,7 +2,7 @@
     <div class="w-[80vw] mt-8 flex flex-col gap-8 ">
         <p class="font-TripBold text-4xl">Terakhir Dibeli</p>    
 
-        <div class="flex justify-evenly relative">
+        <div class="flex justify-start relative">
             <div class="flex flex-wrap justify-center gap-4">
                 @if ($products_last_purcase->first() != NULL)
                 {{-- @dd($products_last_purcase->take(1)); --}}

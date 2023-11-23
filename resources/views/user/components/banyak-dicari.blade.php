@@ -2,8 +2,8 @@
     <div class="w-[80vw] mt-8 flex flex-col gap-8 ">
         <p class="font-TripBold text-4xl">Banyak Dicari</p>    
 
-        <div class="flex justify-evenly relative">
-            <div class="flex flex-wrap justify-center gap-4">
+        <div class="flex justify-start relative">
+            <div class="flex flex-wrap justify-center gap-4 h-72">
                 @if ($products_best_seller->first() != NULL)
                 @foreach ($products_best_seller as $product)
                 <div class="h-full w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
