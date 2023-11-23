@@ -14,7 +14,7 @@
                         </div>
 
                         <center class="relative">
-                            @if ($product->first()->description->product_type == "resep dokter")
+                            @if ($product->first()->product_type == "resep dokter")
                             <span class="bg-red-500 text-white font-semibold px-2 py-1 text-sm rounded-md absolute top-1 left-2">Resep</span>
                             @endif
 
@@ -24,9 +24,9 @@
 
                     <div class="flex justify-between items-center">
                         <div class="px-2 flex flex-col justify-center w-[80%] whitespace-normal break-words">
-                            <p><span class="font-TripBold text-secondaryColor">Rp. {{ number_format($product->first()->detail()->OrderBy('product_expired')->first()->product_sell_price , 0,
-                                    ',', '.') }}</span> / </br> {{ $product->first()->description->unit->unit }}</span></p>
-                            <p class="font-semibold">Stok: {{ $product->first()->detail()->orderBy('product_expired', 'asc')->first()->product_stock }}</p>
+                            <p><span class="font-TripBold text-secondaryColor">Rp. {{ number_format($product->first()->product_sell_price , 0,
+                                    ',', '.') }}</span> / </br> {{ $product->first()->unit }}</span></p>
+                            <p class="font-semibold">Stok: {{ $product->first()->product_stock }}</p>
                         </div>
                         
                         <div class="w-[20%] h-full">
