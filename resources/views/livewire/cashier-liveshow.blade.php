@@ -94,10 +94,14 @@
                     alt="">
             </div>
 
-            <p class="w-full font-semibold text-base namaObat leading-tight break-words">{{ $item->product_name
-                }}</p>
+            <p class="w-full font-semibold text-base namaObat leading-tight break-words">
+                {{ Str::limit($item->product_name, 35, '...')  }}
+                
+            </p>
             @if ($item->description->product_type == "resep dokter")
             <p class="bg-red-600 text-white w-fit px-2 py-1 text-sm rounded-md font-semibold">Resep</p>
+            @else
+            <p class="bg-transparent text-transparent w-fit px-2 py-1 text-sm rounded-md font-semibold">.</p>
             @endif
 
             <div class="flex flex-col">
