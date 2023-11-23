@@ -7,6 +7,7 @@
             class="h-10 w-96 rounded-md shadow-md pl-4 pr-14 placeholder:text-sm" placeholder="Cari produk disini...">
     </div>
 
+
     {{-- FILTER SECTION START --}}
     <div class="flex gap-8">
         {{-- CATEGORY START --}}
@@ -83,7 +84,18 @@
 
     </div>
     {{-- FILTER SECTION END --}}
-
+    <div class="flex gap-5">
+        @foreach($selectedFilters as $filterKey => $value)
+            @php
+                list($filterType, $filterId) = explode('_', $filterKey);
+                $filterName = $this->getFilterName($filterType, $filterId);
+            @endphp
+            <button wire:click="clearFilter('{{ $filterType }}', '{{ $filterId }}')" class="outline-red-500 bg-red-200 outline rounded-lg text-black text-bold py-1 px-2 text-sm">
+                {{ $filterName }} x
+            </button>
+        @endforeach
+    </div>
+    
     {{-- PRODUCT START --}}
     <div class="flex flex-wrap justify-start gap-8">
         @foreach ($products as $item)
@@ -93,7 +105,6 @@
                 <img src="https://i.pinimg.com/564x/22/04/72/2204725ec0bd13c61131bc099467b04c.jpg" class="w-full"
                     alt="">
             </div>
-
             <p class="w-full font-semibold text-base namaObat leading-tight break-words">{{ $item->product_name
                 }}</p>
             @if ($item->description->product_type == "resep dokter")
