@@ -94,8 +94,11 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
 
 // Halaman Cashier
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
-    Route::get('/cashier', [ProductController::class,'produk_cashier'])->name('cashier_product');
-
+    Route::get('/cashier', function()
+    {
+        return view('kasir.index');
+    });
+    
     Route::post('/cashier/hapuskeranjang', [CartController::class,'hapus_keranjang'])->name('hapus_keranjang');
 
     Route::get('/cashier/riwayat-transaksi', function () {
