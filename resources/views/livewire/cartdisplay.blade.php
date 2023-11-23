@@ -9,7 +9,7 @@
 
         {{-- KONDISI TIDAK ADA ITEM DI KERANJANG --}}
         @if ($cartItems->isEmpty())
-        <div class="h-[57vh] bg-red-200 w-full flex justify-center items-center flex-col text-center gap-2">
+        <div class="h-[57vh] w-full flex justify-center items-center flex-col text-center gap-2">
             <i class="text-6xl text-mainColor fa-solid fa-cart-shopping"></i>
             <p class="font-semibold text-2xl text-mainColor">Tidak ada item di keranjang.</p>
         </div>

@@ -21,9 +21,13 @@ class CashierLiveshow extends Component
     public $units;
     public $product;
 
+    public $selectedFilters = [];
     public $selectedUnit;
+    public $selectedUnitName;
     public $selectedGroup;
+    public $selectedGroupName;
     public $selectedCategory;
+    public $selectedCategoryName;
 
     protected $listeners = ['filterChanged' => 'getFilteredProducts'];
 
@@ -46,64 +50,100 @@ class CashierLiveshow extends Component
 
     public function search_product()
     {
+        $filteredProducts = $this->getFilteredProducts();
+
         return $this->search
-            ? Product::where("product_name", "LIKE", "%" . $this->search . "%")->orderBy('product_status')->paginate(8)
-            : Product::orderBy('product_status')->paginate(8);
+        ? ($filteredProducts
+            ? $filteredProducts->where("product_name", "LIKE", "%" . $this->search . "%")->orderBy('product_status')->paginate(8)
+            : Product::where("product_name", "LIKE", "%" . $this->search . "%")->orderBy('product_status')->paginate(8))
+        : ($filteredProducts
+            ? $filteredProducts->orderBy('product_status')->paginate(8)
+            : Product::orderBy('product_status')->paginate(8));
     }
 
-    public function getFilteredProducts()
-    {
-        $products = Product::query();
-        if ($this->selectedUnit) {
-            $products->whereHas('description.unit', function ($query) {
-                $query->where('unit_id', $this->selectedUnit);
-            });
-        }
-
-        if ($this->selectedGroup) {
-            $products->whereHas('description.group', function ($query) {
-                $query->where('group_id', $this->selectedGroup);
-            });
-        }
-
-        if ($this->selectedCategory) {
-            $products->whereHas('description.category', function ($query) {
-                $query->where('category_id', $this->selectedCategory);
-            });
-        }
-
-        $products = $product->orderBy('product_status')->paginate(8);
-    }
-    
     public function applyFilter($filterType, $filterId)
     {
-        switch ($filterType) {
-            case 'unit':
-                $this->selectedUnit = $filterId;
-                $this->selectedGroup = null;
-                $this->selectedCategory = null;
-            break;
+        $key = $filterType . '_' . $filterId;
 
-            case 'group':
-                $this->selectedGroup = $filterId;
-                $this->selectedUnit = null;
-                $this->selectedCategory = null;
-            break;
-                    
-            case 'category':
-                $this->selectedCategory = $filterId;
-                $this->selectedUnit = null;
-                $this->selectedGroup = null;
-            break;
+        if (array_key_exists($key, $this->selectedFilters)) {
+            unset($this->selectedFilters[$key]);
+        } else {
+            $this->selectedFilters[$key] = true;
         }
 
         $this->dispatch('filterChanged');
     }
 
+    public function getFilteredProducts()
+    {
+        $filters = Product::query();
+
+        foreach ($this->selectedFilters as $filterKey => $value) {
+            list($filterType, $filterId) = explode('_', $filterKey);
+
+            switch ($filterType) {
+                case 'unit':
+                    $filters->whereHas('description.unit', function ($query) use ($filterId) {
+                        $query->where('unit_id', $filterId);
+                    });
+                    break;
+
+                case 'group':
+                    $filters->whereHas('description.group', function ($query) use ($filterId) {
+                        $query->where('group_id', $filterId);
+                    });
+                    break;
+
+                case 'category':
+                    $filters->whereHas('description.category', function ($query) use ($filterId) {
+                        $query->where('category_id', $filterId);
+                    });
+                    break;
+            }
+        }
+
+        return $filters;
+    }
+
+    public function getFilterName($filterType, $filterId)
+    {
+        $filter = null;
+
+        switch ($filterType) {
+            case 'unit':
+                $filter = Unit::find($filterId);
+                break;
+
+            case 'group':
+                $filter = Group::find($filterId);
+                break;
+
+            case 'category':
+                $filter = Category::find($filterId);
+                break;
+        }
+
+        if ($filter) {
+            return $filter->{$filterType}; 
+        }
+
+        return '';
+    }
+
+    public function clearFilter($filterType, $filterId)
+    {
+        $key = $filterType . '_' . $filterId;
+
+        if (array_key_exists($key, $this->selectedFilters)) {
+            unset($this->selectedFilters[$key]);
+            $this->dispatch('filterChanged');
+        }
+    }
+
+
     public function render()
     {
         $product = $this->search_product();
-
         $this->categories = Category::orderBy('category')->get();
         $this->groups = Group::orderBy('group')->get();
         $this->units = Unit::orderBy('unit')->get();
