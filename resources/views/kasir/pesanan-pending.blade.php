@@ -39,16 +39,16 @@
                     <tbody>
                         @php $i = 1;  @endphp
                         @php $index = 1;  @endphp
-                        @foreach ($pendingOrders as $pendingOrder)               
+                        @foreach ($pendingOrders as $pendingOrder)    
                         <tr>
                             <td>{{$i}}</td>
                             <td>
                                 <span class="font-bold">{{$pendingOrder->invoice_code}}</span>
                             </td>
-                            <td>{{ $pendingOrder->customer_name }}</td>
-                            <td>{{ $pendingOrder->customer_bank }}</td>
+                            <td>{{ $pendingOrder->recipient_name }}</td>
+                            <td>{{ $pendingOrder->recipient_bank }}</td>
                             <td>
-                                <a href="/cashier/img" target="_blank" class="underline">{{ $pendingOrder->customer_payment }}</a>
+                                <a href="/cashier/img" target="_blank" class="underline">{{ $pendingOrder->recipient_payment }}</a>
                             </td>
                             <td>
                                 {{-- stored function?? --}}
@@ -119,7 +119,7 @@
                                                     <tr>
                                                         <td class="py-2 flex gap-2 items-center">
                                                             <i class="fa-solid fa-image"></i>
-                                                            <a href="/cashier/img" target="_blank">{{ $pendingOrder->customer_payment }}</a>
+                                                            <a href="/cashier/img" target="_blank">{{ $pendingOrder->recipient_payment }}</a>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -128,7 +128,7 @@
     
                                         <div class="px-8 w-[100%]">
                                             <p class="text-mainColor font-bold py-2 border-2 border-b-mainColor border-transparent">Catatan</p>
-                                            <p class="py-4">{{ $pendingOrder->customer_request }}</p>
+                                            <p class="py-4">{{ $pendingOrder->recipient_request }}</p>
                                         </div>
     
                                         <div class="flex justify-end w-full">
