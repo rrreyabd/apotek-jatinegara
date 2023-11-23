@@ -20,7 +20,7 @@
     @include('kasir.components.sidebar')
 
     <main class="flex flex-grow bg-plat min-h-[100vh]" id="mainContent">
-        
+    
         <livewire:cashier-liveshow>
         
 
@@ -114,15 +114,15 @@
         }
 
         // Script untuk membatasi jumlah karakter di nama obat
-        const obatElement = document.getElementsByClassName("namaObat");
+        // const obatElement = document.getElementsByClassName("namaObat");
 
-        for (let i = 0; i < obatElement.length; i++) {
-            const obatText = obatElement[i].textContent;
+        // for (let i = 0; i < obatElement.length; i++) {
+        //     const obatText = obatElement[i].textContent;
 
-            if (obatText.length > 18) {
-                obatElement[i].textContent = obatText.slice(0, 38) + "...";
-            }
-        }
+        //     if (obatText.length > 18) {
+        //         obatElement[i].textContent = obatText.slice(0, 18) + "...";
+        //     }
+        // }
     </script>
 </body>
 

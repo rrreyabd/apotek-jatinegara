@@ -13,7 +13,7 @@
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="font-Trip">
+<body class="font-Inter">
     @include('user.components.navbar')
 
     
@@ -62,18 +62,18 @@
 
             <div class="bg-tertiaryColor rounded-lg">
                 <div class="flex grid-cols-3 gap-4 justify-between p-5 overflow-x-auto">
-                    <div>
-                        <p>Tanggal Pemesanan : {{ date('d M Y',strtotime($purcase->order_date)) }}</p>
-                        <p class="my-2">No. Handphone : {{ $purcase->recipient_phone }}</p> 
+                    <div class="w-1/3">
+                        <p>Tanggal Pemesanan : <span class="font-semibold"> {{ date('d M Y',strtotime($purcase->order_date)) }} </span> </p>
+                        <p class="my-2">No. Handphone : <span class="font-semibold"> {{ $purcase->recipient_phone }} </span> </p> 
                         <p>Resep Dokter : 
                         @if ($purcase->recipient_file)
-                            <a class="underline" href="/resep_dokter/{{ $purcase->recipient_file }}/{{ $purcase->selling_invoice_id }}">{{ $purcase->recipient_file }}</a>
+                            <a class="underline text-blue-600 break-all" href="/resep_dokter/{{ $purcase->recipient_file }}/{{ $purcase->selling_invoice_id }}">{{ $purcase->recipient_file }}</a>
                         @endif</p>
                         </div>
-                    <div>
-                        <p>Nama Penerima : {{ $purcase->recipient_name }}</p> 
-                        <p class="my-2">Batas Pengambilan : {{ date('d M Y',strtotime($purcase->order_date . '3 days ')) }}</p>
-                        <p>Tanggal Pengambilan : {{ date('d M Y',strtotime($purcase->order_complete)) }}</p>
+                    <div class="w-1/3">
+                        <p>Nama Penerima : <span class="font-semibold"> {{ $purcase->recipient_name }} </span></p> 
+                        <p class="my-2">Batas Pengambilan : <span class="font-semibold"> {{ date('d M Y',strtotime($purcase->order_date . '3 days ')) }} </span> </p>
+                        <p>Tanggal Pengambilan : <span class="font-semibold"> {{ date('d M Y',strtotime($purcase->order_complete)) }} </span> </p>
                     </div>
                     <div class="w-1/3">
                         <p>Catatan Tambahan</p>
@@ -85,9 +85,10 @@
             <div class="sm:flex my-7 mb-3 text-xl ">
             <p class="font-semibold me-2">Informasi Pembayaran:</p>
             <a href="/informasi_pembayaran/{{ $purcase->recipient_payment }}/{{ $purcase->selling_invoice_id }}" class="underline me-1 text-lg">
-                <i class="fa-solid fa-note-sticky"></i>
+                <i class="fa-solid fa-file"></i>
                 {{ $purcase->recipient_payment }}</a>
-                <p class="text-lg">({{ $purcase->recipient_bank }})</p>
+                <p class="text-lg">({{ $purcase->recipient_bank }})
+                </p>
             </div>
 
             @if ($purcase->reject_comment)
@@ -99,15 +100,16 @@
             </div>
             @endif
             
-            <p class="text-xl font-semibold me-2 w-1/4 mt-4">Daftar Pesanan:</p>
+            <p class="text-xl font-semibold me-2 w-1/4 mt-4">Daftar Pesanan :</p>
 
             {{-- table --}}
-            <div class="shadow-lg rounded-lg w-full h-fit my-3">
+            <div class="shadow-md rounded-md w-full h-fit my-3">
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead class="bg-mainColor text-white">
                             <tr>
-                                <th class="p-3 rounded-tl-lg" scope="col">Nama Produk</th>
+                                <th class="p-3 rounded-tl-lg" scope="col">No</th>
+                                <th scope="col">Nama Produk</th>
                                 <th scope="col">Harga</th>
                                 <th scope="col">Kuantitas</th>
                                 <th class="p-3 rounded-tr-lg max-w-1/5" scope="col">Total Harga</th>
@@ -117,33 +119,39 @@
                         <tbody class="border-t">
                             @php
                                 $totalHarga = 0;
+                                $no = 1;
                             @endphp
                             @foreach ($detail_products as $detail)
                             <tr>
-                                <th class="py-2" scope="row">
+                                <td class="text-center">
+                                    {{ $no }}
+                                </td>
+                                <td class="py-2 text-start font-semibold" scope="row">
                                     <p>{{ $detail->product_name }}</p>
-                                </th>
-                                <th>
+                                </td>
+                                <td>
                                     <p>Rp {{ number_format($detail->product_sell_price , 0, ',', '.') }}</p>
-                                </th>
-                                <th>
-                                    <p class="text-lg">{{ $detail->quantity }}</p>
-                                </th>
-                                <th>
-                                    <p class="text-lg">Rp {{ number_format($detail->product_sell_price * $detail->quantity , 0, ',', '.') }}</p>
-                                </th>
+                                </td>
+                                <td>
+                                    <p class="text-center">{{ $detail->quantity }}</p>
+                                </td>
+                                <td>
+                                    <p class="text-center font-semibold">Rp {{ number_format($detail->product_sell_price * $detail->quantity , 0, ',', '.') }}</p>
+                                </td>
                             </tr>
                             @php
+                                $no += 1;
                                 $totalHarga += $detail->product_sell_price * $detail->quantity
                             @endphp
                             @endforeach
                         </tbody>
-                        <tfoot class="border-t">
-                            <tr class="bg-tertiaryColor">
+                        <tfoot class="border-t bg-mainColor text-white">
+                            <tr class="">
+                                <th class="rounded-bl-lg"></th>
                                 <th></th>
                                 <th></th>
-                                <th></th>
-                                <th class="py-2">Total Belanja : Rp. {{ number_format($totalHarga , 0, ',', '.') }}</th>
+                                <th>Total Belanja : </th>
+                                <th class="rounded-br-lg py-2"><span class="font-bold"> Rp {{ number_format($totalHarga , 0, ',', '.') }}</th>
                             </tr>
                         </tfoot>
                     </table>
