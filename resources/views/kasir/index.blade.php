@@ -48,13 +48,15 @@
 
     <main class="flex flex-grow bg-plat min-h-[100vh]" id="mainContent">
         @if (session('success'))
-            <div class="text-sm text-mainColor mt-1 ms-3 mb-0 text-center">
-                {{ __('Pembayaran Anda Berhasil') }}
+            <div class="absolute top-4 left-[42.5vw] bg-mainColor shadow-md w-[15vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
+                <i class="text-white fa-solid fa-circle-check"></i>
+                <p class="text-lg text-white font-semibold"> {{ __('Transaksi Berhasil') }} </p>
             </div>
         @endif
         @if (session('error'))
-            <div class="text-sm text-red-600 mt-1 ms-3 mb-0 text-center">
-                {{ session('error') }}
+            <div class="absolute top-4 left-[42.5vw] bg-red-600 shadow-md w-[15vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
+                <i class="text-white fa-solid fa-triangle-exclamation"></i>
+                <p class="text-lg text-white font-semibold"> {{ __('Transaksi Gagal') }} </p>
             </div>
         @endif
 
