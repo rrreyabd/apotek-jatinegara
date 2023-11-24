@@ -154,14 +154,7 @@
 
 <script>
     const showPopUp = () => {
-        const popup = document.getElementById('popup');
-    
-        if (popup.classList.contains('hidden')) {
-            document.body.classList.add('h-[100vh]')
-        } else {
-            popup.classList.add('hidden')
-        }
-        
+        location.reload();
     }
 </script>
 
