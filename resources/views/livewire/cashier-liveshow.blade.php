@@ -84,17 +84,20 @@
 
     </div>
     {{-- FILTER SECTION END --}}
+    @if ($selectedFilters)
     <div class="flex gap-5">
         @foreach($selectedFilters as $filterKey => $value)
             @php
                 list($filterType, $filterId) = explode('_', $filterKey);
                 $filterName = $this->getFilterName($filterType, $filterId);
             @endphp
-            <button wire:click="clearFilter('{{ $filterType }}', '{{ $filterId }}')" class="outline-red-500 bg-red-200 outline rounded-lg text-black text-bold py-1 px-2 text-sm">
-                {{ $filterName }} x
+            <button wire:click="clearFilter('{{ $filterType }}', '{{ $filterId }}')" class="bg-mainColor rounded-lg text-white font-medium text-bold py-2 px-4 w-fit gap-2 flex items-center">
+                {{ $filterName }} 
+                <i class="fa-solid fa-xmark"></i>
             </button>
         @endforeach
     </div>
+    @endif
     
     {{-- PRODUCT START --}}
     <div class="flex flex-wrap justify-start gap-8">
@@ -106,8 +109,8 @@
                     alt="">
             </div>
 
-            <p class="w-full font-semibold text-base namaObat leading-tight break-words">
-                {{ Str::limit($item->product_name, 28, '...')  }}
+            <p class="w-full font-semibold text-base namaObat leading-tight break-all h-[40px]">
+                {{ Str::limit($item->product_name, 45, '...')  }}
                 
             </p>
             

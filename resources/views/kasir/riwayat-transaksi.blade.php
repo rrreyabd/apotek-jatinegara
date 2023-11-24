@@ -84,7 +84,7 @@
                              @php $i++; @endphp
 
                                 {{-- MODAL DETAIL RIWAYAT TRANSAKSI START --}}
-                                <div class="absolute w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal{{ $index }}">                                    
+                                <div class="fixed w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal{{ $index }}">                                    
                                     <div class="w-[70%] h-fit max-h-full bg-white rounded-md shadow-md p-8 flex flex-col gap-6 overflow-auto">
                                         <div class="flex justify-between items-center">
                                             <button onclick="toggleDetail({{ $index }})" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
@@ -200,10 +200,8 @@
 
             if (modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden');
-                document.body.classList.add('h-[100vh]');
             } else {
                 modal.classList.add('hidden');
-                document.body.classList.remove('h-[100vh]');
             }
         };
     </script>

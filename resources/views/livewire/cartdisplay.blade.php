@@ -21,8 +21,10 @@
             @endphp
             @foreach ($cartItems as $item)
             <div class="flex gap-2 mt-4">
-                <img src="https://i.pinimg.com/564x/22/04/72/2204725ec0bd13c61131bc099467b04c.jpg"
+                <div class="h-full flex items-center">
+                    <img src="https://i.pinimg.com/564x/22/04/72/2204725ec0bd13c61131bc099467b04c.jpg"
                     class="w-24 rounded-md" alt="">
+                </div>
 
                 <div class="flex flex-col justify-between w-80">
                         <p class="w-full font-semibold text-base namaObat leading-tight break-words">{{
