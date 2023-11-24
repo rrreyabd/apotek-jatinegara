@@ -150,7 +150,7 @@
                                         <i class="text-red-600 text-6xl fa-solid fa-exclamation"></i>
                                         
                                         <div class="text-center flex items-center flex-col gap-2">
-                                            <p class="font-bold text-2xl w-[80%]">Apakah Anda Yakin Ingin <span class="text-mainColor">Menolak</span> Pesanan Yoona?</p>
+                                            <p class="font-bold text-2xl w-[80%]">Apakah Anda Yakin Ingin <span class="text-mainColor">Menolak</span> Pesanan {{ $order->recipient_name }}?</p>
                                             
                                             <p class="text-red-600 font-semibold w-[80%] text-sm">Penolakan Pesanan Hanya Dilakukan Di Kondisi Tertentu</p>
                                         </div>
@@ -172,7 +172,7 @@
                                         <i class="text-green-600 text-6xl fa-solid fa-exclamation"></i>
                                         
                                         <div class="text-center flex items-center flex-col gap-2">
-                                            <p class="font-bold text-2xl w-[80%]">Apakah Anda Yakin Ingin <span class="text-mainColor">Menerima</span> Pesanan Yoona?</p>
+                                            <p class="font-bold text-2xl w-[80%]">Apakah Anda Yakin Ingin <span class="text-mainColor">Menerima</span> Pesanan {{ $order->recipient_name }}?</p>
                                         </div>
     
                                         <div class="flex justify-between w-[70%]">                                            
@@ -193,7 +193,7 @@
                                         <i class="text-yellow-600 text-6xl fa-solid fa-exclamation"></i>
                                         
                                         <div class="text-center flex items-center flex-col gap-2">
-                                            <p class="font-bold text-2xl w-[80%]">Apakah Anda Yakin Ingin <span class="text-mainColor">Mengembalikan</span> Pesanan Yoona?</p>
+                                            <p class="font-bold text-2xl w-[80%]">Apakah Anda Yakin Ingin <span class="text-mainColor">Mengembalikan</span> Pesanan {{ $order->recipient_name }}?</p>
                                         </div>
     
                                         <div class="flex justify-between w-[70%]">

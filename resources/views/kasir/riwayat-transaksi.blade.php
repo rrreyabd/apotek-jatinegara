@@ -123,8 +123,8 @@
                                                             <td class="py-2 text-center">{{ $j }}</td>
                                                             <td class="py-2">{{ $invoice->product_name }}</td>
                                                             <td class="py-2 text-center">{{ $invoice->quantity }}</td>
-                                                            <td class="py-2 text-center">{{ $invoice->product_sell_price }}</td>
-                                                            <td class="py-2">{{ $invoice->quantity * $invoice->product_sell_price}}</td>
+                                                            <td class="py-2 text-center">Rp {{ number_format($invoice->product_sell_price, 0, ',', '.') }}</td>
+                                                            <td class="py-2">Rp {{ number_format($invoice->quantity * $invoice->product_sell_price, 0, ',', '.')}}</td>
                                                         </tr>
                                                             @php $j++ @endphp
                                                         @endforeach
@@ -171,7 +171,7 @@
                                                     <p class="font-bold">Metode Pembayaran :</p>
                                                     <p>{{ $history->recipient_bank }}</p>
                                                     <p class="font-bold">Bukti Pembayaran :</p>
-                                                    <a href="/cashier/img" target="_blank" class="text-blue-600 underline">{{ $history->recipient_payment }}</a>
+                                                    <a href="/cashier/informasi_pembayaran/{{ $history->recipient_payment }}" target="_blank" class="text-blue-600 underline">{{ $history->recipient_payment }}</a>
                                                     <p class="font-bold">Catatan :</p>
                                                     <p>{{ $history->recipient_request }}</p>
                                                 </div>
