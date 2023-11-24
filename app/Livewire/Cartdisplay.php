@@ -1,16 +1,23 @@
 <?php
 
 namespace App\Livewire;
+use App\Models\User;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\SellingInvoice;
+use App\Models\SellingInvoiceDetail;
+use App\Models\ProductDetail;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
+
 
 class Cartdisplay extends Component
 {
     public $user_id;
     public $product_id;
     public $cartItems;
+    public $cart;
     public $totalProducts = 0;
     public $quantity;
     protected $listeners = ['productAddedToCart', 'decrementButton', 'incrementButton'];
@@ -35,6 +42,7 @@ class Cartdisplay extends Component
         }
         $this->cartItems = Cart::where('user_id', $user)->get();
     }
+
 
     public function decrementButton($cart, $detail_product) {
         if($cart['quantity'] > $detail_product['product_stock']) {

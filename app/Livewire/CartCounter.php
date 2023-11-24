@@ -10,19 +10,12 @@ class CartCounter extends Component
     public $quantity;
     public $cart_id;
 
-    public function mount($stock,$quantity, $cart)
-    {
-        $this->stock_product = $stock;
-        $this->quantity = $quantity;
-        $this->cart_id = $cart;
-    }
-
     public function cashier_count($item)
     {
         $this->dispatch('addToCart',auth()->user()->user_id,$item);
     }
 
-    public function decrementButton() {
+    public function decrementButton($cart_id,$quantity,$stock_product) {
             if($this->quantity > $this->stock_product) {
                 Cart::where('cart_id', $this->cart_id)->update([
                     'quantity'=> $this->stock_product,
@@ -41,7 +34,7 @@ class CartCounter extends Component
         
     }
 
-    public function incrementButton() {
+    public function incrementButton($cart_id,$quantity,$stock_product) {
             if($this->quantity > $this->stock_product) {
                 Cart::where('cart_id', $this->cart_id)->update([
                     'quantity'=> $this->stock_product,
@@ -61,6 +54,6 @@ class CartCounter extends Component
 
     public function render()
     {
-        return view('livewire.cart-counter');
+        return view('livewire.cartdisplay');
     }
 }

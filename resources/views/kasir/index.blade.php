@@ -11,6 +11,34 @@
     {{-- FONT AWESOME --}}
     <script src="https://kit.fontawesome.com/e87c4faa10.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
+
+    <style>
+        body::-webkit-scrollbar {
+            display: none
+        }
+        /* width */
+        #cartProduct::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        /* Track */
+        #cartProduct::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 5px;
+        }
+        
+        /* Handle */
+        #cartProduct::-webkit-scrollbar-thumb {
+            background: #1A8889;
+            border-radius: 5px;
+        }
+        
+        /* Handle on hover */
+        #cartProduct::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+
     @livewireStyles
 </head>
 
@@ -18,146 +46,20 @@
 
     @include('kasir.components.sidebar')
 
-    <main class="flex flex-grow bg-plat" id="mainContent">
-        <div class="flex flex-col gap-8 w-[67%] p-10">
-            <div class="flex gap-8">
-                <button onclick="toggleSidebar()" class="bg-white h-10 w-10 rounded-md shadow-md p-1">
-                    <i class="fa-solid fa-bars text-mediumGrey"></i>
-                </button>
-
-                <livewire:cashier-liveshow>
+    <main class="flex flex-grow bg-plat min-h-[100vh]" id="mainContent">
+        @if (session('success'))
+            <div class="text-sm text-mainColor mt-1 ms-3 mb-0 text-center">
+                {{ __('Pembayaran Anda Berhasil') }}
             </div>
-
-            {{-- FILTER SECTION START --}}
-            <div class="flex gap-8">
-                {{-- CATEGORY START --}}
-                <div class="relative inline-block text-left">
-                    <button id="dropdown-button0"
-                        class="inline-flex justify-center gap-2 items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-2  focus:ring-mainColor">
-                        Kategori Obat
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
-                    <div id="dropdown-menu0"
-                        class="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                        <div class="py-2 p-2" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-button">
-
-                            @foreach ($categories as $category)
-                            <form action="" method="GET">
-                                <input type="hidden" name="" id="" value="">
-                                <button
-                                    class="flex rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
-                                    role="menuitem">
-                                    {{ $category -> category }}
-                                </button>
-                            </form>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                {{-- CATEGORY END --}}
-
-                {{-- UNIT START --}}
-                <div class="relative inline-block text-left">
-                    <button id="dropdown-button1"
-                        class="inline-flex justify-center gap-2 items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-2  focus:ring-mainColor">
-                        Bentuk Obat
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
-                    <div id="dropdown-menu1"
-                        class="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                        <div class="py-2 p-2" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-button">
-
-                            @foreach ($units as $unit)
-
-                            <form action="" method="GET">
-                                <input type="hidden" name="" id="" value="">
-                                <button
-                                    class="flex rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
-                                    role="menuitem">
-                                    {{ $unit->unit }}
-                                </button>
-                            </form>
-                            @endforeach
-
-                        </div>
-                    </div>
-                </div>
-                {{-- UNIT END --}}
-
-                {{-- GROUP START --}}
-                <div class="relative inline-block text-left">
-                    <button id="dropdown-button2"
-                        class="inline-flex justify-center gap-2 items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-2  focus:ring-mainColor">
-                        Golongan
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
-                    <div id="dropdown-menu2"
-                        class="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                        <div class="py-2 p-2" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-button">
-
-                            @foreach ($groups as $group)
-                            <form action="" method="GET">
-                                <input type="hidden" name="" id="" value="">
-                                <button
-                                    class="flex rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer"
-                                    role="menuitem">
-                                    {{ $group->group }}
-                                </button>
-                            </form>
-                            @endforeach
-
-                        </div>
-                    </div>
-                </div>
-                {{-- GROUP END --}}
-
+        @endif
+        @if (session('error'))
+            <div class="text-sm text-red-600 mt-1 ms-3 mb-0 text-center">
+                {{ session('error') }}
             </div>
-            {{-- FILTER SECTION END --}}
-            {{-- PRODUCT START --}}
-            <div class="flex flex-wrap justify-start gap-8">
-                @foreach ($products as $item)
+        @endif
 
-                <div class="bg-white w-52 p-4 flex flex-col rounded-md shadow-md gap-2">
-                    <div class="h-36 w-full overflow-hidden flex justify-center object-contain rounded-md">
-                        <img src="https://i.pinimg.com/564x/22/04/72/2204725ec0bd13c61131bc099467b04c.jpg"
-                            class="w-full" alt="">
-                    </div>
-
-                    <p class="w-full font-semibold text-base namaObat leading-tight break-words">{{ Str::limit($item->product_name, 30, "...")
-                        }}</p>
-                    @if ($item->description->product_type == "resep dokter")
-                    <p class="bg-red-600 h-7 text-white w-fit px-2 py-1 text-sm rounded-md font-semibold">Resep</p>
-                    @else
-                    <div class="h-7"></div>
-                    @endif
-
-                    <div class="flex flex-col">
-                        <p> <span class="text-secondaryColor font-bold leading-tight break-all">Rp. {{
-                                number_format($item->detail()->orderBy('product_expired')->first()->product_sell_price,
-                                0,
-                                ',', '.') }}</span> / </p>
-                        <p class="h-[3.2rem]"> {{ $item->description->unit->unit }}</p>
-                        <p class="font-semibold leading-tight break-all">Stok : {{
-                            $item->detail()->orderBy('product_expired')->first()->product_stock }}</p>
-                    </div>
-                    @auth
-                        @if ($item->product_status == 'aktif')
-                        <livewire:buttonAddCartCashier :user="auth()->user()->user_id" :product="$item->product_id"/>
-                        @else
-                            <button type="button" disabled
-                                class="text-mediumGrey font-semibold bg-lightGrey w-full py-1 rounded-md">Tambah</button>
-                        @endif
-                    @endauth
-                    <form action="">
-                    </form>
-                </div>
-                @endforeach
-            </div>
-            {{-- PRODUCT END --}}
-            {{-- PAGINATION START --}}
-            {{ $products ? $products->links() : "" }}
-            {{-- PAGINATION END --}}
-        </div>
+        <livewire:cashier-liveshow>
+        
 
         {{-- CART START --}}
         <livewire:cartdisplay/>
@@ -247,17 +149,6 @@
         for (let i = 0; i < 4; i++) {
             initializeDropdown('dropdown-button' + i, 'dropdown-menu' + i);
         }
-
-        // Script untuk membatasi jumlah karakter di nama obat
-        // const obatElement = document.getElementsByClassName("namaObat");
-
-        // for (let i = 0; i < obatElement.length; i++) {
-        //     const obatText = obatElement[i].textContent;
-
-        //     if (obatText.length > 18) {
-        //         obatElement[i].textContent = obatText.slice(0, 18) + "...";
-        //     }
-        // }
     </script>
 </body>
 

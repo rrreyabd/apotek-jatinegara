@@ -1,21 +1,21 @@
 {{-- CART START --}}
-<div class="w-[33%] bg-white py-10 px-8 flex flex-col justify-between gap-10 shadow-md">
-    <div class="flex flex-col gap-4">
+<div class="w-[33%] bg-white py-10 px-6 flex flex-col gap-10 shadow-md fixed right-0">
+    <div class="flex flex-col gap-3">
             <div class="flex justify-between">
                 <p class="font-bold text-2xl">Detail Pesanan</p>
-                <button type="button" onclick="cartAlert()" class="outline-red-500 bg-red-200 outline rounded-lg text-black text-bold py-1 px-2 text-sm">Hapus Keranjang</button>
+                <button type="button" onclick="cartAlert()" class="text-mainColor font-bold py-1 px-2">Hapus Semua</button>
             </div>
         <hr class="border border-1 border-mediumGrey opacity-20 ">
 
         {{-- KONDISI TIDAK ADA ITEM DI KERANJANG --}}
         @if ($cartItems->isEmpty())
-        <div class="h-[80vh] w-full flex justify-center items-center flex-col text-center gap-2">
+        <div class="h-[57vh] w-full flex justify-center items-center flex-col text-center gap-2">
             <i class="text-6xl text-mainColor fa-solid fa-cart-shopping"></i>
             <p class="font-semibold text-2xl text-mainColor">Tidak ada item di keranjang.</p>
         </div>
         {{-- KONDISI ADA ITEM DI KERANJANG --}}
         @else
-        <div class="w-full flex flex-col gap-4">
+        <div class="w-full h-[57vh] overflow-y-scroll flex flex-col gap-4" id="cartProduct">
             @php
                 $jumlah = 0
             @endphp
@@ -81,7 +81,7 @@
     </div>
 
     {{-- TOTAL START --}}
-    <form action="" method="" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4">
         <p class="font-bold text-2xl">Total Pesanan</p>
         <hr class="border border-1 border-mediumGrey opacity-20">
 
@@ -97,8 +97,8 @@
             </div>
         </div>
 
-        <button type="submit" class="w-full py-2 bg-mainColor text-white font-bold text-lg rounded-md">Bayar</button>
-    </form>
+        <a href="{{ route('bayar_offline') }}" class="w-full py-2 bg-mainColor text-white font-bold text-lg rounded-md text-center">Bayar</a>
+    </div>
     {{-- TOTAL END --}}
     
 </div>

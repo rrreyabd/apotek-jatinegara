@@ -20,9 +20,9 @@ class CustomerController extends Controller
      * Display a listing of the resource.
      */
     public function booking() {
-        $carts = Auth()->user()->cart;
+        $carts = DB::table('cart_view')->where('user_id', auth()->user()->user_id)->get();
 
-        return view("user.detail-pesanan", [
+        return view("user.detail-pesanan",[
             "carts"=> $carts,
         ]);
     }
@@ -32,7 +32,7 @@ class CustomerController extends Controller
             $validated_data = $request->validate([
                 'nama' => ['required', 'string', 'min:5', 'max:255'],
                 'nomor_telepon' => ['required','numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
-                'resep_dokter' => ['required', 'file', 'max: 5120' ,'mimes:pdf,doc,docx,png,jpeg,jpg'],
+                'resep_dokter' => ['required', 'file', 'max: 5120' ,'mimes:pdf,png,jpeg,jpg'],
             ]);
         }else{
             $validated_data = $request->validate([
@@ -58,7 +58,7 @@ class CustomerController extends Controller
 
         $validated_data = $request->validate([
             'paymentMethod'=> ['required'],
-            'buktiPembayaran' => ['required', 'file', 'max: 5120','mimes:pdf,doc,docx,png,jpeg,jpg'],
+            'buktiPembayaran' => ['required', 'file', 'max: 5120','mimes:pdf,png,jpeg,jpg'],
         ]);
 
         $produk_id = SellingInvoice::orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();

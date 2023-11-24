@@ -75,7 +75,7 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/detail-riwayat-pesanan', [UserController::class,'detailRiwayatTransaksi'])->name('detail-riwayat-transaksi');
 
     Route::get('/keranjang', [CartController::class,'keranjang'])->name('keranjang');
-    Route::post('/keranjang/jumlah', [CartController::class,'jumlahItem'])->name('jumlah-keranjang');
+    // Route::post('/keranjang/jumlah', [CartController::class,'jumlahItem'])->name('jumlah-keranjang');
     Route::post('/keranjang/hapus', [CartController::class,'hapusItem'])->name('hapus-keranjang');
     Route::post('/keranjang/tambah', [CartController::class,'tambahItem'])->name('tambah-keranjang');
 
@@ -95,8 +95,12 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
 
 // Halaman Cashier
 Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
-    Route::get('/cashier', [ProductController::class,'produk_cashier'])->name('cashier_product');
+    Route::get('/cashier', function()
+    {
+        return view('kasir.index');
+    });
 
+    Route::get('/cashier/bayar',[CartController::class, 'checkout'])->name('bayar_offline');
     Route::post('/cashier/hapuskeranjang', [CartController::class,'hapus_keranjang'])->name('hapus_keranjang');
 
     Route::get('/cashier/riwayat-transaksi', [CashierController::class, 'riwayatTransaksi'])->name('riwayat-transaksi-kasir');

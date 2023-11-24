@@ -12,7 +12,7 @@
     <script src="https://kit.fontawesome.com/1fc4ea1c6a.js" crossorigin="anonymous"></script>
 
 </head>
-<body class="font-Trip bg-gradient-to-br from-mainColor to-tertiaryColor h-[100vh] flex justify-center items-center">
+<body class="font-Inter bg-gradient-to-br from-mainColor to-tertiaryColor h-[100vh] flex justify-center items-center">
     <form action="/register" method="POST">
     @csrf
     <div class="bg-white w-[80vw] h-[80vh] rounded-3xl shadow-xl flex p-4">

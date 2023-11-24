@@ -14,9 +14,11 @@ class DatabaseSeeder extends Seeder
     {
         \App\Models\User::factory(8)->create();
         \App\Models\User::factory()->create([
+            'username' => 'kasir1',
             'role' => 'cashier'
         ]);
         \App\Models\User::factory()->create([
+            'username' => 'owner',
             'role' => 'owner'
         ]);
         \App\Models\User::factory()->create([
