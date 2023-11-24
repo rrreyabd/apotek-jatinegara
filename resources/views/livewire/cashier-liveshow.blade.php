@@ -107,7 +107,7 @@
             </div>
 
             <p class="w-full font-semibold text-base namaObat leading-tight break-words">
-                {{ Str::limit($item->product_name, 35, '...')  }}
+                {{ Str::limit($item->product_name, 28, '...')  }}
                 
             </p>
             

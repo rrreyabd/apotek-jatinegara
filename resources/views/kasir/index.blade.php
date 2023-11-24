@@ -47,7 +47,17 @@
     @include('kasir.components.sidebar')
 
     <main class="flex flex-grow bg-plat min-h-[100vh]" id="mainContent">
-    
+        @if (session('success'))
+            <div class="text-sm text-mainColor mt-1 ms-3 mb-0 text-center">
+                {{ __('Pembayaran Anda Berhasil') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="text-sm text-red-600 mt-1 ms-3 mb-0 text-center">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <livewire:cashier-liveshow>
         
 

@@ -99,7 +99,8 @@ Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
     {
         return view('kasir.index');
     });
-    
+
+    Route::get('/cashier/bayar',[CartController::class, 'checkout'])->name('bayar_offline');
     Route::post('/cashier/hapuskeranjang', [CartController::class,'hapus_keranjang'])->name('hapus_keranjang');
 
     Route::get('/cashier/riwayat-transaksi', [CashierController::class, 'riwayatTransaksi'])->name('riwayat-transaksi-kasir');
