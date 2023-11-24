@@ -27,7 +27,7 @@
 
         <div class="flex flex-col gap-8 mt-10">
             <p class="text-3xl font-bold">Pesanan Online</p>
-         @error('alasanTolak')
+        @error('alasanTolak')
             <div class="text-md font-bold text-red-500 mt-1 ms-3 mb-0 text-left">
                 {{ $message }}
             </div>
