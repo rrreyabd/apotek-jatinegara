@@ -48,7 +48,7 @@
                             <td>{{ $pendingOrder->recipient_name }}</td>
                             <td>{{ $pendingOrder->recipient_bank }}</td>
                             <td>
-                                <a href="/cashier/img" target="_blank" class="underline">{{ $pendingOrder->recipient_payment }}</a>
+                                <a href="/cashier/informasi_pembayaran/{{ $pendingOrder->recipient_payment }}" target="_blank" class="underline">{{ $pendingOrder->recipient_payment }}</a>
                             </td>
                             <td>
                                 {{-- stored function?? --}}
@@ -107,7 +107,7 @@
                                                         <td class="py-2">{{ $detail->product_type }}</td>
                                                     </tr>
                                                     @php $j++ @endphp
-                                                    @endforeach
+                                                    @endforeach=
                                                 </table>
                                             </div>
     
@@ -119,7 +119,7 @@
                                                     <tr>
                                                         <td class="py-2 flex gap-2 items-center">
                                                             <i class="fa-solid fa-image"></i>
-                                                            <a href="/cashier/img" target="_blank">{{ $pendingOrder->recipient_payment }}</a>
+                                                            <a href="/cashier/resep_dokter/{{ $pendingOrder->recipient_file }}" target="_blank">{{ $pendingOrder->recipient_file }}</a>
                                                         </td>
                                                     </tr>
                                                 </table>

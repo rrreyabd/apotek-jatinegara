@@ -13,64 +13,52 @@ use App\Policies\SellingInvoiceDetailPolicy;
 
 class CashierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+public function riwayatTransaksi()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCashierRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function riwayatTransaksi()
-    {
-        $histories = SellingInvoice::with('sellingInvoiceDetail')
-            ->where('order_status', 'Berhasil')
+        $histories = SellingInvoice::where('order_status', 'Berhasil')
             ->orWhere('order_status','Offline')
             ->orWhere('order_status','Gagal')
             ->orWhere('order_status','Refund')
+            ->orderBy('invoice_code', 'desc')
             ->get();
-        $histories = $histories->reverse();
             // dd($histories);
+
+        $total = SellingInvoice::where('order_status', 'Menunggu Konfirmasi')
+            ->count();
     
-        return view('kasir.riwayat-transaksi', ['histories' => $histories]);
+        return view('kasir.riwayat-transaksi', ['histories' => $histories, 'total' => $total]);
     }
     public function pendingOrder()
     {
-        $pendingOrders = SellingInvoice::with('sellingInvoiceDetail')
-            ->where('order_status', 'Menunggu Pengambilan')
+        $pendingOrders = SellingInvoice::where('order_status', 'Menunggu Pengambilan')
             ->orderBy('order_date', 'desc')
             ->get();
             // dd($pendingOrders);
+
+            $total = SellingInvoice::where('order_status', 'Menunggu Konfirmasi')
+            ->count();
     
-        return view('kasir.pesanan-pending', ['pendingOrders' => $pendingOrders,]);
+        return view('kasir.pesanan-pending', ['pendingOrders' => $pendingOrders,  'total' => $total]);
+    }
+    
+    public function onlineOrder(){
+        $onlineOrders = SellingInvoice::where('order_status', 'Menunggu Konfirmasi')
+            ->orderBy('order_date', 'desc')
+            ->get();
+            // dd($onlineOrders);
+        $total = $onlineOrders->count();
+
+        return view('kasir.pesanan-online', ['onlineOrders' => $onlineOrders, 'total' => $total]);
     }
 
 
-    public function updateStatus(Request $request, $id){
+    public function finishOrder($id){
         try {
             $order = SellingInvoice::findOrFail($id);
             
             // Ubah status menjadi 'Berhasil'
             $order->order_status = 'Berhasil';
+            $order->order_complete = now();
             $order->save();
     
             // Redirect ke halaman atau tindakan yang sesuai
@@ -79,22 +67,72 @@ class CashierController extends Controller
             return redirect()->back()->with('error', 'Pesanan tidak ditemukan.');
         }
     }
-    public function edit(Cashier $cashier)
-    {
-        //
+
+    public function updateStatus(Request $request, $id){
+        try{
+            $order = SellingInvoice::findOrFail($id);
+            
+            
+            if($request->status == 'terima'){
+                $order->order_status = 'Menunggu Pengambilan';
+                
+                $order->cashier_name = auth()->user()->username;
+                $order->save();
+                
+                return redirect()->back()->with('success', 'Pesanan berhasil diterima.');
+            } else if($request->status == 'tolak'){
+                $order->order_status = 'Gagal';
+                $order->cashier_name = auth()->user()->username;
+
+                $request->validate([
+                    'alasanTolak' => ['required', 'string', 'min:10', 'regex:/^[a-zA-Z0-9 ]+$/', 'max:255']
+                ]);
+                $order->reject_comment = $request->alasanTolak; 
+
+                $order->save();
+                
+                return redirect()->back()->with('success', 'Pesanan berhasil ditolak.');
+            } else if($request->status == 'refund'){
+                $order->order_status = 'Menunggu Pengembalian';
+                $order->cashier_name = auth()->user()->username;
+                
+                $request->validate([
+                    'alasanRefund' => ['required', 'string', 'min:10', 'regex:/^[a-zA-Z0-9 ]+$/', 'max:255']
+                ]);
+                $order->reject_comment = $request->alasanRefund; 
+
+                $order->save();
+                
+                return redirect()->back()->with('success', 'Pesanan akan diproses untuk pengembalian.');
+            }
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+            return redirect()->back()->with('error', 'Pesanan tidak ditemukan.');
+        }
+    }
+    public function informasi_pembayaran(Request $request){
+        return view('kasir.show-image',[
+            'title' => 'Bukti Pembayaran',
+            'root' => 'bukti-pembayaran',
+            'file'=> $request->img,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.p
-     */
-    public function update(UpdateCashierRequest $request, Cashier $cashier)
-    {
-        //
+    public function resep_dokter(Request $request){
+        return view('kasir.show-image',[
+            'title' => 'Resep Dokter',
+            'root' => 'resep-dokter',
+            'file'=> $request->img,
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function refund(Request $request){
+        return view('kasir.show-image',[
+            'title' => 'Refund',
+            'root' => 'refund',
+            'file'=> $request->img,
+        ]);
+    }
+
     public function destroy(Cashier $cashier)
     {
         //

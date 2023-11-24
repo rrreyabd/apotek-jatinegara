@@ -104,17 +104,13 @@ Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
 
     Route::get('/cashier/riwayat-transaksi', [CashierController::class, 'riwayatTransaksi'])->name('riwayat-transaksi-kasir');
     Route::get('/cashier/pesanan-pending', [CashierController::class, 'pendingOrder'])->name('pesanan-pending-kasir');
-    Route::get('/cashier/pesanan-pending/{id}', [CashierController::class, 'updateStatus'])->name('successOrder');
+    Route::get('/cashier/pesanan-pending/{id}', [CashierController::class, 'finishOrder'])->name('successOrder');
+    Route::get('/cashier/pesanan-online', [CashierController::class, 'onlineOrder']);
+    Route::post('/cashier/pesanan-online/{id}', [CashierController::class, 'updateStatus'])->name('updateStatus');
 
-    Route::get('/cashier/img', function () {
-        return view('kasir.show-image');
+    Route::get('/cashier/informasi_pembayaran/{img}', [CashierController::class, 'informasi_pembayaran'])->name('informasi-pembayaran-cust');
+    Route::get('/cashier/resep_dokter/{img}', [CashierController::class, 'resep_dokter'])->name('resep-dokter-cust');
     }); 
-
-    Route::get('/cashier/pesanan-online', function () {
-        return view('kasir.pesanan-online');
-    });
-    
-});
 // Akhir Halaman Cashier
 
 // halaman owner
