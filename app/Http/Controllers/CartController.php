@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\ProductDetail;
+use App\Models\SellingInvoice;
+use App\Models\SellingInvoiceDetail;
 use App\Http\Requests\StoreCartRequest;
 use App\Http\Requests\UpdateCartRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -85,5 +89,54 @@ class CartController extends Controller
     public function hapus_keranjang() {
         Cart::where('user_id', auth()->user()->user_id)->delete();
         return redirect()->back();
+    }
+
+    public function checkout()
+    {
+        DB::beginTransaction();
+        $uuid = Str::uuid();
+        
+        try{
+            $cart = Cart::where('user_id', auth()->user()->user_id)->get();
+            $produk_id = SellingInvoice::orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();
+            $number = intval(str_replace("INV-", "", $produk_id)) + 1;
+            SellingInvoice::create([
+                'selling_invoice_id' => $uuid,
+                'invoice_code' => 'INV-' . str_pad($number, 6, '0', STR_PAD_LEFT),
+                'cashier_name' => auth()->user()->username,
+                'order_date' => now(),
+                'order_complete' => now(),
+                'order_status' => 'Offline',
+            ]);
+            // dd(auth()->user()->username);
+            
+            foreach ($cart as $item) {
+                SellingInvoiceDetail::create([
+                    'selling_detail_id' => Str::uuid(),
+                    'selling_invoice_id' => $uuid,
+                    'product_name' => $item->product->product_name,
+                    'product_sell_price' => $item->product->detail()->orderBy('product_expired')->first()->product_sell_price,
+                    'quantity' => $item->quantity,
+                ]);
+
+                ProductDetail::where('product_id',$item->product_id)->update([
+                    'product_stock' => $item->product->detail()->orderBy('product_expired')->first()->product_stock - $item->quantity
+                ]);
+            }
+
+            foreach($cart as $item)
+            {
+                $item->delete();
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Pembayaran Berhasil');
+        } 
+        catch (\Exception $e) {
+            DB::rollBack();
+
+            // throw $e;
+            return redirect()->back()->with('error', $e);
+        }
     }
 }

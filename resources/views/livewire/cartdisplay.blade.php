@@ -97,7 +97,7 @@
             </div>
         </div>
 
-        <button wire:click="checkout" class="w-full py-2 bg-mainColor text-white font-bold text-lg rounded-md">Bayar</button>
+        <a href="{{ route('bayar_offline') }}" class="w-full py-2 bg-mainColor text-white font-bold text-lg rounded-md text-center">Bayar</a>
     </div>
     {{-- TOTAL END --}}
     
