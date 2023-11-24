@@ -19,11 +19,14 @@ public function riwayatTransaksi()
             ->orWhere('order_status','Offline')
             ->orWhere('order_status','Gagal')
             ->orWhere('order_status','Refund')
-            ->orderBy('order_date', 'desc')
+            ->orderBy('invoice_code', 'desc')
             ->get();
             // dd($histories);
+
+        $total = SellingInvoice::where('order_status', 'Menunggu Konfirmasi')
+            ->count();
     
-        return view('kasir.riwayat-transaksi', ['histories' => $histories]);
+        return view('kasir.riwayat-transaksi', ['histories' => $histories, 'total' => $total]);
     }
     public function pendingOrder()
     {
@@ -31,8 +34,11 @@ public function riwayatTransaksi()
             ->orderBy('order_date', 'desc')
             ->get();
             // dd($pendingOrders);
+
+            $total = SellingInvoice::where('order_status', 'Menunggu Konfirmasi')
+            ->count();
     
-        return view('kasir.pesanan-pending', ['pendingOrders' => $pendingOrders,]);
+        return view('kasir.pesanan-pending', ['pendingOrders' => $pendingOrders,  'total' => $total]);
     }
     
     public function onlineOrder(){
@@ -40,8 +46,9 @@ public function riwayatTransaksi()
             ->orderBy('order_date', 'desc')
             ->get();
             // dd($onlineOrders);
+        $total = $onlineOrders->count();
 
-        return view('kasir.pesanan-online', ['onlineOrders' => $onlineOrders]);
+        return view('kasir.pesanan-online', ['onlineOrders' => $onlineOrders, 'total' => $total]);
     }
 
 
