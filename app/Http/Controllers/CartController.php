@@ -109,6 +109,7 @@ class CartController extends Controller
             ]);
             // dd(auth()->user()->username);
             
+            
             foreach ($cart as $item) {
                 SellingInvoiceDetail::create([
                     'selling_detail_id' => Str::uuid(),

@@ -58,12 +58,13 @@
                                 // Mendapatkan waktu sekarang dan order_date + 3 hari
                                     $now = now();
                                     $deadline = $orderDate->addDays(3);
+                                    // @dd($now->diffAsCarbonInterval($deadline));
                             
                                 // Menghitung selisih waktu dalam bentuk CarbonInterval
                                     $difference = $now->diffAsCarbonInterval($deadline);
                             
                                 // Mengambil informasi selisih waktu dalam bentuk hari, jam, dan menit
-                                    $days = max($difference->format('%a'), 0); // Menggunakan fungsi max untuk memastikan nilai minimal adalah 0
+                                    $days = max($difference->format('%d'), 0); // Menggunakan fungsi max untuk memastikan nilai minimal adalah 0
                                     $hours = $difference->format('%h');
                                     $minutes = $difference->format('%i');
                                 @endphp
