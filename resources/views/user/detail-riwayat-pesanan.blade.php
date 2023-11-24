@@ -73,7 +73,7 @@
                     <div class="w-1/3">
                         <p>Nama Penerima : <span class="font-semibold"> {{ $purcase->recipient_name }} </span></p> 
                         <p class="my-2">Batas Pengambilan : <span class="font-semibold"> {{ date('d M Y',strtotime($purcase->order_date . '3 days ')) }} </span> </p>
-                        <p>Tanggal Pengambilan : <span class="font-semibold"> {{ date('d M Y',strtotime($purcase->order_complete)) }} </span> </p>
+                        <p>Tanggal Pengambilan : <span class="font-semibold"> {{ $purcase->order_complete ? date('d M Y',strtotime($purcase->order_complete)) : "" }} </span> </p>
                     </div>
                     <div class="w-1/3">
                         <p>Catatan Tambahan</p>
