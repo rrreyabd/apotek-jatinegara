@@ -27,7 +27,7 @@
 
         <div class="flex flex-col gap-8 mt-10">
             <p class="text-3xl font-bold">Pesanan Online</p>
-         @error('alasanTolak')
+        @error('alasanTolak')
             <div class="text-md font-bold text-red-500 mt-1 ms-3 mb-0 text-left">
                 {{ $message }}
             </div>
@@ -96,7 +96,7 @@
                                             <div class="w-[70%]">
                                                 <div class="flex flex-col gap-8">
                                                     <div class="overflow-y-auto h-96">
-                                                        <table class="w-full h-full overflow-scroll">
+                                                        <table class="w-full h-fit max-h-[20px] overflow-scroll">
                                                             <tr class="border-2 border-b-mainColor border-transparent text-mainColor font-bold w-[100%]">
                                                                 <td class="w-[10%] pb-2 text-center">No</td>
                                                                 <td class="w-[30%] pb-2">Nama</td>

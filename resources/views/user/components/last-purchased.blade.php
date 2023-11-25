@@ -4,6 +4,7 @@
 
         <div class="flex justify-start relative">
             <div class="flex flex-wrap justify-center gap-4">
+                {{-- @dd($products_last_purcase); --}}
                 @if ($products_last_purcase->first() != NULL)
                 {{-- @dd($products_last_purcase->take(1)); --}}
                 @foreach ($products_last_purcase as $product)

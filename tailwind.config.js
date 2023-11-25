@@ -26,6 +26,7 @@ module.exports = {
             },
             animation: {
                 scale: 'scale 3s infinite linear',
+                notif: 'notif 3s linear',
             },
             keyframes: {
                 scale: {
@@ -38,6 +39,20 @@ module.exports = {
                     '100%': {
                         scale: '100%',
                     }
+                },
+                notif: {
+                    '0%': {
+                        opacity: '0%',
+                    },
+                    '20%': {
+                        opacity: '100%',
+                    },
+                    '80%': {
+                        opacity: '100%',
+                    },
+                    '100%': {
+                        opacity: '0%',
+                    },
                 },
             },
         },

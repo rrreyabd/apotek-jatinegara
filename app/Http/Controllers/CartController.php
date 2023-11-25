@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-
 class CartController extends Controller
 {
     public function keranjang() {
@@ -110,6 +109,7 @@ class CartController extends Controller
             ]);
             // dd(auth()->user()->username);
             
+            
             foreach ($cart as $item) {
                 SellingInvoiceDetail::create([
                     'selling_detail_id' => Str::uuid(),
@@ -136,7 +136,7 @@ class CartController extends Controller
             DB::rollBack();
 
             // throw $e;
-            return redirect()->back()->with('error', $e);
+            return redirect()->back()->with('error', 'Transaksi Gagal');
         }
     }
 }
