@@ -11,7 +11,7 @@ use App\Http\Requests\UpdateCartRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
+
 
 class CartController extends Controller
 {

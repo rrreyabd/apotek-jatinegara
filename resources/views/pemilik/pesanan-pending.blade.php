@@ -39,27 +39,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i < 20; $i++) <tr>
-                            <td>{{$i + 1}}</td>
+                        @php $i=1; @endphp
+                        @foreach ($pendingOrders as $order) <tr>
+                            <td>{{$i}}</td>
                             <td>
-                                <span class="font-bold">INV-1234{{$i}}</span>
+                                <span class="font-bold">{{ $order->invoice_code }}</span>
                             </td>
-                            <td>Nama Penerima {{$i + 1}}</td>
-                            <td>BCA</td>
+                            <td>{{ $order->recipient_name }}</td>
+                            <td>{{ $order->recipient_bank }}</td>
                             <td>
                                 <button onclick="showPaymentSS()" target="_blank"
-                                    class="underline">Screenshot123.jpg</button>
+                                    class="underline">{{ $order->recipient_payment }}</button>
                                 <div class="absolute w-full h-full top-0 left-0 flex justify-center pt-28 items-start backdrop-brightness-[.25] z-10 hidden"
                                     id="ModalBuktiPembayaran">
                                     <div class="bg-white rounded-xl shadow-md">
                                         <div
                                             class="bg-mainColor text-white font-semibold px-10 py-4 rounded-t-xl flex justify-between">
-                                            namaFile.jpg
+                                            {{ $order->recipient_payment }}
                                             <button onclick="showPaymentSS()">
                                                 <i class="fa-solid fa-xmark fa-xl" style="color: white"></i>
                                             </button>
                                         </div>
-                                        <img src="{{ asset('img/obat1.jpg') }}" alt=""
+                                        <img src=" {{ asset('/storage/bukti-pembayaran/{{ $order->recipient_payment }}') }}" alt=""
                                             class="h-[60vh] w-fit relative p-4">
                                     </div>
                                 </div>
@@ -167,7 +168,8 @@
                                 {{-- MODAL DETAIL PESANAN PENDING END --}}
                             </td>
                             </tr>
-                            @endfor
+                            @php $i++ @endphp
+                            @endforeach
                     </tbody>
                 </table>
             </div>

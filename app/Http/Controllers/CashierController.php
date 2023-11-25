@@ -132,11 +132,4 @@ public function riwayatTransaksi()
             'file'=> $request->img,
         ]);
     }
-
-    public function destroy(Cashier $cashier)
-    {
-        //
-    }
-
-    
 }
