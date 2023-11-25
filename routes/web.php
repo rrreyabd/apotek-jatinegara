@@ -155,6 +155,8 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     });
 
     Route::get('pesanan-pending', [OwnerController::class, 'pendingOrder'])->name('pesanan-pending');
+    Route::post('pesanan-pending/{sellingInvoiceID}', [OwnerController::class, 'refund'])->name('owner-refund');
+    Route::get('resep_dokter/{img}', [OwnerController::class, 'resep_dokter']);
 });
 // akhir halaman owner
 

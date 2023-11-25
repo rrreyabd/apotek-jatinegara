@@ -82,6 +82,7 @@ public function riwayatTransaksi()
                 return redirect()->back()->with('success', 'Pesanan berhasil diterima.');
             } else if($request->status == 'tolak'){
                 $order->order_status = 'Gagal';
+                $order->order_complete = now();
                 $order->cashier_name = auth()->user()->username;
 
                 $request->validate([
@@ -94,6 +95,7 @@ public function riwayatTransaksi()
                 return redirect()->back()->with('success', 'Pesanan berhasil ditolak.');
             } else if($request->status == 'refund'){
                 $order->order_status = 'Menunggu Pengembalian';
+                $order->order_complete = now();
                 $order->cashier_name = auth()->user()->username;
                 
                 $request->validate([

@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreCashierRequest;
 use App\Http\Requests\UpdateCashierRequest;
 use App\Policies\SellingInvoiceDetailPolicy;
+use Illuminate\Support\Facades\Storage;
+
 
 class OwnerController extends Controller
 {
@@ -33,56 +35,35 @@ class OwnerController extends Controller
         return view('pemilik.pesanan-pending', ['pendingOrders' => $pendingOrders,  'total' => $total]);
     }
     
-    public function index()
-    {
-        //
+    public function resep_dokter(Request $request){
+        return view('pemilik.show-image',[
+            'title' => 'Resep Dokter',
+            'root' => 'resep-dokter',
+            'file'=> $request->img,
+        ]);
     }
+    public function refund(Request $request, $id){
+        try{
+        $order = SellingInvoice::findOrFail($id);
+        // dd($request->buktiRefund);
+        
+        $validated_data = $request->validate([
+            'buktiRefund' => ['required', 'file', 'max:5120', 'mimes:pdf,png,jpeg,jpg'],
+        ], [
+            'buktiRefund.required' => 'Lampirkan bukti pengembalian uang terlebih dahulu.',
+            'buktiRefund.file' => 'Dokumen pengembalian harus berupa file.',
+            'buktiRefund.max' => 'Dokumen yang dilampirkan tidak boleh lebih dari 5 mb',
+            'buktiRefund.mimes' => 'Format dokumen yang diterima adalah PDF, PNG, JPEG, or JPG file.',
+        ]);
+        $buktiRefund = $validated_data['buktiRefund']->store('bukti-refund');
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $order->update([
+            'refund_file' =>$buktiRefund,
+            'order_status' => 'Refund',
+        ]);
+        return redirect()->back()->with('success', 'Berhasil melakukan refund.');
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+        return redirect()->back()->with('error', 'Pesanan tidak ditemukan.');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+}
 }
