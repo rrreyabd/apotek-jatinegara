@@ -75,7 +75,6 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/detail-riwayat-pesanan', [UserController::class,'detailRiwayatTransaksi'])->name('detail-riwayat-transaksi');
 
     Route::get('/keranjang', [CartController::class,'keranjang'])->name('keranjang');
-    // Route::post('/keranjang/jumlah', [CartController::class,'jumlahItem'])->name('jumlah-keranjang');
     Route::post('/keranjang/hapus', [CartController::class,'hapusItem'])->name('hapus-keranjang');
     Route::post('/keranjang/tambah', [CartController::class,'tambahItem'])->name('tambah-keranjang');
 
@@ -105,7 +104,8 @@ Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
 
     Route::get('/cashier/riwayat-transaksi', [CashierController::class, 'riwayatTransaksi'])->name('riwayat-transaksi-kasir');
     Route::get('/cashier/pesanan-pending', [CashierController::class, 'pendingOrder'])->name('pesanan-pending-kasir');
-    Route::get('/cashier/pesanan-pending/{id}', [CashierController::class, 'finishOrder'])->name('successOrder');
+    Route::get('/cashier/pesanan-berhasil/{id}', [CashierController::class, 'finishOrder'])->name('successOrder');
+    Route::get('/cashier/pesanan-gagal/{id}', [CashierController::class, 'failOrder'])->name('failOrder');
     Route::get('/cashier/pesanan-online', [CashierController::class, 'onlineOrder']);
     Route::post('/cashier/pesanan-online/{id}', [CashierController::class, 'updateStatus'])->name('updateStatus');
 

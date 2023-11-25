@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Log extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'log_id',
+        'log_time',
+        'invoice_code',
+        'cashier_name',
+        'log_target',
+        'log_description',
+        'old_value',
+        'new_value',
+    ];
 }

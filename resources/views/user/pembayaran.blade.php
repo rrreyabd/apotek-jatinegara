@@ -57,7 +57,7 @@
                         {{-- akhir BCA --}}
                         {{-- Mandiri --}}
                         <div class="relative">
-                            <input type="text" class="w-[24vw] shadow-sm shadow-mediumGrey h-10 pl-24 rounded-full text-sm" placeholder="987123 a.n Gopal">
+                            <input type="text" readonly class="w-[24vw] shadow-sm shadow-mediumGrey h-10 pl-24 rounded-full text-sm" placeholder="987123 a.n Gopal">
                             
                             <label for="paymentMethod4" class="flex gap-2 items-center absolute left-3 top-[26%] cursor-pointer">
                                 <input type="radio" name="paymentMethod" value="Mandiri" id="paymentMethod4" class="h-5 w-5">
