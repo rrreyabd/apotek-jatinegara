@@ -17,6 +17,7 @@ class SellingInvoiceDetail extends Model
         'selling_detail_id',
         'selling_invoice_id',
         'product_name',
+        'product_type',
         'product_sell_price',
         'quantity',
     ];
