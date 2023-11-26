@@ -13,6 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
+        DROP PROCEDURE IF EXISTS stock_back;
+
         CREATE PROCEDURE stock_back(IN stock INT, IN product CHAR(36))
         BEGIN 
             UPDATE product_details 
@@ -22,7 +24,7 @@ return new class extends Migration
         END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

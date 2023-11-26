@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
-        CREATE VIEW cart_view AS
+        CREATE OR REPLACE VIEW cart_view AS
         SELECT a.cart_id, a.user_id, b.product_id, b.product_photo, b.product_name, b.category, b.product_type, b.product_stock, b.product_expired, b.product_sell_price, a.quantity, Total_Harga(a.quantity, b.product_sell_price) AS total_harga
         FROM carts a
         JOIN product_view b ON a.product_id = b.product_id;

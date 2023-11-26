@@ -39,7 +39,7 @@
                         </div>
                         <div class="items-center">
                             <p class="text-md text-mediumGrey font-bold">Pesanan Menunggu Pengembalian</p>
-                            <p class="text-lg font-bold">5</p>
+                            <p class="text-lg font-bold">{{ $pending }}</p>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="items-center">
                             <p class="text-md text-mediumGrey font-bold">Produk</p>
-                            <p class="text-lg font-bold">100</p>
+                            <p class="text-lg font-bold">{{ $product }}</p>
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         </div>
                         <div class="items-center">
                             <p class="text-md text-mediumGrey font-bold">User</p>
-                            <p class="text-lg font-bold">25</p>
+                            <p class="text-lg font-bold">{{ $user }}</p>
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                         </div>
                         <div class="items-center">
                             <p class="text-md text-mediumGrey font-bold">Supplier</p>
-                            <p class="text-lg font-bold">20</p>
+                            <p class="text-lg font-bold">{{ $supplier }}</p>
                         </div>
                     </div>
                 </div>
@@ -90,20 +90,24 @@
 
                     <table>
                         <tbody>
-                            @for ($i = 0; $i < 3; $i++) 
+                            @php
+                                $i = 1;
+                            @endphp
+                            @foreach ($popular as $item)
+                                
                             <tr class="md:flex justify-between items-center gap-8">
-                                <td>{{$i + 1}}</td>
+                                <td>{{$i++}}</td>
                                 <td class="w-[160px] h-[140px] invisible">
                                     <img src="{{asset('img/obat1.jpg')}}" alt="" class="sm:visible w-25 p-5">
                                 </td>
                                 <td>
-                                    <p class="font-bold">Paracetamol 500 mg</p>
+                                    <p class="font-bold">{{ $item->product_name }}</p>
                                 </td>
                                 <td>
-                                    <p class="font-bold text-mainColor">530 Pembeli</p>
+                                    <p class="font-bold text-mainColor">{{ $item->jumlah_kemunculan }}</p>
                                 </td>
-                                </tr>
-                                @endfor
+                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
