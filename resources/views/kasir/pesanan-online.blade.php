@@ -27,6 +27,20 @@
 
         <div class="flex flex-col gap-8 mt-10">
             <p class="text-3xl font-bold">Pesanan Online</p>
+
+            @if (session('success'))
+                <div class="absolute top-4 left-[42.5vw] bg-mainColor shadow-md w-[25vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
+                    <i class="text-white fa-solid fa-circle-check"></i>
+                    <p class="text-lg text-white font-semibold"> {{ __('Status Berhasil Diperbaharui') }} </p>
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="absolute top-4 left-[42.5vw] bg-red-600 shadow-md w-[15vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
+                    <i class="text-white fa-solid fa-triangle-exclamation"></i>
+                    <p class="text-lg text-white font-semibold"> {{ __('Terjadi Kesalahan') }} </p>
+                </div>
+            @endif
+    
         @error('alasanTolak')
             <div class="text-md font-bold text-red-500 mt-1 ms-3 mb-0 text-left">
                 {{ $message }}
@@ -43,6 +57,7 @@
                     <thead>
                         <tr>
                             <th>No.</th>
+                            <th>Nomor Invoice</th>
                             <th>Nama Pengambil</th>
                             <th>Nomor HP</th>
                             <th>Metode Pembayaran</th>
@@ -57,8 +72,9 @@
                         @foreach ($onlineOrders as $order)                
                         <tr>
                             <td>{{$i}}</td>
+                            <td><span class="font-bold">{{ $order->invoice_code }}</span></td>
                             <td>
-                                <span class="font-bold">{{ $order->recipient_name }}</span>
+                                {{ $order->recipient_name }}
                             </td>
                             <td>{{ $order->recipient_phone }}</td>
                             <td>{{ $order->recipient_bank }}</td>
