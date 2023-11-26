@@ -13,14 +13,16 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
-        CREATE FUNCTION `Total_Harga`(`jumlah` INT(11), `harga` INT(11)) RETURNS INT       
+        DROP FUNCTION IF EXISTS Total_Harga;
+
+        CREATE FUNCTION Total_Harga(jumlah INT, harga INT) RETURNS INT
         DETERMINISTIC
         BEGIN
             RETURN (harga * jumlah);
         END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

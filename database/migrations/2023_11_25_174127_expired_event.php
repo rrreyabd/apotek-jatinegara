@@ -12,7 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $sql = "
+        $sql = " DROP EVENT IF EXISTS check_expired;
+
         CREATE EVENT check_expired 
         ON SCHEDULE EVERY 1 DAY 
         DO 
@@ -25,7 +26,7 @@ return new class extends Migration
             END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\SellingInvoice;
-
+use App\Models\PopularProduct;
+use App\Models\Product;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCashierRequest;
 use App\Http\Requests\UpdateCashierRequest;
@@ -14,6 +16,31 @@ use Illuminate\Support\Facades\Storage;
 
 class OwnerController extends Controller
 {
+    public function display()
+    {
+        $popular = PopularProduct::take(3)->get();
+        $count_product = Product::count();
+        $count_supplier = Supplier::count();
+        $count_user = User::where('role', 'user')->count();
+        $count_pending = SellingInvoice::where('order_status','Menunggu Pengembalian')->count();
+
+        return view ('pemilik.index', [
+            'popular' => $popular,
+            'product' => $count_product,
+            'supplier' => $count_supplier,
+            'pending' => $count_pending,
+            'user' => $count_user
+        ]);
+    }
+
+    public function display_user()
+    {
+        $total_pesanan_online = SellingInvoice::where('order_status','Berhasil')->count();;
+        return view('pemilik.list-user', [
+            'total' => $total_pesanan_online
+        ]);
+    }
+
     public function lihatKasir(){
 
         $cashiers = User::where('role', 'cashier')

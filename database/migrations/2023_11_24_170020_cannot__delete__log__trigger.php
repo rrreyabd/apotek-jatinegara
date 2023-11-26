@@ -12,17 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $sql = "
+        $sql = " DROP TRIGGER IF EXISTS cannot_delete_log;
+
         CREATE TRIGGER cannot_delete_log 
         BEFORE DELETE ON logs 
         FOR EACH ROW 
         BEGIN 
             SIGNAL SQLSTATE '45000' SET
             MESSAGE_TEXT = 'Tidak Dapat Menghapus Log';
-        END;
+        END ;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

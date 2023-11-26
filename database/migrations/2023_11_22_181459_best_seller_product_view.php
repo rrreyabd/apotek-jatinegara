@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
-            CREATE VIEW bestSellerProduct_view AS
+            CREATE OR REPLACE VIEW bestSellerProduct_view AS
             SELECT a.product_name, b.product_status, COUNT(*) as jumlah_kemunculan
             FROM selling_invoice_details a
             JOIN products b ON a.product_name = b.product_name

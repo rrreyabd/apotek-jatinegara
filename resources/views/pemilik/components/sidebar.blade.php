@@ -7,14 +7,14 @@
     <div class="w-full shadow border border-neutral-200 my-3"></div>
 
     <div class="overflow-x-hidden text-mediumGrey mt-8" style="transition: 0.3s;">
-        <a href="/owner" class="flex items-center text-lg">
+        <a href="{{ route('dashboard') }}" class="flex items-center text-lg">
             <i class="fa-solid fa-chart-line me-3"></i>
             <p>Dashboard</p>
         </a>
     </div>
 
     <div class="overflow-x-hidden text-mediumGrey my-4" style="transition: 0.3s;">
-        <a href="/owner/user" class="flex items-center text-lg">
+        <a href="{{ route('list-user') }}" class="flex items-center text-lg">
             <i class="fa-regular fa-user me-3"></i>
             <p>User</p>
         </a>

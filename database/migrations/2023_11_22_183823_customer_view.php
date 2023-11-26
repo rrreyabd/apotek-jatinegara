@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
-        CREATE VIEW customer_view AS
+        CREATE OR REPLACE VIEW customer_view AS
         SELECT a.user_id, a.username, a.email, a.password, a.role, b.customer_phone
         FROM users a
         JOIN customers b ON a.user_id = b.user_id
