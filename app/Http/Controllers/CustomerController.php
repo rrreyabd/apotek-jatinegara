@@ -94,6 +94,7 @@ class CustomerController extends Controller
                     'selling_detail_id' => Str::uuid(),
                     'selling_invoice_id' => $uuid,
                     'product_name' => $produk->product->product_name,
+                    'product_type' => $produk->product->description->product_type,
                     'product_sell_price' => $produk->product->detail()->orderBy('product_expired')->first()->product_sell_price,
                     'quantity' => $produk->quantity,
                 ]);
@@ -137,7 +138,6 @@ class CustomerController extends Controller
             $status = false;
 
             DB::rollback();
-            throw $e;
         }
         
         if ($status){

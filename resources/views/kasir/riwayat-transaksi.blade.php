@@ -48,7 +48,7 @@
                             </td>
                             <td>{{$history->recipient_name}}</td>
                             <td>{{ date('d M Y',strtotime($history->order_complete)) }}</td>
-                                 @php
+                                @php
                                     $totalPrice = 0; // Initialize the variable to store the total price
                                 @endphp
                                 @foreach ($history->sellingInvoiceDetail as $invoice)
@@ -166,7 +166,7 @@
                                                     <p>{{ $history->recipient_name }}</p>
                                                     <p class="font-bold">Nomor HP :</p>
                                                     <p>{{ $history->recipient_phone }}</p>
-                                                    <p class="font-bold">Tanggal Pengambilan :</p>
+                                                    <p class="font-bold">Tanggal Selesai :</p>
                                                     <p>{{ date('d M Y',strtotime($history->order_complete)) }}</p>
                                                     <p class="font-bold">Metode Pembayaran :</p>
                                                     <p>{{ $history->recipient_bank }}</p>

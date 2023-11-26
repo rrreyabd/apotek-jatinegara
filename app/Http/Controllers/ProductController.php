@@ -67,6 +67,7 @@ class ProductController extends Controller
     }
     
     public function produk(Request $request) {
+        // dd($request->all());
         $categories = Category::orderBy('category')->get();
         $groups = Group::orderBy('group')->get();
         $units = Unit::orderBy('unit')->get();
