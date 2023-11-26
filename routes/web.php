@@ -6,6 +6,7 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\printPDFController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\OwnerController;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
@@ -115,49 +116,47 @@ Route::middleware(['auth', 'verified', 'cekRole:cashier'])->group(function () {
 // Akhir Halaman Cashier
 
 // halaman owner
-Route::middleware(['auth', 'verified', 'cekRole:owner'])->group(function () {
-    Route::get('/owner', function () {
+Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group(function () {
+    Route::get('/', function () {
         return view('pemilik.index');
     });
-    Route::get('/owner/produk', function () {
+    Route::get('produk', function () {
         return view('pemilik.list-produk');
     });
     
-    Route::get('/owner/detail-produk', function () {
+    Route::get('detail-produk', function () {
         return view('pemilik.detail-produk');
     });
 
-    Route::get('/owner/tambah-produk', function () {
+    Route::get('tambah-produk', function () {
         return view('pemilik.tambah-produk');
     });
 
-    Route::get('/owner/edit-produk', function () {
+    Route::get('edit-produk', function () {
         return view('pemilik.edit-produk');
     });
 
-    Route::get('/owner/kasir', function () {
-        return view('pemilik.list-kasir');
-    });
+    Route::get('kasir', [OwnerController::class,'lihatKasir'])->name('list-kasir');
 
-    Route::get('/owner/transaksi-penjualan', function () {
+    Route::get('transaksi-penjualan', function () {
         return view('pemilik.log-transaksi-penjualan');
     });
 
-    Route::get('/owner/transaksi-pembelian', function () {
+    Route::get('transaksi-pembelian', function () {
         return view('pemilik.log-transaksi-pembelian');
     });
 
-    Route::get('/owner/supplier', function () {
+    Route::get('supplier', function () {
         return view('pemilik.list-supplier');
     });
 
-    Route::get('/owner/user', function () {
+    Route::get('user', function () {
         return view('pemilik.list-user');
     });
 
-    Route::get('/owner/pesanan-pending', function () {
-        return view('pemilik.pesanan-pending');
-    });
+    Route::get('pesanan-pending', [OwnerController::class, 'pendingOrder'])->name('pesanan-pending');
+    Route::post('pesanan-pending/{sellingInvoiceID}', [OwnerController::class, 'refund'])->name('owner-refund');
+    Route::get('resep_dokter/{img}', [OwnerController::class, 'resep_dokter']);
 });
 // akhir halaman owner
 

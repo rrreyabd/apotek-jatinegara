@@ -12,4 +12,29 @@
             </button>
         </form>
     </div>
+    
+    <a href="/owner/pesanan-online" class="flex gap-2 items-center text-mainColor bg-white shadow-md rounded-full px-2 py-1">
+        <i class="fa-solid fa-circle-exclamation text-xl"></i>
+        <p class="font-bold">{{ $total }} Pesanan Online</p>
+    </a>
 </div>
+
+<script>
+    const sidebar = () => {
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('mainContent');
+
+        if (sidebar.classList.contains('-translate-x-80')) {
+            sidebar.classList.remove('-translate-x-80')
+            main.classList.add('brightness-50')
+            // document.body.classList.add('h-[100vh]')
+            // document.body.classList.add('overflow-hidden')
+        } else {
+            sidebar.classList.add('-translate-x-80')
+            main.classList.remove('brightness-50')
+            // document.body.classList.remove('h-[100vh]')
+            // document.body.classList.remove('overflow-hidden')
+        }
+
+    }
+</script>

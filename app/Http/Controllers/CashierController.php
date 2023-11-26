@@ -111,6 +111,7 @@ public function riwayatTransaksi()
                 try {
                     DB::beginTransaction();
                         $order->order_status = 'Gagal';
+                        $order->order_complete = now();
                         $order->cashier_name = auth()->user()->username;
 
                         $request->validate([
@@ -136,13 +137,13 @@ public function riwayatTransaksi()
                 try {
                     DB::beginTransaction();
                         $order->order_status = 'Menunggu Pengembalian';
+                        $order->order_complete = now();
                         $order->cashier_name = auth()->user()->username;
                         
                         $request->validate([
                             'alasanRefund' => ['required', 'string', 'min:10', 'regex:/^[a-zA-Z0-9 ]+$/', 'max:255']
                         ]);
                         $order->reject_comment = $request->alasanRefund; 
-
                         $order->save();
 
                         foreach($order->sellingInvoiceDetail as $detail) {
@@ -185,11 +186,4 @@ public function riwayatTransaksi()
             'file'=> $request->img,
         ]);
     }
-
-    public function destroy(Cashier $cashier)
-    {
-        //
-    }
-
-    
 }
