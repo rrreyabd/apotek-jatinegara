@@ -129,6 +129,7 @@ public function riwayatTransaksi()
                         ]);
                         DB::select("CALL order_refund(?, ?, ?)", array($id, auth()->user()->username, $request->alasanRefund));
 
+
                         foreach($order->sellingInvoiceDetail as $detail) {
                             $product_id = Product::where('product_name', $detail->product_name)->first()->product_id;
                             // dd($product_id);
@@ -169,11 +170,4 @@ public function riwayatTransaksi()
             'file'=> $request->img,
         ]);
     }
-
-    public function destroy(Cashier $cashier)
-    {
-        //
-    }
-
-    
 }

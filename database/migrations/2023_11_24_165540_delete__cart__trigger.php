@@ -13,6 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
+        DROP TRIGGER IF EXISTS delete_cart;
+
         CREATE TRIGGER delete_cart 
         AFTER UPDATE ON products 
         FOR EACH ROW 
@@ -20,10 +22,10 @@ return new class extends Migration
             IF NEW.product_status = 'tidak aktif' OR NEW.product_status = 'exp' THEN 
                 DELETE FROM carts WHERE product_id = NEW.product_id;
             END IF;
-        END;
+        END ;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

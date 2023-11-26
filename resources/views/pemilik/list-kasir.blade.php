@@ -91,18 +91,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i < 6; $i++) <tr>
-                            <td>{{$i + 1}}</td>
+                        @php $i = 1; @endphp
+                        @foreach ($cashiers as $cashier) <tr>
+                            <td>{{$i}}</td>
                             <td>
-                                <span class="font-bold">Agus</span>
+                                <span class="font-bold">{{ $cashier->username }}</span>
                             </td>
-                            <td>aguslapar@buk.com</td>
-                            <td>Perempuan</td>
+                            <td>{{ $cashier->email }}</td>
+                            <td>{{ $cashier->cashier->cashier_gender }}</td>
                             <td>
-                                081234567890
+                                {{ $cashier->cashier->cashier_phone }}
                             </td>
                             <td>
-                                Jl. Sudirman no.200 Medan Selayang
+                                {{ $cashier->cashier->cashier_address }}
                             </td>
                             <td>
                                 <button onclick="showPopUpEdit()" class="p-2 bg-secondaryColor rounded mx-2"><i
@@ -180,7 +181,8 @@
                                 {{-- MODAL EDIT KASIR END --}}
                             </td>
                             </tr>
-                            @endfor
+                            @php $i++ @endphp
+                            @endforeach
                     </tbody>
                 </table>
             </div>

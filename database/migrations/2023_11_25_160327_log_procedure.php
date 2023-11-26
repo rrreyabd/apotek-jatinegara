@@ -12,7 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $sql = "
+        $sql = " DROP PROCEDURE IF EXISTS insert_log;
+
         CREATE PROCEDURE insert_log(IN invoiceCode varchar(20), IN cashierName varchar(255), IN target VARCHAR(100), IN description VARCHAR(6), IN oldValue LONGTEXT, IN newValue LONGTEXT)
         BEGIN
             INSERT INTO logs (log_id, log_time, invoice_code, cashier_name, log_target, log_description, old_value, new_value)
@@ -20,7 +21,7 @@ return new class extends Migration
         END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**
