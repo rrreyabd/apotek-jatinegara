@@ -75,11 +75,7 @@ public function riwayatTransaksi()
             DB::beginTransaction();
             $order = SellingInvoice::findOrFail($id);
             
-            // Ubah status menjadi 'Berhasil'
-            $order->order_status = 'Gagal';
-            $order->order_complete = now();
-            $order->reject_comment = "Telah Melewati Batas Waktu Pengambilan, Tidak Akan Dilakukan Refund!!";
-            $order->save();
+            DB::select("CALL order_fail(?, ?, ?)", array($id, auth()->user()->username, "Telah Melewati Batas Waktu Pengambilan, Tidak Akan Dilakukan Refund!!"));
 
             foreach($order->sellingInvoiceDetail as $detail) {
                 $product_id = Product::where('product_name', $detail->product_name)->first()->product_id;
@@ -101,24 +97,17 @@ public function riwayatTransaksi()
             
             
             if($request->status == 'terima'){
-                $order->order_status = 'Menunggu Pengambilan';
-                
-                $order->cashier_name = auth()->user()->username;
-                $order->save();
+                DB::select("CALL order_success(?, ?)", array($id, auth()->user()->username));
                 
                 return redirect()->back()->with('success', 'Pesanan berhasil diterima.');
             } else if($request->status == 'tolak'){
                 try {
                     DB::beginTransaction();
-                        $order->order_status = 'Gagal';
-                        $order->cashier_name = auth()->user()->username;
-
                         $request->validate([
                             'alasanTolak' => ['required', 'string', 'min:10', 'regex:/^[a-zA-Z0-9 ]+$/', 'max:255']
                         ]);
-                        $order->reject_comment = $request->alasanTolak; 
-
-                        $order->save();
+                        
+                        DB::select("CALL order_fail(?, ?, ?)", array($id, auth()->user()->username, $request->alasanTolak));
 
                         foreach($order->sellingInvoiceDetail as $detail) {
                             $product_id = Product::where('product_name', $detail->product_name)->first()->product_id;
@@ -135,15 +124,10 @@ public function riwayatTransaksi()
             } else if($request->status == 'refund'){
                 try {
                     DB::beginTransaction();
-                        $order->order_status = 'Menunggu Pengembalian';
-                        $order->cashier_name = auth()->user()->username;
-                        
                         $request->validate([
                             'alasanRefund' => ['required', 'string', 'min:10', 'regex:/^[a-zA-Z0-9 ]+$/', 'max:255']
                         ]);
-                        $order->reject_comment = $request->alasanRefund; 
-
-                        $order->save();
+                        DB::select("CALL order_refund(?, ?, ?)", array($id, auth()->user()->username, $request->alasanRefund));
 
                         foreach($order->sellingInvoiceDetail as $detail) {
                             $product_id = Product::where('product_name', $detail->product_name)->first()->product_id;

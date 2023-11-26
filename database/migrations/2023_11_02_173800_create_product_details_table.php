@@ -18,7 +18,7 @@ return new class extends Migration
                 ->references('product_id')
                 ->on('products')
                 ->onUpdate('cascade')
-                ->onDelete('restrict');
+                ->onDelete('cascade');
             $table->timestamp('product_expired');
             $table->integer('product_stock');
             $table->integer('product_buy_price');

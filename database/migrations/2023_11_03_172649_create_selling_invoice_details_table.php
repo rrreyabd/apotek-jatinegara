@@ -18,7 +18,7 @@ return new class extends Migration
                 ->references('selling_invoice_id')
                 ->on('selling_invoices')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('restrict');
             $table->string('product_name');
             $table->enum('product_type', ['umum', 'resep dokter']);
             $table->integer('product_sell_price');

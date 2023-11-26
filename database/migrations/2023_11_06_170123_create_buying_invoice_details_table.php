@@ -18,7 +18,7 @@ return new class extends Migration
                 ->references('buying_invoice_id')
                 ->on('buying_invoices')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('restrict');
             $table->string('product_name');
             $table->integer('product_buy_price');
             $table->timestamp('exp_date');

@@ -36,8 +36,10 @@ use App\Models\Supplier;
 
 Route::get('/test', function () {
     $alamat = User::where('role', 'cashier')->get();
+    $products_name = Product::all()->pluck('product_name');
+    $product_name = fake()->randomElement($products_name);
 
-    dd($alamat);
+    dd(Product::where('product_name', $product_name)->first()->detail()->orderBy('product_expired')->first()->product_sell_price);
 });
 
 // halaman akses tanpa login
