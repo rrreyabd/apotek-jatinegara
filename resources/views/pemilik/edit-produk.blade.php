@@ -14,152 +14,210 @@
 </head>
 
 <body class="font-Trip bg-[#DEDEDE]">
+    
     <div class="flex flex-col mb-8">
         <div class="p-10 flex flex-col">
-
             {{-- back button --}}
-            <a href="{{ url()->previous()}}" class="p-3 px-4 rounded-full bg-mainColor w-fit">
+            <a href="javascript:history.back()" class="p-3 px-4 rounded-full bg-mainColor w-fit">
                 <i class="fa-solid fa-arrow-left" style="color: white;"></i>
             </a>
+            @php
+            
+                $uuid = $product->product_id;
+                $numericValue = hexdec(substr($uuid, -12));
+                $formatted = 'P-' . str_pad($numericValue, 4, '0', STR_PAD_LEFT);
 
+            @endphp
             <p class="text-3xl font-TripBold my-3 mt-8">Edit Produk</p>
 
             {{-- container --}}
             <div class="rounded-lg shadow-lg w-full bg-white h-fit md:p-16 md:px-24 p-7 overflow-x-auto">
-                <form action="">
+                <form action="{{ route('product-proccess-update',['id'=> $product->product_id]) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+
                     <div class="flex flex-col justify-center items-center mb-3">
-                        <p class="text-3xl font-TripBold">P-001</p>
+                        <p class="text-3xl font-TripBold">{{ $formatted }}</p>
                         {{-- status --}}
                         <div class="w-fit rounded-lg border-2 shadow p-1.5 px-3 mt-3">
-                            <select name="" id="" @selected(true) class="outline-none">
-                                <option value="">Aktif</option>
-                                <option value="">Tidak Aktif</option>
+                            <select name="status" id="" @selected(true) class="outline-none">
+                                @foreach ($status as $item)
+                                        <option value="{{ $item }}" {{ $product->product_status == $item ? 'selected' : '' }}>
+                                            {{ $item }}
+                                        </option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
 
                     <div class="md:flex md:grid-col-4 gap-8 justify-between">
                         <div class="flex-col w-full">
+                            {{-- Nama Obat --}}
                             <p class="mt-5">Nama Obat</p>
-                            <input type="text" id="" placeholder="Nama Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="Paracetamol 500 mg">
+                            <input type="text" id="" placeholder="Nama Obat"  name="nama_obat"
+                                class="p-2 w-full border rounded-xl shadow @error('nama_obat') is-invalid @enderror" value="{{ $product->product_name }}">
+                                @error('nama_obat')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
 
+                            {{-- Kategori Obat --}}
                             <p class="mt-5">Kategori Obat</p>
-                            {{-- kategori --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="" id="" @selected(true) class="outline-none w-full">
-                                    <option value="">Aktif</option>
-                                    <option value="">Tidak Aktif</option>
+                                <select name="kategori" id="" @selected(true) class="outline-none w-full">
+                                    @foreach ($categories as $item)
+                                        <option value="{{ $item->category_id }}" {{ $product->description->category->category == $item->category ? 'selected' : '' }}>
+                                            {{ $item->category }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
+                            {{-- Harga Beli Obat --}}
                             <p class="mt-5">Harga Beli Obat</p>
-                            <input type="text" id="" placeholder="Harga Beli Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="3500">
-                        </div>
+                            <input type="number" id="" placeholder="Harga Beli Obat" name="harga_beli" 
+                                class="p-2 w-full border rounded-xl shadow @error('nama_obat') is-invalid @enderror" value="{{ $product->detail()->orderBy('product_expired')->first()->product_buy_price }}">
+                                @error('harga_beli')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
+                            </div>
+                                @php
+                                    $carbonDate = \Carbon\Carbon::parse( $product->detail()->orderBy('product_expired')->first()->product_expired);
+                                    $formattedDate = $carbonDate->format('Y-m-d');
+                                @endphp
 
-                        <div class="flex-col w-full">
+                            <div class="flex-col w-full">
                             <p class="mt-5">Expired Obat</p>
-                            <input type="text" id="" placeholder="Expired Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="24 September 2023">
+                            <input type="date" id="" placeholder="Expired Obat" name="expired_date"
+                                class="p-2 w-full border rounded-xl shadow @error('expired_date') is-invalid @enderror" value="{{ $formattedDate }}">
 
-                            <p class="mt-5">Golongan Obat</p>
                             {{-- golongan --}}
+                            <p class="mt-5">Golongan Obat</p>
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="" id="" @selected(true) class="outline-none w-full">
-                                    <option value="">Obat Demam</option>
-                                    <option value="">Obat Batuk</option>
+                                <select name="golongan" id="" @selected(true) class="outline-none w-full">
+                                    @foreach ($groups as $item)
+                                        <option value="{{ $item->group_id }}" {{ $product->description->group->group == $item->group ? 'selected' : '' }}>
+                                            {{ $item->group }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <p class="mt-5">Harga Jual Obat</p>
-                            <input type="text" id="" placeholder="Harga Jual Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="5000">
+                            <input type="number" id="" placeholder="Harga Jual Obat" name="harga_jual"
+                                class="p-2 w-full border rounded-xl shadow @error('harga_jual') is-invalid @enderror" value="{{ $product->detail()->orderBy('product_expired')->first()->product_sell_price }}">
+                                @error('harga_jual')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
                         </div>
 
                         <div class="flex-col w-full">
                             <p class="mt-5">Stok Obat</p>
-                            <input type="text" id="" placeholder="Stok Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="30">
-
+                            <input type="number" id="" placeholder="Stok Obat" name="stock"
+                                class="p-2 w-full border rounded-xl shadow @error('stock') is-invalid @enderror" value="{{ $product->detail()->orderBy('product_expired')->first()->product_stock }}">
                             <p class="mt-5">Satuan Obat</p>
+                            @error('stock')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                            @enderror
+
                             {{-- satuan --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="" id="" @selected(true) class="outline-none w-full">
-                                    <option value="">Sirup</option>
-                                    <option value="">Strip</option>
-                                    <option value="">Kotak</option>
+                                <select name="satuan_obat" id="" @selected(true) class="outline-none w-full">
+                                    @foreach ($units as $item)
+                                        <option value="{{ $item->unit_id }}" {{ $product->description->unit->unit == $item->unit ? 'selected' : '' }}>
+                                            {{ $item->unit }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <p class="mt-5">NIE Obat</p>
-                            <input type="text" id="" placeholder="NIE Obat" class="p-2 w-full border rounded-xl shadow" value="GBL237838974">
+                            <input type="text" id="" name="NIE" placeholder="NIE Obat" class="p-2 w-full border rounded-xl shadow @error('NIE') is-invalid @enderror" value="{{ $product->description->product_DPN }}">
+                            @error('NIE')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="flex-col w-full">
                             <p class="mt-5">Tipe Obat</p>
                             {{-- tipe --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="" id="" @selected(true) class="outline-none w-full">
-                                    <option value="">Resep</option>
-                                    <option value="">Umum</option>
+                                <select name="tipe" id="" @selected(true) class="outline-none w-full">
+                                    @foreach ($types as $item)
+                                        <option value="{{ $item }}" {{ $product->description->product_type == $item ? 'selected' : '' }}>
+                                            {{ $item }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <p class="mt-5">Pemasok Obat</p>
                             {{-- pemasok --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="" id="" @selected(true) class="outline-none w-full">
-                                    <option value="">PT. ABC</option>
-                                    <option value="">PT. DEF</option>
+                                <select name="pemasok" id="" @selected(true) class="outline-none w-full">
+                                    @foreach ($suppliers as $item)
+                                        <option value="{{ $item->supplier_id }}" {{ $product->description->supplier->supplier == $item->supplier ? 'selected' : '' }}>
+                                            {{ $item->supplier }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <p class="mt-5">Produksi dari</p>
-                            <input type="text" id="" placeholder="Produksi dari"
-                                class="p-2 w-full border rounded-xl shadow" value="PT. ABC">
+                            <input type="text" id="" placeholder="Produksi dari" name="produksi"
+                                class="p-2 w-full border rounded-xl shadow @error('produksi') is-invalid @enderror" value="{{ $product->description->product_manufacture }}">
+                                @error('produksi')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
                         </div>
                     </div>
 
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Deskripsi Obat</p>
-                            <input type="text" id="" placeholder="Deskripsi Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="obat sakit gigi">
+                            <textarea type="text" id="" placeholder="Deskripsi Obat" name="deskripsi"
+                            class="p-2 w-full border rounded-xl shadow h-28">{{ $product->description->product_description }}</textarea>
                         </div>
                         <div class="flex-col w-full">
                             <p class="mt-5">Efek Samping Obat</p>
-                            <input type="text" id="" placeholder="Efek Samping Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="menyebabkan kantuk">
+                            <textarea id="" placeholder="Efek Samping Obat" name="efek_samping"
+                                class="p-2 w-full border rounded-xl shadow h-28">{{ $product->description->product_sideEffect }}</textarea>
                         </div>
                     </div>
 
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Dosis Obat</p>
-                            <input type="text" id="" placeholder="Dosis Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="dewasa 1/2 kaplet">
+                            <textarea id="" placeholder="Dosis Obat" name="dosis"
+                                class="p-2 w-full border rounded-xl shadow h-28 @error('dosis') is-invalid @enderror">{{ $product->description->product_dosage }}"</textarea>
+                                @error('dosis')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
                         </div>
-                        <div class="flex-col w-full">
-                            <p class="mt-5">Indikasi Umum Obat</p>
-                            <input type="text" id="" placeholder="Indikasi Umum Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="obat patah hati">
-                        </div>
+                        @if ($product->description->product_indication != NULL)
+                            <div class="flex-col w-full">
+                                <p class="mt-5">Indikasi Umum Obat</p>
+                                <textarea id="" placeholder="Indikasi Umum Obat" name="indikasi"
+                                    class="p-2 w-full border rounded-xl shadow h-28">{{ $product->description->product_indication }}</textarea>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
-                        <div class="flex-col w-full">
-                            <p class="mt-5">Peringatan Obat</p>
-                            <input type="text" id="" placeholder="Peringatan Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="hati hati dijalan">
-                        </div>
-                        <div class="md:flex w-full">
+                        @if ($product->description->product_notice != NULL)
+                            <div class="flex-col w-full">
+                                <p class="mt-5">Peringatan Obat</p>
+                                <textarea id="" placeholder="Peringatan Obat" name="peringatan"
+                                    class="p-2 w-full border rounded-xl shadow h-28">{{ $product->description->product_notice }}"></textarea>
+                            </div>
+                        @endif
+
+                        <div class="md:flex w-6/12">
                             <div class="w-[200px] h-[170px] p-1 mt-8">
-                            <img src="" alt="" id="uploadedFile" class="max-w-full max-h-full">
+                                <img src="{{ asset('storage/gambar-obat/'.$product->description->product_photo) }}" id="uploadedFile" alt="Current Image" class="max-w-full max-h-full">
                         </div>
 
                         <div class="ms-3 mt-3.5">
-                            <input type="file" id="file2" class="invisible" accept="image/*" onchange="showFile(this)">
+                            <input type="file" id="file2" name="gambar_obat" class="invisible" accept="image/*" onchange="showFile(this)">
                             <button id="file" onclick="document.getElementById('file2').click(); return false;" class="p-2 w-full border rounded-xl shadow">
                                 <div class="flex items-center gap-2">
                                     <i class="fa-solid fa-arrow-up-from-bracket p-2 px-2.5 rounded-full bg-mainColor w-fit ms-2" style="color: white;"></i>

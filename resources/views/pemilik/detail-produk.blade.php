@@ -19,21 +19,28 @@
         <div class="p-10 flex flex-col">
 
             {{-- back button --}}
-            <a href="{{ url()->previous()}}" class="p-3 px-4 rounded-full bg-mainColor w-fit">
+            <a href="javascript:history.back()" class="p-3 px-4 rounded-full bg-mainColor w-fit">
                 <i class="fa-solid fa-arrow-left" style="color: white;"></i>
             </a>
 
             <p class="text-3xl font-TripBold my-3 mt-8">Detail Produk</p>
 
             {{-- container --}}
+            @php
+                $uuid = $product->product_id;
+
+                $numericValue = hexdec(substr($uuid, -12));
+
+                $formatted = 'P-' . str_pad($numericValue, 4, '0', STR_PAD_LEFT);
+            @endphp
             <div class="rounded-lg shadow-lg w-full bg-white h-fit md:p-16 md:px-24 p-3 overflow-x-auto">
-                <p class="text-3xl font-TripBold my-5 flex justify-center">P-001</p>
+                <p class="text-3xl font-TripBold my-5 flex justify-center">{{ $formatted }}</p>
 
                 <div class="sm:flex sm:grid-cols-3 md:gap-20 gap-3">
                     {{-- gambar obat --}}
                     <div class="sm:w-1/6 mb-7 border-2 border-black rounded-lg h-fit">
                         <img src="{{ asset('img/Pencernaan.png/') }}" alt="" class="w-full p-5">
-                        <p class="font-TripBold flex justify-center py-3 rounded-b-lg border-t-2">Paracetamol 500 mg</p>
+                        <p class="font-TripBold flex justify-center py-3 rounded-b-lg border-t-2">{{ $product->product_name }}</p>
                     </div>
 
                     {{-- detail obat --}}
@@ -43,27 +50,31 @@
                             <table>
                                 <tr>
                                     <td class="py-1">Status Obat</td>
-                                    <td>: Aktif</td>
+                                    <td>: {{ $product->product_status }}</td>
                                 </tr>
+                                @php
+                                    $carbonDate = \Carbon\Carbon::parse( $product->detail()->orderBy('product_expired')->first()->product_expired);
+                                    $formattedDate = $carbonDate->format('j F Y');
+                                @endphp
                                 <tr>
-                                    <td class="py-1">Ecpired Obat</td>
-                                    <td>: 24 September 2023</td>
+                                    <td class="py-1">Expired Obat</td>
+                                    <td>: {{ $formattedDate }}</td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">Stok Obat</td>
-                                    <td>: 30</td>
+                                    <td>: {{ $product->detail()->orderBy('product_expired')->first()->product_stock }}</td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">Tipe Obat</td>
-                                    <td>: Resep</td>
+                                    <td>: {{ $product->description->product_type }}</td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">Harga Beli Obat</td>
-                                    <td>: 3500</td>
+                                    <td>: {{ $product->detail()->orderBy('product_expired')->first()->product_buy_price }}</td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">Harga Jual Obat</td>
-                                    <td>: 5000</td>
+                                    <td>: {{ $product->detail()->orderBy('product_expired')->first()->product_sell_price }}</td>
                                 </tr>
                             </table>
                     </div>
@@ -71,27 +82,27 @@
                             <table class="mt-7">
                                 <tr>
                                     <td class="py-1">Kategori Obat</td>
-                                    <td>: Obat Demam</td>
+                                    <td>: {{ $product->description->category->category }}</td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">Golongan Obat</td>
-                                    <td>: Bebas</td>
+                                    <td>: {{ $product->description->group->group }}</td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">Satuan Obat</td>
-                                    <td>: Strip</td>
+                                    <td>: {{ $product->description->unit->unit }}</td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">NIE Obat</td>
-                                    <td>: GBL7802318304A2</td>
+                                    <td>: {{ $product->description->product_DPN }}</td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">Pemasok Obat</td>
-                                    <td>: PT. ABC</td>
+                                    <td>: {{ $product->description->supplier->supplier }}</td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">Produksi dari</td>
-                                    <td>: PT. ABC</td>
+                                    <td>: {{ $product->description->product_manufacture }}</td>
                                 </tr>
                             </table>
                     </div>
@@ -100,34 +111,32 @@
                 {{-- deskripsi obat --}}
                 <div class="w-full my-2">
                     <p class="font-TripBold text-lg">Deskripsi Obat:</p>
-                    <p class="text-lg">Paracetamol tablet merupakan obat yang dapat digunakan untuk meringankan rasa
-                        sakit pada sakit kepala, sakit gigi, dan menurunkan demam.</p>
+                    <p class="text-lg">{{ $product->description->product_description }}</p>
                 </div>
 
                 <div class="w-full my-2">
                     <p class="font-TripBold text-lg">Dosis Obat:</p>
-                    <p class="text-lg">Dewasa: 1-2 kaplet, 3-4 kali per hari. Penggunaan maximum 8 kaplet per hari. </p>
-                    <p>Anak 7-12 tahun : 0.5 - 1 kaplet, 3-4 kali per hari. Penggunaan maximum 4 kaplet per hari.</p>
+                    <p class="text-lg">{{ $product->description->product_dosage }}
                 </div>
-
-                <div class="w-full my-2">
-                    <p class="font-TripBold text-lg">Peringatan Obat:</p>
-                    <p class="text-lg">Hati-hati penggunaan pada pasien dengan gagal ginjal, gangguan fungsi hati, dan
-                        alergi atau mengalami hipersensitivitas terhadap paracetamol.</p>
-                </div>
+                @if ($product->description->product_notice != NULL)
+                    <div class="w-full my-2">
+                        <p class="font-TripBold text-lg">Peringatan Obat:</p>
+                        <p class="text-lg">{{ $product->description->product_notice }}</p>
+                    </div>
+                @else
+                
+                @endif
 
                 <div class="w-full my-2">
                     <p class="font-TripBold text-lg">Efek Samping Obat:</p>
-                    <p class="text-lg">Penggunaan untuk jangka waktu lama dan dosis besar dapat menyebabkan kerusakan
-                        fungsi hati. </p>
-                    <p>Reaksi hipersensitifitas/ alergi.</p>
+                    <p class="text-lg">{{ $product->description->product_sideEffect }}</p>
                 </div>
-
-                <div class="w-full my-2">
-                    <p class="font-TripBold text-lg">Indikasi Umum Obat:</p>
-                    <p class="text-lg">Obat ini digunakan untuk meredakan nyeri ringan hingga sedang seperti sakit
-                        kepala, sakit gigi, nyeri otot, serta menurunkan demam.</p>
-                </div>
+                @if ($product->description->product_indication != NULL)
+                    <div class="w-full my-2">
+                        <p class="font-TripBold text-lg">Indikasi Umum Obat:</p>
+                        <p class="text-lg">{{ $product->description->product_indication }}</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
