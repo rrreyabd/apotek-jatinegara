@@ -110,7 +110,7 @@
             </div>
 
             <p class="w-full font-semibold text-base namaObat leading-tight break-all h-[40px]">
-                {{ Str::limit($item->product_name, 45, '...')  }}
+                {{ Str::limit($item->product_name, 38, '...')  }}
                 
             </p>
             
@@ -130,8 +130,7 @@
                     $item->detail()->orderBy('product_expired')->first()->product_stock }}</p>
             </div>
             @auth
-            @if ($item->product_status == 'aktif' && $item->detail()->orderBy('product_expired')->first()->product_stock
-            > 0)
+            @if ($item->product_status == 'aktif')
                     <button wire:click="AddedToCart({{ $item }})" type="button"
                         class="text-white font-semibold bg-mainColor w-full py-1 rounded-md">Tambah</button>
                 {{-- <livewire:buttonAddCartCashier :user="auth()->user()->user_id" :product="$item->product_id" /> --}}

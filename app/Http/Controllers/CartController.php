@@ -109,19 +109,34 @@ class CartController extends Controller
             ]);
             // dd(auth()->user()->username);
             
+            
             foreach ($cart as $item) {
                 SellingInvoiceDetail::create([
                     'selling_detail_id' => Str::uuid(),
                     'selling_invoice_id' => $uuid,
                     'product_name' => $item->product->product_name,
+                    'product_type' => $item->product->description->product_type,
                     'product_sell_price' => $item->product->detail()->orderBy('product_expired')->first()->product_sell_price,
                     'quantity' => $item->quantity,
                 ]);
 
+                $stock = $item->product->detail()->orderBy('product_expired')->first()->product_stock - $item->quantity;
+
                 ProductDetail::where('product_id',$item->product_id)->update([
-                    'product_stock' => $item->product->detail()->orderBy('product_expired')->first()->product_stock - $item->quantity
+                    'product_stock' => $stock
                 ]);
+
+                if($stock == 0){
+                    if($item->product->detail()->count() <= 1){
+                        $item->product->update([
+                            'product_status' => 'tidak aktif',
+                        ]);
+                    }else{
+                        $item->product->detail()->orderBy('product_expired')->first()->delete();
+                    }
+                }
             }
+
 
             foreach($cart as $item)
             {

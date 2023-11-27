@@ -13,14 +13,18 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
-        CREATE OR REPLACE VIEW customer_view AS
-        SELECT a.user_id, a.username, a.email, a.password, a.role, b.customer_phone
-        FROM users a
-        JOIN customers b ON a.user_id = b.user_id
-        WHERE a.role = 'user';
+        DROP PROCEDURE IF EXISTS stock_back;
+
+        CREATE PROCEDURE stock_back(IN stock INT, IN product CHAR(36))
+        BEGIN 
+            UPDATE product_details 
+            SET product_stock = product_stock + stock
+            WHERE product_id COLLATE utf8mb4_unicode_ci = product COLLATE utf8mb4_unicode_ci
+            ORDER BY product_expired LIMIT 1;
+        END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

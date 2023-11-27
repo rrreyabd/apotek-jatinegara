@@ -12,15 +12,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $sql = "
-        CREATE OR REPLACE VIEW customer_view AS
-        SELECT a.user_id, a.username, a.email, a.password, a.role, b.customer_phone
-        FROM users a
-        JOIN customers b ON a.user_id = b.user_id
-        WHERE a.role = 'user';
+        $sql = " DROP TRIGGER IF EXISTS selling_update_trigger;
+
+        CREATE TRIGGER selling_update_trigger 
+        AFTER UPDATE ON selling_invoices 
+        FOR EACH ROW 
+        BEGIN 
+            CALL insert_log(NEW.invoice_code ,NEW.cashier_name ,'Status Penjualan', 'update', OLD.order_status, NEW.order_status);
+        END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

@@ -29,7 +29,7 @@ class SellingInvoiceDetailFactory extends Factory
             'selling_detail_id' => fake()->uuid,
             'selling_invoice_id' => $id,
             'product_name' => $product_name,
-            'product_sell_price' => fake()->numberBetween(1000,100000),
+            'product_sell_price' => Product::where('product_name', $product_name)->first()->detail()->orderBy('product_expired')->first()->product_sell_price,
             'quantity' => fake()->numberBetween(1, 20),
         ];
     }

@@ -13,12 +13,13 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
-            CREATE OR REPLACE VIEW bestSellerProduct_view AS
-            SELECT a.product_name, b.product_status, COUNT(*) as jumlah_kemunculan
-            FROM selling_invoice_details a
-            JOIN products b ON a.product_name = b.product_name
-            GROUP BY a.product_name, b.product_status
-            ORDER BY jumlah_kemunculan DESC
+        CREATE TRIGGER cannot_delete_selling_invoice 
+        BEFORE DELETE ON selling_invoices
+        FOR EACH ROW 
+        BEGIN 
+            SIGNAL SQLSTATE '45000' SET
+            MESSAGE_TEXT = 'Tidak Dapat Menghapus Invoice';
+        END;
         ";
 
         DB::statement($sql);
@@ -29,7 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $sql = "DROP VIEW bestSellerProduct_view";
-        DB::statement($sql);
+        //
     }
 };

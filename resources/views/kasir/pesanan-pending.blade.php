@@ -20,6 +20,19 @@
     <main class="p-10 font-Inter bg-plat min-h-[100vh] h-full" id="mainContent">
         @include("kasir.components.navbar")
 
+        @if (session('success'))
+            <div class="absolute top-4 left-[42.5vw] bg-mainColor shadow-md w-[25vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
+                <i class="text-white fa-solid fa-circle-check"></i>
+                <p class="text-lg text-white font-semibold"> {{ __('Status Berhasil Diperbaharui') }} </p>
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="absolute top-4 left-[42.5vw] bg-red-600 shadow-md w-[15vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
+                <i class="text-white fa-solid fa-triangle-exclamation"></i>
+                <p class="text-lg text-white font-semibold"> {{ __('Terjadi Kesalahan') }} </p>
+            </div>
+        @endif
+
         <div class="flex flex-col gap-8 mt-10">
             <p class="text-3xl font-bold">Pesanan Pending</p>
 
@@ -58,12 +71,13 @@
                                 // Mendapatkan waktu sekarang dan order_date + 3 hari
                                     $now = now();
                                     $deadline = $orderDate->addDays(3);
+                                    // @dd($now->diffAsCarbonInterval($deadline));
                             
                                 // Menghitung selisih waktu dalam bentuk CarbonInterval
                                     $difference = $now->diffAsCarbonInterval($deadline);
                             
                                 // Mengambil informasi selisih waktu dalam bentuk hari, jam, dan menit
-                                    $days = max($difference->format('%a'), 0); // Menggunakan fungsi max untuk memastikan nilai minimal adalah 0
+                                    $days = max($difference->format('%d'), 0); // Menggunakan fungsi max untuk memastikan nilai minimal adalah 0
                                     $hours = $difference->format('%h');
                                     $minutes = $difference->format('%i');
                                 @endphp
@@ -132,10 +146,15 @@
                                         </div>
     
                                         <div class="flex justify-end w-full">
-                                            @csrf
-                                            <form action="{{ route('successOrder', $pendingOrder->selling_invoice_id) }}" method="get">
-                                                <button class="bg-green-600 text-white font-bold py-2 px-4 rounded-md shadow-md">Tandai Selesai</button>
-                                            </form>
+                                            @if($now->gt($deadline))
+                                                <form action="{{ route('failOrder', $pendingOrder->selling_invoice_id) }}" method="get">
+                                                    <button class="bg-red-600 text-white font-bold py-2 px-4 rounded-md shadow-md">Tandai Gagal</button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('successOrder', $pendingOrder->selling_invoice_id) }}" method="get">
+                                                    <button class="bg-green-600 text-white font-bold py-2 px-4 rounded-md shadow-md">Tandai Selesai</button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

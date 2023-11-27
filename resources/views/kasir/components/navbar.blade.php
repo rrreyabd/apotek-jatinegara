@@ -4,18 +4,13 @@
             <i class="fa-solid fa-bars text-mediumGrey"></i>
         </button>
 
-        <form action="" class="relative">
-            <input type="text" name="" id="" class="h-10 w-96 rounded-md shadow-md pl-4 pr-14 placeholder:text-sm" placeholder="Cari produk disini...">
-            <button type="submit" class="absolute right-1 top-1 bg-mainColor font-semibold text-white px-2 py-1 rounded-md">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </form>
+        <a href="/cashier" class="text-xl rounded-lg font-bold hover:bg-teal-700 duration-300 text-white bg-mainColor text-center px-4 py-2"><- Belanja Offline</a>
     </div>
 
-    <div class="flex gap-2 items-center text-mainColor bg-white shadow-md rounded-full px-2 py-1">
+    <a href="/cashier/pesanan-online" class="@if($total > 0) animate-bounce duration-200 @endif flex gap-2 items-center text-mainColor bg-white shadow-md rounded-full px-2 py-1">
         <i class="fa-solid fa-circle-exclamation text-xl"></i>
-        <p class="font-bold">{{ $total }} Pesanan Pending</p>
-    </div>
+        <p class="font-bold">{{ $total }} Pesanan Online</p>
+    </a>
 </div>
 
 <script>

@@ -12,15 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $sql = "
-        CREATE OR REPLACE VIEW customer_view AS
-        SELECT a.user_id, a.username, a.email, a.password, a.role, b.customer_phone
-        FROM users a
-        JOIN customers b ON a.user_id = b.user_id
-        WHERE a.role = 'user';
+        $sql = " DROP TRIGGER IF EXISTS cannot_delete_log;
+
+        CREATE TRIGGER cannot_delete_log 
+        BEFORE DELETE ON logs 
+        FOR EACH ROW 
+        BEGIN 
+            SIGNAL SQLSTATE '45000' SET
+            MESSAGE_TEXT = 'Tidak Dapat Menghapus Log';
+        END ;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

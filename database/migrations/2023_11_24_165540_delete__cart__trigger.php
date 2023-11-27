@@ -13,14 +13,19 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
-        CREATE OR REPLACE VIEW customer_view AS
-        SELECT a.user_id, a.username, a.email, a.password, a.role, b.customer_phone
-        FROM users a
-        JOIN customers b ON a.user_id = b.user_id
-        WHERE a.role = 'user';
+        DROP TRIGGER IF EXISTS delete_cart;
+
+        CREATE TRIGGER delete_cart 
+        AFTER UPDATE ON products 
+        FOR EACH ROW 
+        BEGIN 
+            IF NEW.product_status = 'tidak aktif' OR NEW.product_status = 'exp' THEN 
+                DELETE FROM carts WHERE product_id = NEW.product_id;
+            END IF;
+        END ;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**
