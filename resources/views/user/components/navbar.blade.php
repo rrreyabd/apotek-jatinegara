@@ -88,7 +88,7 @@
 
         @if (session('status') == 'pembayaran-berhasil')
             {{-- Pop up pembayaran start --}}
-            <div class="absolute w-[100%] h-[100vh] backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-50" id="popup">
+            <div class="fixed w-[100%] h-[100vh] backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-50" id="popup">
                 <div class="w-[30%] h-fit bg-white rounded-2xl shadow-md p-8 flex flex-col gap-6 relative">
                     <div class="flex flex-col items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="text-secondaryColor icon icon-tabler icon-tabler-discount-check-filled" width="80" height="80" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -154,14 +154,7 @@
 
 <script>
     const showPopUp = () => {
-        const popup = document.getElementById('popup');
-    
-        if (popup.classList.contains('hidden')) {
-            document.body.classList.add('h-[100vh]')
-        } else {
-            popup.classList.add('hidden')
-        }
-        
+        location.reload();
     }
 </script>
 
