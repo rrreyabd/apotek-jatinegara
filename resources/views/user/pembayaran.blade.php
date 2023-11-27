@@ -37,7 +37,7 @@
                         {{-- akhir gopay --}}
                         {{-- shopeepay --}}
                         <div class="relative">
-                            <input type="text" class="w-[24vw] shadow-sm shadow-mediumGrey h-10 pl-24 rounded-full text-sm" placeholder="987123 a.n Gopal">
+                            <input type="text" readonly class="w-[24vw] shadow-sm shadow-mediumGrey h-10 pl-24 rounded-full text-sm" placeholder="987123 a.n Gopal">
                             
                             <label for="paymentMethod2" class="flex gap-2 items-center absolute left-3 top-[26%] cursor-pointer">
                                 <input type="radio" name="paymentMethod" value="Shopeepay" id="paymentMethod2" class="h-5 w-5">
@@ -47,7 +47,7 @@
                         {{-- akhir shopeepay --}}
                         {{-- BCA --}}
                         <div class="relative">
-                            <input type="text" class="w-[24vw] shadow-sm shadow-mediumGrey h-10 pl-24 rounded-full text-sm" placeholder="987123 a.n Gopal">
+                            <input type="text" readonly class="w-[24vw] shadow-sm shadow-mediumGrey h-10 pl-24 rounded-full text-sm" placeholder="987123 a.n Gopal">
                             
                             <label for="paymentMethod3" class="flex gap-2 items-center absolute left-3 top-[26%] cursor-pointer">
                                 <input type="radio" name="paymentMethod" value="BCA" id="paymentMethod3" class="h-5 w-5">

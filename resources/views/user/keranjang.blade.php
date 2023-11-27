@@ -75,7 +75,7 @@
                                         <input type="hidden" name="hapus" value="satuan">
                                         <input type="hidden" name="cart_id" value="{{ $cart->cart_id }}">
                                         <button type="submit" class="w-[50px] h-[50px]">
-                                            <i class="fa-solid fa-x w-1/8 text-start my-auto text-red-500"></i>
+                                            <i class="fa-solid fa-trash w-1/8 text-start my-auto text-red-500"></i>
                                         </button>
                                     </form>
                                 </th>
@@ -123,11 +123,17 @@
                     <a href="/booking" class="p-2 px-7 rounded-lg shadow-lg text-white font-semibold bg-secondaryColor hover:bg-orange-400">Booking</a>
                 </div>
             @else
-                <p class="text-center text-4xl font-bold mb-20 text-red-400">Keranjang Kosong</p>
-
-                <div class="flex justify-end items-end my-3 me-10">
-                    <button disabled class="p-2 px-7 rounded-lg shadow-lg text-white font-semibold bg-slate-400">Booking</button>
+                <div class="text-mainColor text-center flex flex-col items-center justify-center px-60 gap-4 h-96">
+                    <i class="fa-solid fa-cart-plus text-6xl"></i>
+                    <p class="text-center text-2xl font-bold">
+                        Keranjang Anda masih kosong. <br>
+                        Silahkan masukkan produk ke keranjang.
+                    </p>
                 </div>
+
+                {{-- <div class="flex justify-end items-end my-3 me-10">
+                    <button disabled class="p-2 px-7 rounded-lg shadow-lg text-white font-semibold bg-slate-400">Booking</button>
+                </div> --}}
             @endisset
 
         </div>
