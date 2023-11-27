@@ -13,6 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
+        DROP TRIGGER IF EXISTS cannot_update_log;
+
         CREATE TRIGGER cannot_update_log 
         BEFORE UPDATE ON logs 
         FOR EACH ROW 
@@ -22,7 +24,7 @@ return new class extends Migration
         END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

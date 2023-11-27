@@ -78,28 +78,9 @@
                                 <td>
                                     <a href="{{ route('product-edit',['id'=> $item->product_id]) }}" class="p-2 bg-secondaryColor rounded mx-2"><i
                                         class="fa-regular fa-pen-to-square" style="color: white;"></i></a>
-                                        <button onclick="showPopUpDelete()" class="p-2 bg-mediumRed rounded mx-2"><i class="fa-regular fa-trash-can"
-                                            style="color: white;"></i></button>
-                                            
-                                            {{-- Pop up konfirmasi hapus start --}}
-                                            <div class="absolute w-screen h-full backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden" id="popup">
-                                                <div class="w-[30%] h-[50%] bg-white rounded-2xl shadow-md p-8 flex flex-col gap-6 relative items-center">
-                                                    <div class="border-2 border-mainColor rounded-full w-fit">
-                                                        <i class="fa-solid fa-question fa-2xl p-8 py-10" style="color: #1A8889;"></i>
-                                                    </div>
-                                                    
-                                                    <p class="text-2xl text-mainColor font-TripBold text-center">Apakah Anda Yakin Ingin Menghapus soeharto?</p>
-                                                    
-                                                    <div class="flex gap-4">
-                                                    <form action="{{ route('product-delete',['id'=> $item->product_id]) }}" method="get">
-                                                        <button onclick="showPopUpDelete()" class="bg-mediumRed text-white text-2xl p-1 px-5 rounded-lg">Tidak</button>
-                                                        <button type="submit" class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>
-                                                    </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- Pop up konfirmasi hapus end --}}
-                                        </td>
+                                    <a href="{{ route('add-product-batch',['id'=> $item->product_id]) }}" class="p-2 bg-green-700 rounded mx-2"><i
+                                        class="fa-solid fa-plus" style="color: white;"></i></a>
+                                        
                                     </tr>
                             @endforeach            
                         </tbody>

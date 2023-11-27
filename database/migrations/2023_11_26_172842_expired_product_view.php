@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
-        CREATE VIEW expired_product_view AS
+        CREATE OR REPLACE VIEW expired_product_view AS
         SELECT a.product_name, d.supplier, SUM(b.product_stock) AS product_stock
         FROM products a 
         JOIN product_details b ON a.product_id = b.product_id 

@@ -13,6 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
+        DROP PROCEDURE IF EXISTS order_fail;
+
         CREATE PROCEDURE `order_fail`(IN `invoiceID` VARCHAR(36), IN `cashierName` VARCHAR(255), IN `comments` LONGTEXT)
         BEGIN
             UPDATE selling_invoices SET order_status = 'Gagal', cashier_name = cashierName, reject_comment = comments, order_complete = NOW()
@@ -20,7 +22,7 @@ return new class extends Migration
         END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**
