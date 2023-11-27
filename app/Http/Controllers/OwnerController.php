@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Category;
+use App\Models\Group;
+use App\Models\Unit;
 use App\Models\SellingInvoice;
 use App\Models\PopularProduct;
+use App\Models\ProductDescription;
 use App\Models\Product;
 use App\Models\Supplier;
+
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCashierRequest;
 use App\Http\Requests\UpdateCashierRequest;
@@ -39,6 +45,96 @@ class OwnerController extends Controller
         return view('pemilik.list-user', [
             'total' => $total_pesanan_online
         ]);
+    }
+    public function display_product()
+    {
+        $products = Product::all();
+        
+        return view('pemilik.list-produk',[
+            'product' => $products
+        ]);
+    }
+    public function detail_product($id)
+    {
+        $products = Product::find($id);
+
+        return view('pemilik.detail-produk',[
+            'product' => $products
+        ]);
+    }
+
+    public function add_product()
+    {
+        return view('pemilik.tambah-produk');
+    }
+
+    public function edit_product($id)
+    {
+        $products = Product::findOrFail($id);
+        $category = Category::orderBy('category')->get();
+        $group = Group::orderBy('group')->get();
+        $unit = Unit::orderBy('unit')->get();
+        $supplier = Supplier::orderBy('supplier')->get();
+        $type = ProductDescription::distinct()->pluck('product_type');
+        $state = Product::distinct()->pluck('product_status');
+
+        return view('pemilik.edit-produk',[
+            "product"=> $products ?? NULL,
+            "categories"=> $category ?? [],
+            "units"=> $unit ?? [],
+            "groups"=> $group ?? [],
+            "suppliers"=> $supplier ?? [],
+            "types" => $type ?? [],
+            "status" => $state ?? [],
+        ]);
+    }
+
+    public function edit_product_process(Request $request,$id)
+    {
+        $products = Product::find($id);
+        
+        $validated_data = $request->validate([
+            'gambar_obat' => ['required', 'file', 'max:5120', 'mimes:png,jpeg,jpg'],
+        ]);
+
+        $carbonDate = Carbon::parse($request->expired_date);
+        $formatted = $carbonDate->format('Y-m-d H:i:s');
+
+        $products -> product_status = $request->status;
+        $products -> product_name = $request->nama_obat;
+        $products -> description -> category_id = $request->kategori;
+        $products -> detail()-> orderBy('product_expired')-> first()-> product_buy_price = $request->harga_beli;
+        $products -> detail()->orderBy('product_expired')->first()->product_expired = $formatted;
+        $products -> description -> group_id = $request->golongan;
+        $products -> detail()-> orderBy('product_expired')-> first()-> product_sell_price = $request->harga_jual;
+        $products -> detail()->orderBy('product_expired')->first()->product_stock = $request->stock;
+        $products -> description -> unit_id = $request->satuan_obat;
+        $products -> description -> product_DPN = $request->NIE;
+        $products -> description->product_type = $request->tipe;
+        $products -> description -> supplier_id = $request->pemasok;
+        $products -> description -> product_manufacture = $request->produksi;
+        $products -> description -> product_description = $request->deskripsi;
+        $products -> description -> product_sideEffect = $request->efek_samping;
+        $products -> description -> product_dosage = $request->dosis;
+        $products -> description -> product_indication = $request->indikasi;
+        $products -> description -> product_notice = $request->peringatan;
+
+        if ($request->hasFile('gambar_obat')) {
+            $GambarObat = $validated_data['gambar_obat']->store('gambar-obat');
+            $products -> description -> product_photo = str_replace("gambar-obat/","",$GambarObat);
+        }
+
+        $products->save();
+        $products->description->save();
+        $products->detail()->orderBy('product_expired')->first()->save();
+
+        return redirect('/owner/produk')->with('update_status','Produk berhasil diperbaharui');
+
+    }
+
+    public function delete_product($id)
+    {
+        $products = Product::find($id);
     }
 
     public function lihatKasir(){
