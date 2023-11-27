@@ -12,9 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $sql = " DROP FUNCTION IF EXISTS Total_Pemasukan;
+        $sql = "
+        DROP FUNCTION IF EXISTS Total_Pemasukan;
 
-        CREATE FUNCTION `Total_Pemasukan`(`tanggal_awal` TIMESTAMP, `tanggal_akhir` TIMESTAMP)
+        CREATE FUNCTION Total_Pemasukan(`tanggal_awal` TIMESTAMP, `tanggal_akhir` TIMESTAMP)
         RETURNS INT       
         DETERMINISTIC
         BEGIN

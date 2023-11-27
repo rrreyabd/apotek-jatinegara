@@ -15,7 +15,7 @@ return new class extends Migration
         $sql = "
         DROP PROCEDURE IF EXISTS order_refund;
 
-        CREATE PROCEDURE `order_refund`(IN `invoiceID` VARCHAR(36), IN `cashierName` VARCHAR(255), IN `comments` LONGTEXT)
+        CREATE PROCEDURE order_refund(IN `invoiceID` VARCHAR(36), IN `cashierName` VARCHAR(255), IN `comments` LONGTEXT)
         BEGIN
             UPDATE selling_invoices 
             SET order_status = 'Menunggu Pengembalian', cashier_name = cashierName, reject_comment = comments 

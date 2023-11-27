@@ -15,7 +15,7 @@ return new class extends Migration
         $sql = "
         DROP PROCEDURE IF EXISTS order_success;
 
-        CREATE PROCEDURE `order_success`(IN `invoiceID` CHAR(36), IN `cashierName` VARCHAR(255))
+        CREATE PROCEDURE order_success(IN `invoiceID` CHAR(36), IN `cashierName` VARCHAR(255))
         BEGIN
             UPDATE selling_invoices
             SET order_status = 'Menunggu Pengambilan', cashier_name = cashierName

@@ -15,7 +15,7 @@ return new class extends Migration
         $sql = "
         DROP FUNCTION IF EXISTS Total_Keuntungan;
 
-        CREATE FUNCTION `Total_Keuntungan`(`tanggal_awal` TIMESTAMP, `tanggal_akhir` TIMESTAMP)
+        CREATE FUNCTION Total_Keuntungan(`tanggal_awal` TIMESTAMP, `tanggal_akhir` TIMESTAMP)
         RETURNS INT       
         DETERMINISTIC
         BEGIN

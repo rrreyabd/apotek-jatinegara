@@ -24,7 +24,7 @@ class ProductDetailFactory extends Factory
         $products_id = Product::all()->pluck('product_id');
         $product_id = fake()->unique()->randomElement($products_id);
 
-        $stock = rand(0,50);
+        $stock = rand(1,50);
 
         return [
             'detail_id' => fake()->uuid,

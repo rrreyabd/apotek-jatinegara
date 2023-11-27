@@ -20,9 +20,9 @@
             <div class="bg-mainColor rounded-full h-6 w-6"></div>
 
             <div class="underline flex flex-col leading-loose">
-                <a href="">Syarat dan Ketentuan</a>
-                <a href="">Cara Belanja</a>
-                <a href="">Hubungi Kami</a>
+                <a href="/s&k">Syarat dan Ketentuan</a>
+                <a href="/cara-belanja">Cara Belanja</a>
+                <a target="_blank" href="https://wa.me/6281362549558">Hubungi Kami</a>
             </div>
         </div>
     </div>
