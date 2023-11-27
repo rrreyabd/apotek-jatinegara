@@ -82,10 +82,10 @@ class OwnerController extends Controller
             'buktiRefund.max' => 'Dokumen yang dilampirkan tidak boleh lebih dari 5 mb',
             'buktiRefund.mimes' => 'Format dokumen yang diterima adalah PDF, PNG, JPEG, or JPG file.',
         ]);
-        $buktiRefund = $validated_data['buktiRefund']->store('refund');
-
+        $refund_file = basename($validated_data['buktiRefund']->store('refund'));
+        
         $order->update([
-            'refund_file' =>$buktiRefund,
+            'refund_file' =>$refund_file,
             'order_status' => 'Refund',
         ]);
         return redirect()->back()->with('success', 'Berhasil melakukan refund.');
