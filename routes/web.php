@@ -54,6 +54,19 @@ Route::get('/', [ProductController::class, 'home'])->name('home');
 
 Route::get('/produk', [ProductController::class,'produk'])->name('produk');
 Route::get('/deskripsi/{product}', [ProductController::class,'deskripsiProduk'])->name('deskripsi-produk');
+
+Route::get('/s&k', function () {
+    $apotek = Information::first();
+    // dd($nama_toko);
+
+    return view('user.syarat-ketentuan', [
+        'apotek'=> $apotek,
+    ]);
+});
+
+Route::get('/cara-belanja', function () {
+        return view('user.cara-belanja');
+});
 // akhir halaman akses tanpa login
 
 // halama user, cashier, owner
@@ -73,19 +86,6 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
 
     Route::get('/detail-pesanan', function () {
             return view('user.detail-pesanan');
-    });
-
-    Route::get('/s&k', function () {
-        $apotek = Information::first();
-        // dd($nama_toko);
-
-        return view('user.syarat-ketentuan', [
-            'apotek'=> $apotek,
-        ]);
-    });
-
-    Route::get('/cara-belanja', function () {
-            return view('user.cara-belanja');
     });
 
     Route::get('/riwayat-pesanan', [UserController::class,'riwayatTransaksi'])->name('riwayat-transaksi');
