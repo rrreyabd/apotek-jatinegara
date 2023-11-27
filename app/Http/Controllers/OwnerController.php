@@ -9,6 +9,7 @@ use App\Models\Unit;
 use App\Models\SellingInvoice;
 use App\Models\PopularProduct;
 use App\Models\ProductDescription;
+use App\Models\ProductDetail;
 use App\Models\Product;
 use App\Models\Supplier;
 
@@ -65,7 +66,70 @@ class OwnerController extends Controller
 
     public function add_product()
     {
-        return view('pemilik.tambah-produk');
+        $category = Category::orderBy('category')->get();
+        $group = Group::orderBy('group')->get();
+        $unit = Unit::orderBy('unit')->get();
+        $supplier = Supplier::orderBy('supplier')->get();
+        $type = ProductDescription::distinct()->pluck('product_type');
+        $state = Product::distinct()->pluck('product_status');
+
+        return view('pemilik.tambah-produk',[
+            "categories"=> $category ?? [],
+            "units"=> $unit ?? [],
+            "groups"=> $group ?? [],
+            "suppliers"=> $supplier ?? [],
+            "types" => $type ?? [],
+            "status" => $state ?? [],
+        ]);
+    }
+
+    public function add_product_process(Request $request)
+    {
+        echo "Hello Word";
+        $validated_data = $request->validate([
+            'gambar_obat' => ['required', 'file', 'max:5120', 'mimes:png,jpeg,jpg'],
+        ]);
+
+        
+        $carbonDate = Carbon::parse($request->expired_date);
+        $formatted = $carbonDate->format('Y-m-d H:i:s');
+        $GambarObat = $validated_data['gambar_obat']->store('gambar-obat');
+        
+        $new_description = new ProductDescription;
+        $new_description -> description_id = $request->desc_id;
+        $new_description -> category_id = $request->kategori;
+        $new_description -> group_id = $request->golongan;
+        $new_description -> unit_id = $request->satuan_obat;
+        $new_description -> product_DPN = $request->NIE;
+        $new_description -> product_type = $request->tipe;
+        $new_description -> supplier_id = $request->pemasok;
+        $new_description -> product_manufacture = $request->produksi;
+        $new_description -> product_description = $request->deskripsi;
+        $new_description -> product_sideEffect = $request->efek_samping;
+        $new_description -> product_dosage = $request->dosis;
+        $new_description -> product_indication = $request->indikasi;
+        $new_description -> product_notice = $request->peringatan;
+        $new_description -> product_photo = str_replace("gambar-obat/","",$GambarObat);
+        $new_description->save();
+
+        $new_product = new Product;
+        $new_product -> product_id = $request->id;
+        $new_product -> product_status = $request->status;
+        $new_product -> product_name = $request->nama_obat;
+        $new_product -> description_id = $request->desc_id;
+        $new_product -> save();
+        
+        $new_detail = new ProductDetail;
+        $new_detail->product_id = $new_product->product_id;
+        $new_detail ->detail_id = $request->detail_id;
+        $new_detail-> product_buy_price = $request->harga_beli;
+        $new_detail->product_expired = $formatted;
+        $new_detail-> product_sell_price = $request->harga_jual;
+        $new_detail->product_stock = $request->stock;
+
+        $new_detail->save();
+        
+        return redirect('/owner/produk')->with('add_status','Produk berhasil ditambah');
     }
 
     public function edit_product($id)
@@ -135,6 +199,15 @@ class OwnerController extends Controller
     public function delete_product($id)
     {
         $products = Product::find($id);
+        $products->delete();
+
+        $products->description()->delete();
+
+        $products->detail()->delete();
+
+        // Delete the main product
+
+        return redirect('/owner/produk')->with('delete_status', 'Produk berhasil dihapus');
     }
 
     public function lihatKasir(){

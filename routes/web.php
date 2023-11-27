@@ -124,6 +124,7 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     Route::get('detail-produk/{id}', [OwnerController::class, 'detail_product'])->name('product-detail');
 
     Route::get('tambah-produk', [OwnerController::class, 'add_product'])->name('add-product');
+    Route::put('tambah-produk-process', [OwnerController::class, 'add_product_process'])->name('add-product-process');
 
     Route::get('edit-produk/{id}', [OwnerController::class, 'edit_product'])->name('product-edit');
     Route::put('update-produk-process/{id}', [OwnerController::class, 'edit_product_process'])->name('product-proccess-update');

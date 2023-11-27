@@ -91,8 +91,10 @@
                                                     <p class="text-2xl text-mainColor font-TripBold text-center">Apakah Anda Yakin Ingin Menghapus soeharto?</p>
                                                     
                                                     <div class="flex gap-4">
+                                                    <form action="{{ route('product-delete',['id'=> $item->product_id]) }}" method="get">
                                                         <button onclick="showPopUpDelete()" class="bg-mediumRed text-white text-2xl p-1 px-5 rounded-lg">Tidak</button>
                                                         <button type="submit" class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>
+                                                    </form>
                                                     </div>
                                                 </div>
                                             </div>
