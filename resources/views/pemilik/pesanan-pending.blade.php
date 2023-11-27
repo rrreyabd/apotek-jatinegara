@@ -151,7 +151,7 @@
 
                                             <div class="md:flex w-1/2 items-center">
                                                 <div class="me-3">
-                                                    <input type="file" id="buktiRefund{{ $index }}" name="buktiRefund" class="invisible" accept=".pdf, .png, .jpg, .jpeg" onchange="updateLabel({{ $index }})" required>
+                                                    <input type="file" id="buktiRefund{{ $index }}" name="buktiRefund" class="invisible" accept=".pdf, .png, .jpg, .jpeg" onchange="updateLabel({{ $index }});showFile(this, {{ $index }});" required>
                                                     <button id="file" onclick="document.getElementById('buktiRefund{{ $index }}').click(); return false;" class="p-2 w-full border rounded-xl shadow">
                                                         <div class="flex items-center gap-2">
                                                             <i class="fa-solid fa-arrow-up-from-bracket p-2 px-2.5 rounded-full bg-mainColor w-fit ms-2" style="color: white;"></i>
@@ -160,7 +160,9 @@
                                                     </button>
                                                     <p class="text-xs text-mediumRed mt-2">*Maks 5mb</p>
                                                 </div>
-                                                <div></div>
+                                                <div class="w-full h-full m-2 border-2 flex justify-center">
+                                                    <img src="" alt="" id="uploadedFile{{ $index }}" class="max-w-full max-h-full">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="flex justify-end w-full">
@@ -220,6 +222,17 @@
         const fileName = input.files[0].name;
         const label = document.getElementById('fileName'+index);
         label.textContent = fileName;
+        }
+
+        function showFile(input, index) {
+        const getFile = document.getElementById('uploadedFile'+index);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = (e) => {
+                getFile.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
 </body>
