@@ -134,22 +134,19 @@ Route::middleware(['auth', 'verified', 'cekRole:cashier'])->prefix('cashier')->g
 // halaman owner
 Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group(function () {
     Route::get('/', [OwnerController::class, 'display'])->name('dashboard');
+
+    Route::get('produk', [OwnerController::class, 'display_product'])->name('product');
     
-    Route::get('produk', function () {
-        return view('pemilik.list-produk');
-    });
+    Route::get('detail-produk/{id}', [OwnerController::class, 'detail_product'])->name('product-detail');
+
+    Route::get('tambah-produk', [OwnerController::class, 'add_product'])->name('add-product');
+    Route::put('tambah-produk-process', [OwnerController::class, 'add_product_process'])->name('add-product-process');
+
+    Route::get('edit-produk/{id}', [OwnerController::class, 'edit_product'])->name('product-edit');
+    Route::put('update-produk-process/{id}', [OwnerController::class, 'edit_product_process'])->name('product-proccess-update');
+
+    Route::get('delete-produk/{id}', [OwnerController::class, 'delete_product'])->name('product-delete');
     
-    Route::get('detail-produk', function () {
-        return view('pemilik.detail-produk');
-    });
-    
-    Route::get('tambah-produk', function () {
-        return view('pemilik.tambah-produk');
-    });
-    
-    Route::get('edit-produk', function () {
-        return view('pemilik.edit-produk');
-    });
     
     Route::get('kasir', [OwnerController::class,'lihatKasir'])->name('list-kasir');
     

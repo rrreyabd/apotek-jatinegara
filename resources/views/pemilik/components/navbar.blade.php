@@ -15,7 +15,7 @@
     
     <a href="/owner/pesanan-online" class="flex gap-2 items-center text-mainColor bg-white shadow-md rounded-full px-2 py-1">
         <i class="fa-solid fa-circle-exclamation text-xl"></i>
-        <p class="font-bold">{{ $total }} Pesanan Online</p>
+        <p class="font-bold">10 Pesanan Online</p>
     </a>
 </div>
 

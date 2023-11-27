@@ -36,15 +36,34 @@
 
             {{-- container --}}
             <div class="rounded-lg shadow-lg w-full bg-white h-fit md:p-16 md:px-24 p-7 overflow-x-auto">
-                <form action="">
+                <form action="{{ route('add-product-process') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    
+                    @method('PUT')
+
+                    @php
+                        $uuid = \Illuminate\Support\Str::uuid();
+                        $numericValue = hexdec(substr($uuid, -12));
+                        $formatted = 'P-' . str_pad($numericValue, 4, '0', STR_PAD_LEFT);
+
+                        $desc_uuid = \Illuminate\Support\Str::uuid();
+                        $detail_uuid = \Illuminate\Support\Str::uuid();
+
+                    @endphp
                     <div class="flex flex-col justify-center items-center mb-3">
-                        <p class="text-3xl font-TripBold">P-001</p>
+                        <p class="text-3xl font-TripBold">{{ $formatted }}</p>
+                        <input type="hidden" name="id" value="{{ $uuid }}">
+                        <input type="hidden" name="desc_id" value="{{ $desc_uuid }}">
+                        <input type="hidden" name="detail_id" value="{{ $detail_uuid }}">
                         {{-- status --}}
                         <div class="w-fit rounded-lg border-2 shadow p-1.5 px-3 mt-3">
-                            <select name="" id="" @selected(true) class="outline-none">
+                            <select name="status" id="" @selected(true) class="outline-none" required> 
                                 <option disabled selected>Status Obat</option>
-                                <option value="">Aktif</option>
-                                <option value="">Tidak Aktif</option>
+                                @foreach ($status as $item)
+                                        <option value="{{ $item }}">
+                                            {{ $item }}
+                                        </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -52,122 +71,170 @@
                     <div class="md:flex md:grid-col-4 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Nama Obat</p>
-                            <input type="text" id="" placeholder="Nama Obat"
-                                class="p-2 w-full border rounded-xl shadow">
+                            <input type="text" id="" placeholder="Nama Obat" name="nama_obat" required 
+                                class="p-2 w-full border rounded-xl shadow @error('nama_obat') is-invalid @enderror" value="{{ old('nama_obat') }}">
+                                @error('nama_obat')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
 
                             <p class="mt-5">Kategori Obat</p>
                             {{-- kategori --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="" id="" @selected(true) class="outline-none w-full">
+                                <select name="kategori" id="" @selected(true) class="outline-none w-full" required>
                                     <option disabled selected>Kategori Obat</option>
-                                    <option value="">Aktif</option>
-                                    <option value="">Tidak Aktif</option>
+                                    @foreach ($categories as $item)
+                                        <option value="{{ $item->category_id }}">
+                                            {{ $item->category }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <p class="mt-5">Harga Beli Obat</p>
-                            <input type="text" id="" placeholder="Harga Beli Obat"
-                                class="p-2 w-full border rounded-xl shadow">
+                            <input type="text" id="" placeholder="Harga Beli Obat" name="harga_beli" required
+                                class="p-2 w-full border rounded-xl shadow @error('harga_beli') is-invalid @enderror" value="{{ old('harga_beli') }}">
+                                @error('harga_beli')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
                         </div>
 
                         <div class="flex-col w-full">
                             <p class="mt-5">Expired Obat</p>
-                            <input type="text" id="" placeholder="Expired Obat"
-                                class="p-2 w-full border rounded-xl shadow">
+                            <input type="date" id="" placeholder="Expired Obat" name="expired_date" required
+                                class="p-2 w-full border rounded-xl shadow @error('expired_date') is-invalid @enderror" value="{{ old('expired_date') }}">
+                                @error('expired_date')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
 
                             <p class="mt-5">Golongan Obat</p>
                             {{-- golongan --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="" id="" @selected(true) class="outline-none w-full">
+                                <select name="golongan" id="" @selected(true) class="outline-none w-full" required>
                                     <option disabled selected>Golongan Obat</option>
-                                    <option value="">Obat Demam</option>
-                                    <option value="">Obat Batuk</option>
+                                    @foreach ($groups as $item)
+                                        <option value="{{ $item->group_id }}">
+                                            {{ $item->group }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <p class="mt-5">Harga Jual Obat</p>
-                            <input type="text" id="" placeholder="Harga Jual Obat"
-                                class="p-2 w-full border rounded-xl shadow">
+                            <input type="text" id="" placeholder="Harga Jual Obat" name="harga_jual" required
+                                class="p-2 w-full border rounded-xl shadow @error('harga_jual') is-invalid @enderror" value="{{ old('harga_jual') }}">
+                                @error('harga_jual')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
                         </div>
 
                         <div class="flex-col w-full">
                             <p class="mt-5">Stok Obat</p>
-                            <input type="text" id="" placeholder="Stok Obat"
-                                class="p-2 w-full border rounded-xl shadow">
+                            <input type="text" id="" placeholder="Stok Obat" name="stock" required
+                                class="p-2 w-full border rounded-xl shadow @error('stock') is-invalid @enderror" value="{{ old('stock') }}">
+                                @error('stock')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
 
                             <p class="mt-5">Satuan Obat</p>
                             {{-- satuan --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="" id="" @selected(true) class="outline-none w-full">
+                                <select name="satuan_obat" id="" @selected(true) class="outline-none w-full" required>
                                     <option disabled selected>Satuan Obat</option>
-                                    <option value="">Sirup</option>
-                                    <option value="">Strip</option>
-                                    <option value="">Kotak</option>
+                                    @foreach ($units as $item)
+                                        <option value="{{ $item->unit_id }}">
+                                            {{ $item->unit }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <p class="mt-5">NIE Obat</p>
-                            <input type="text" id="" placeholder="NIE Obat" class="p-2 w-full border rounded-xl shadow">
+                            <input type="text" name="NIE" required placeholder="NIE Obat" class="p-2 w-full border rounded-xl shadow @error('NIE') is-invalid @enderror" value="{{ old('NIE') }}">
+                            @error('NIE')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="flex-col w-full">
                             <p class="mt-5">Tipe Obat</p>
                             {{-- tipe --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="" id="" @selected(true) class="outline-none w-full">
+                                <select name="tipe" id="" @selected(true) class="outline-none w-full" required>
                                     <option disabled selected>Tipe Obat</option>
-                                    <option value="">Resep</option>
-                                    <option value="">Umum</option>
+                                    @foreach ($types as $item)
+                                        <option value="{{ $item }}">{{ $item }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <p class="mt-5">Pemasok Obat</p>
                             {{-- pemasok --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="" id="" @selected(true) class="outline-none w-full">
+                                <select name="pemasok" id="" @selected(true) class="outline-none w-full" required>
                                     <option disabled selected>Pemasok Obat</option>
-                                    <option value="">PT. ABC</option>
-                                    <option value="">PT. DEF</option>
+                                    @foreach ($suppliers as $item)
+                                        <option value="{{ $item->supplier_id }}">
+                                            {{ $item->supplier }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <p class="mt-5">Produksi dari</p>
-                            <input type="text" id="" placeholder="Produksi dari"
-                                class="p-2 w-full border rounded-xl shadow">
+                            <input type="text" name="produksi" id="" placeholder="Produksi dari"  required value="{{ old('produksi') }}"
+                                class="p-2 w-full border rounded-xl shadow @error('produksi') is-invalid @enderror">
+                                @error('produksi')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
                         </div>
                     </div>
 
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Deskripsi Obat</p>
-                            <input type="text" id="" placeholder="Deskripsi Obat"
-                                class="p-2 w-full border rounded-xl shadow">
+                            <textarea id="" placeholder="Deskripsi Obat" name="deskripsi" required 
+                                class="p-2 w-full border rounded-xl shadow h-28 @error('deskripsi') is-invalid @enderror">{{ old('deskripsi') }}</textarea>
+                            @error('deskripsi')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="flex-col w-full">
                             <p class="mt-5">Efek Samping Obat</p>
-                            <input type="text" id="" placeholder="Efek Samping Obat"
-                                class="p-2 w-full border rounded-xl shadow">
+                            <textarea name="efek_samping" id="" placeholder="Efek Samping Obat" required
+                                class="p-2 w-full border rounded-xl shadow h-8 @error('efek_samping') is-invalid @enderror">{{ old('efek_samping') }}</textarea>
+                            @error('efek_samping')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                @enderror
                         </div>
                     </div>
 
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Dosis Obat</p>
-                            <input type="text" id="" placeholder="Dosis Obat"
-                                class="p-2 w-full border rounded-xl shadow">
+                            <textarea id="" placeholder="Dosis Obat" name="dosis" required
+                                class="p-2 w-full border rounded-xl shadow h-28 @error('dosis') is-invalid @enderror">{{ old('dosis') }}</textarea>
+                            @error('dosis')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="flex-col w-full">
                             <p class="mt-5">Indikasi Umum Obat</p>
-                            <input type="text" id="" placeholder="Indikasi Umum Obat"
-                                class="p-2 w-full border rounded-xl shadow">
+                            <textarea id="" placeholder="Indikasi Umum Obat" name="indikasi"
+                                class="p-2 w-full border rounded-xl shadow"></textarea>
+                            @error('indikasi')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Peringatan Obat</p>
-                            <input type="text" id="" placeholder="Peringatan Obat"
-                                class="p-2 w-full border rounded-xl shadow" value="hati hati dijalan">
+                            <textarea id="" placeholder="Peringatan Obat" name="peringatan"
+                                class="p-2 w-full border rounded-xl shadow @error('peringatan') is-invalid @enderror">{{ old('peringatan') }}</textarea>
+                            @error('peringatan')
+                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="md:flex w-full">
                             <div class="w-[200px] h-[170px] p-1 mt-8">
@@ -175,7 +242,7 @@
                         </div>
 
                         <div class="ms-3 mt-3.5">
-                            <input type="file" id="file2" class="invisible" accept="image/*" onchange="showFile(this)">
+                            <input type="file" name="gambar_obat" id="file2" class="invisible @error('gambar_obat') is-invalid @enderror" accept="image/*" onchange="showFile(this)" required>
                             <button id="file" onclick="document.getElementById('file2').click(); return false;" class="p-2 w-full border rounded-xl shadow">
                                 <div class="flex items-center gap-2">
                                     <i class="fa-solid fa-arrow-up-from-bracket p-2 px-2.5 rounded-full bg-mainColor w-fit ms-2" style="color: white;"></i>
