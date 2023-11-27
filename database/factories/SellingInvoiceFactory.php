@@ -44,7 +44,7 @@ class SellingInvoiceFactory extends Factory
             'order_complete' => fake()->dateTime(),
             'refund_file' => fake()->word().'.jpg',
             'reject_comment' => fake()->words(15, true),
-            'order_status' => fake()->randomElement(['Berhasil', 'Gagal', 'Menunggu Pengembalian', 'Menunggu Konfirmasi', 'Menunggu Pengambilan', 'Offline', 'Refund'])
+            'order_status' => fake()->randomElement(['Berhasil', 'Gagal', 'Menunggu Pengembalian', 'Menunggu Konfirmasi', 'Menunggu Pengambilan', 'Refund'])
         ];
     }
 }
