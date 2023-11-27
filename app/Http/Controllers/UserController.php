@@ -45,18 +45,33 @@ class UserController extends Controller
 
         } else if($request->update == 'password'){
 
-            $validated_data = $request->validate([
-                'password_lama' => 'required|min:8|regex:/^[^\s]+$/',
-                'password_baru' => 'required|min:8|regex:/^[^\s]+$/',
-                'konfirmasi_password_baru' => 'required|min:8|same:password_baru|regex:/^[^\s]+$/'
-            ]);
-
-            if (Hash::check($request->password_lama, auth()->user()->password)) {
-                auth()->user()->update([
-                    'password' => bcrypt($request->password_baru)
+            if(Hash::check('123', auth()->user()->password)){
+                $validated_data = $request->validate([
+                    'password_baru' => 'required|min:8|regex:/^[^\s]+$/',
+                    'konfirmasi_password_baru' => 'required|min:8|same:password_baru|regex:/^[^\s]+$/'
                 ]);
+            }else{
+                $validated_data = $request->validate([
+                    'password_lama' => 'required|min:8|regex:/^[^\s]+$/',
+                    'password_baru' => 'required|min:8|regex:/^[^\s]+$/',
+                    'konfirmasi_password_baru' => 'required|min:8|same:password_baru|regex:/^[^\s]+$/'
+                ]);
+            }
 
-                return redirect()->back()->with('success_password', 'Password Berhasil Diubah!!');
+            if(Hash::check('123', auth()->user()->password)){
+                    auth()->user()->update([
+                        'password' => bcrypt($request->password_baru)
+                    ]);
+    
+                    return redirect()->back()->with('success_password', 'Password Berhasil Diubah!!');
+            }else{
+                if (Hash::check($request->password_lama, auth()->user()->password)) {
+                    auth()->user()->update([
+                        'password' => bcrypt($request->password_baru)
+                    ]);
+    
+                    return redirect()->back()->with('success_password', 'Password Berhasil Diubah!!');
+                }
             }
 
             return redirect()->back()->with('error', 'Konfirmasi Password Lama Salah!!');

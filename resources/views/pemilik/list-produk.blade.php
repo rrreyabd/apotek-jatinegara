@@ -76,10 +76,10 @@
                                 </a>
                             </td>
                                 <td>
-                                    <a href="{{ route('product-edit',['id'=> $item->product_id]) }}" class="p-2 bg-secondaryColor rounded mx-2"><i
-                                        class="fa-regular fa-pen-to-square" style="color: white;"></i></a>
-                                        <button onclick="showPopUpDelete()" class="p-2 bg-mediumRed rounded mx-2"><i class="fa-regular fa-trash-can"
-                                            style="color: white;"></i></button>
+                                    <a href="{{ route('product-edit',['id'=> $item->product_id]) }}" class="p-1 px-2 border-2 border-secondaryColor text-white duration-300 transition-colors ease-in-out hover:bg-transparent hover:text-secondaryColor bg-secondaryColor rounded mx-2"><i
+                                        class="fa-regular fa-pen-to-square"></i></a>
+                                        {{-- <button onclick="showPopUpDelete()" class="p-2 bg-mediumRed rounded mx-2"><i class="fa-regular fa-trash-can"
+                                            style="color: white;"></i></button> --}}
                                             
                                             {{-- Pop up konfirmasi hapus start --}}
                                             <div class="absolute w-screen h-full backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden" id="popup">
@@ -88,7 +88,7 @@
                                                         <i class="fa-solid fa-question fa-2xl p-8 py-10" style="color: #1A8889;"></i>
                                                     </div>
                                                     
-                                                    <p class="text-2xl text-mainColor font-TripBold text-center">Apakah Anda Yakin Ingin Menghapus soeharto?</p>
+                                                    <p class="text-2xl text-mainColor font-TripBold text-center">Apakah Anda Yakin Ingin Menghapus abcd?</p>
                                                     
                                                     <div class="flex gap-4">
                                                     <form action="{{ route('product-delete',['id'=> $item->product_id]) }}" method="get">

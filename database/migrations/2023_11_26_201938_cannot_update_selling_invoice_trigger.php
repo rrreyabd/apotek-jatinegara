@@ -13,6 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
+        DROP TRIGGER IF EXISTS cannot_update_selling_invoices;
+
         CREATE TRIGGER cannot_update_selling_invoices 
         BEFORE UPDATE ON selling_invoices 
         FOR EACH ROW 
@@ -24,7 +26,7 @@ return new class extends Migration
         END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

@@ -138,6 +138,8 @@
                         </div>
                     @endif
 
+                    @if (Hash::check('123', auth()->user()->password))
+                    @else
                     <div class="flex flex-col w-full gap-2 relative">
                         <label for="password_lama">Kata Sandi Lama :</label>
                         <input type="password" name="password_lama" id="password_lama" value="" placeholder="Kata Sandi Lama"
@@ -158,6 +160,7 @@
                             @endif
                         @enderror
                     </div>
+                    @endif
 
                     <div class="flex flex-col w-full gap-2 relative">
                         <label for="password_baru">Kata Sandi Baru :</label>
