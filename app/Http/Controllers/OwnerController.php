@@ -85,7 +85,6 @@ class OwnerController extends Controller
 
     public function add_product_process(Request $request)
     {
-        echo "Hello Word";
         $validated_data = $request->validate([
             'gambar_obat' => ['required', 'file', 'max:5120', 'mimes:png,jpeg,jpg'],
         ]);
@@ -196,20 +195,40 @@ class OwnerController extends Controller
 
     }
 
-    public function delete_product($id)
+    public function add_batch($id)
     {
         $products = Product::find($id);
-        $products->delete();
 
-        $products->description()->delete();
-
-        $products->detail()->delete();
-
-        // Delete the main product
-
-        return redirect('/owner/produk')->with('delete_status', 'Produk berhasil dihapus');
+        return view('pemilik.tambah-batch',[
+            'product' => $products
+        ]);
     }
 
+    public function add_batch_process(Request $request)
+    {
+        $carbonDate = Carbon::parse($request->expired_date);
+        $formatted = $carbonDate->format('Y-m-d H:i:s');
+
+        $new_detail = new ProductDetail;
+        $new_detail -> product_id = $request->id;
+        $new_detail -> detail_id = $request->detail_id;
+        $new_detail -> product_buy_price = $request->harga_beli;
+        $new_detail -> product_expired = $formatted;
+        $new_detail -> product_sell_price = $request->harga_jual;
+        $new_detail -> product_stock = $request->stock;
+
+        $new_detail->save();
+        return redirect('/owner/produk')->with('add_batch_status','Batch produk berhasil ditambah');
+    }
+
+    public function display_supplier()
+    {
+        $supplier = Supplier::orderBy('supplier')->get();
+
+        return view('pemilik.list-supplier',[
+            'suppliers' => $supplier
+        ]);
+    }
     public function lihatKasir(){
 
         $cashiers = User::where('role', 'cashier')

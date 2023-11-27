@@ -141,6 +141,8 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
 
     Route::get('tambah-produk', [OwnerController::class, 'add_product'])->name('add-product');
     Route::put('tambah-produk-process', [OwnerController::class, 'add_product_process'])->name('add-product-process');
+    Route::get('tambah-batch-produk/{id}', [OwnerController::class, 'add_batch'])->name('add-product-batch');
+    Route::put('tambah-batch-proccess', [OwnerController::class, 'add_batch_process'])->name('add-batch-process');
 
     Route::get('edit-produk/{id}', [OwnerController::class, 'edit_product'])->name('product-edit');
     Route::put('update-produk-process/{id}', [OwnerController::class, 'edit_product_process'])->name('product-proccess-update');
@@ -158,9 +160,7 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
         return view('pemilik.log-transaksi-pembelian');
     });
     
-    Route::get('supplier', function () {
-        return view('pemilik.list-supplier');
-    });
+    Route::get('supplier', [OwnerController::class,'display_supplier'])->name('list-supplier');
     
     Route::get('user', [OwnerController::class, 'display_user'])->name('list-user');
 
