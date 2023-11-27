@@ -18,6 +18,7 @@ use App\Models\Cashier;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Group;
+use App\Models\Information;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\SellingInvoice;
@@ -75,7 +76,12 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     });
 
     Route::get('/s&k', function () {
-            return view('user.syarat-ketentuan');
+        $apotek = Information::first();
+        // dd($nama_toko);
+
+        return view('user.syarat-ketentuan', [
+            'apotek'=> $apotek,
+        ]);
     });
 
     Route::get('/cara-belanja', function () {

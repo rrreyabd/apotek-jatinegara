@@ -13,7 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
-        CREATE PROCEDURE `order_success`(IN `invoiceID` CHAR(36), IN `cashierName` VARCHAR(255))
+        DROP PROCEDURE IF EXISTS order_success;
+
+        CREATE PROCEDURE order_success(IN `invoiceID` CHAR(36), IN `cashierName` VARCHAR(255))
         BEGIN
             UPDATE selling_invoices
             SET order_status = 'Menunggu Pengambilan', cashier_name = cashierName
@@ -21,7 +23,7 @@ return new class extends Migration
         END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

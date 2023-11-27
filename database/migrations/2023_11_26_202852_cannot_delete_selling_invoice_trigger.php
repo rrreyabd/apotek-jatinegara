@@ -13,6 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
+        DROP TRIGGER IF EXISTS cannot_delete_selling_invoice;
+
         CREATE TRIGGER cannot_delete_selling_invoice 
         BEFORE DELETE ON selling_invoices
         FOR EACH ROW 
@@ -22,7 +24,7 @@ return new class extends Migration
         END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**

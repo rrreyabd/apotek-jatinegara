@@ -16,9 +16,11 @@ class UnitFactory extends Factory
      */
     public function definition(): array
     {
+        $units = ['Botol', 'Strip', 'Ampul', 'Kotak', 'Pot', 'Sachet', 'Tube'];
+
         return [
             'unit_id' => fake()->uuid,
-            'unit' => fake()->unique()->words(mt_rand(1,2), true),
+            'unit' => fake()->unique()->randomElement($units),
         ];
     }
 }

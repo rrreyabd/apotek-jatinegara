@@ -13,7 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         $sql = "
-        CREATE FUNCTION `Total_Pemasukan`(`tanggal_awal` TIMESTAMP, `tanggal_akhir` TIMESTAMP)
+        DROP FUNCTION IF EXISTS Total_Pemasukan;
+
+        CREATE FUNCTION Total_Pemasukan(`tanggal_awal` TIMESTAMP, `tanggal_akhir` TIMESTAMP)
         RETURNS INT       
         DETERMINISTIC
         BEGIN
@@ -29,7 +31,7 @@ return new class extends Migration
         END;
         ";
 
-        DB::statement($sql);
+        DB::unprepared($sql);
     }
 
     /**
