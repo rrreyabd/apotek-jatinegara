@@ -48,7 +48,7 @@
         </div>
 
         <div class="overflow-x-hidden text-mediumGrey my-4" style="transition: 0.3s;">
-            <a href="/owner/transaksi-penjualan" class="flex items-center text-lg">
+            <a href="{{ route('list-selling-transaction') }}" class="flex items-center text-lg">
                 <i class="fa-regular fa-clipboard me-3"></i>
                 <p>Transaksi Penjualan</p>
             </a>

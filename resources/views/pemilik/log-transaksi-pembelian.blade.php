@@ -21,7 +21,7 @@
     <main class="p-10 font-Inter bg-plat min-h-[100vh] h-full" id="mainContent">
         @include('pemilik.components.navbar')
 
-        <p class="text-3xl font-bold mt-10 mb-4">Log Transaksi Pembalian</p>
+        <p class="text-3xl font-bold mt-10 mb-4">Log Transaksi Pembelian</p>
 
         <div class="flex flex-col gap-8">
             <div class="flex justify-between">
@@ -65,45 +65,50 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Pembeli</th>
+                            <th>Nama Supplier</th>
                             <th>Tanggal Transaksi</th>
-                            <th>Nomor Invoice</th>
-                            <th>Status Transaksi</th>
+                            <th>Nomor Faktur</th>
                             <th>Detail Pesanan</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i < 6; $i++) <tr>
-                            <td>{{$i + 1}}</td>
+                        @php
+                            $i = 1;
+                            $index = 1;
+                        @endphp
+                        @foreach ($buying as $item)
+                            <td>{{$i++}}</td>
                             <td>
-                                <span class="font-bold">Agus</span>
+                                <span class="font-bold">{{ $item->supplier_name }}</span>
                             </td>
-                            <td>25 September 2023</td>
-                            <td>INV-12345</td>
-                            <td>
-                                <div class="w-full flex gap-2 items-center">
-                                    {{-- GREEN = BERHASIL, YELLOW = REFUND, RED = GAGAL --}}
-                                    <i class="text-green-600 fa-solid fa-circle"></i>
-                                    <i class="text-yellow-600 fa-solid fa-circle"></i>
-                                    <i class="text-red-600 fa-solid fa-circle"></i>
-                                    <p class="font-bold">Berhasil</p>
-                                </div>
-                            </td>
+                            @php
+                            $carbonDate = \Carbon\Carbon::parse( $item->order_date);
+                            $formattedDate = $carbonDate->format('j F Y');
+                            $uuid = $item->buying_invoice_id;
+
+                            $numericValue = hexdec(substr($uuid, -5));
+
+                            $formatted = 'FR-' . str_pad($numericValue, 6, '0', STR_PAD_LEFT);
+                            @endphp
+                            <td>{{ $formattedDate }}</td>
+
+                            <td>{{ $formatted }}</td>
+                            
                             <td>
                                 <div class="flex w-full">
-                                    <button class="border-2 border-secondaryColor rounded-md hover:bg-transparent hover:text-secondaryColor font-bold px-4 py-1 bg-secondaryColor text-white duration-300 transition-colors ease-in-out" type="button" onclick="toggleDetail()">Lihat</button>
+                                    <button class="border-2 border-secondaryColor rounded-md hover:bg-transparent hover:text-secondaryColor font-bold px-4 py-1 bg-secondaryColor text-white duration-300 transition-colors ease-in-out" type="button" onclick="toggleDetail({{ $index }})" data-index="{{ $index }}">Lihat</button>
                                 </div>
 
                                 {{-- MODAL DETAIL TRANSAKSI PEMBELIAN START --}}
-                                <div class="absolute w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal">
+                                <div class="absolute w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal{{ $index }}">
                                     <div class="w-[70%] h-fit max-h-full bg-white rounded-md shadow-md p-8 flex flex-col gap-6 overflow-auto">
                                         <div class="flex justify-between items-center">
-                                            <button onclick="toggleDetail()" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
+                                            <button onclick="toggleDetail({{ $index }})" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
                                                 <i class="fa-solid fa-arrow-left"></i>
                                                 Kembali
                                             </button>
     
-                                            <p class="font-bold">FR-0007</p>
+                                            <p class="font-bold">{{ $formatted }}</p>
                                             <div></div>
                                         </div>
     
@@ -112,19 +117,19 @@
                                                 <div class="flex justify-between">
                                                     <div class="font-bold">
                                                         <p class="text-mainColor">Tanggal Pembelian</p> 
-                                                        <p>25 Desember 3030</p>
+                                                        <p>{{ $formattedDate }}</p>
                                                     </div>
                                                     <div class="font-bold">
                                                         <p class="text-mainColor">Supplier</p> 
-                                                        <p>PT. Makmur</p>
+                                                        <p>{{ $item->supplier_name }}</p>
                                                     </div>
                                                     <div class="font-bold">
                                                         <p class="text-mainColor">Nomor HP</p> 
-                                                        <p>08123445677</p>
+                                                        <p>{{ $supplier->supplier_phone }}</p>
                                                     </div>
                                                     <div class="font-bold">
                                                         <p class="text-mainColor">Alamat</p> 
-                                                        <p>Jl Sudirman No. 27, Medan Kota</p>
+                                                        <p class="whitespace-pre-wrap w-72">{{ $supplier->supplier_address }}</p>
                                                     </div>
                                                 </div>
 
@@ -138,16 +143,27 @@
                                                             <td class="pb-2 text-center">Harga</td>
                                                             <td class="pb-2">Total</td>
                                                         </tr>
-                                                        @for ($j = 1; $j <= 50; $j++)
+                                                        @php
+                                                            $j =1;
+                                                            $subtotal = 0;
+                                                        @endphp
+                                                        @foreach ($item->buyingInvoiceDetail as $detail)
                                                         <tr>
-                                                            <td class="py-2 text-center">{{$j}}</td>
-                                                            <td class="py-2">Paracetamol 200 kg</td>
-                                                            <td class="py-2 text-center">4</td>
-                                                            <td class="py-2 text-center">Rp 5.000</td>
-                                                            <td class="py-2 text-center"">Rp 20.000</td>
-                                                            <td class="py-2">Rp 20.000</td>
+                                                            <td class="py-2 text-center">{{$j++}}</td>
+                                                            <td class="py-2">{{ $detail->product_name }}</td>
+                                                            @php
+                                                                $carbonDated = \Carbon\Carbon::parse( $detail->exp_date);
+                                                                $formattedEXPDate = $carbonDated->format('j F Y');
+                                                                $subtotal += $detail->quantity * $detail->product_buy_price
+                                                            @endphp
+                                                            <td class="py-2 text-center">{{ $formattedEXPDate }}</td>
+                                                            <td class="py-2 text-center">{{ $detail->quantity }}</td>
+                                                            <td class="py-2 text-center">Rp
+                                                                {{ number_format($detail->product_buy_price , 0, ',', '.') }}</td>
+                                                            <td class="py-2">Rp
+                                                                {{ number_format($detail->quantity * $detail->product_buy_price , 0, ',', '.') }}</td>
                                                         </tr>
-                                                        @endfor
+                                                        @endforeach
                                                     </table>
                                                 </div>
     
@@ -156,7 +172,8 @@
                                                     <div class="flex font-bold gap-2">
                                                         <p class="w-28">Total Harga</p>
                                                         <p>:</p>
-                                                        <p class="text-secondaryColor">Rp 140.000</p>
+                                                        <p class="text-secondaryColor">Rp
+                                                            {{ number_format($subtotal , 0, ',', '.') }}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -167,7 +184,10 @@
                                 {{-- MODAL DETAIL TRANSAKSI PEMBELIAN END --}}
                             </td>
                             </tr>
-                            @endfor
+                            @php
+                                $index++
+                            @endphp
+                            @endforeach
                     </tbody>
                 </table>
             </div>
@@ -180,15 +200,15 @@
     <script src="{{ asset('js/datatables.js') }}"></script>
 
     <script>
-        const toggleDetail = () => {
-            const modal = document.getElementById('detailModal');
+        const toggleDetail = (index) => {
+            const modal = document.getElementById('detailModal' + index);
 
             if (modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden')
-                document.body.classList.add('h-[100vh]')
+                document.body.classList.add('h-fit')
             } else {
                 modal.classList.add('hidden')
-                document.body.classList.remove('h-[100vh]')
+                document.body.classList.remove('h-fit')
             }
         }
 

@@ -7,7 +7,9 @@ use App\Models\Category;
 use App\Models\Group;
 use App\Models\Unit;
 use App\Models\SellingInvoice;
+use App\Models\BuyingInvoice;
 use App\Models\PopularProduct;
+use App\Models\LastTransaction;
 use App\Models\ProductDescription;
 use App\Models\ProductDetail;
 use App\Models\Product;
@@ -26,6 +28,7 @@ class OwnerController extends Controller
     public function display()
     {
         $popular = PopularProduct::take(3)->get();
+        $last = LastTransaction::orderBy('Tanggal_Transaksi')->get();
         $count_product = Product::count();
         $count_supplier = Supplier::count();
         $count_user = User::where('role', 'user')->count();
@@ -33,6 +36,7 @@ class OwnerController extends Controller
 
         return view ('pemilik.index', [
             'popular' => $popular,
+            'last' => $last,
             'product' => $count_product,
             'supplier' => $count_supplier,
             'pending' => $count_pending,
@@ -229,6 +233,29 @@ class OwnerController extends Controller
             'suppliers' => $supplier
         ]);
     }
+    public function log_penjualanan()
+    {
+        $selling = SellingInvoice::get();
+
+        return view('pemilik.log-transaksi-penjualan',[
+            'sellings' => $selling
+        ]);
+
+    }
+
+    public function log_pembelian()
+    {
+        $buying = BuyingInvoice::get();
+        $supplierNames = $buying->pluck('supplier_name')->all();
+        $supplier = Supplier::whereIn('supplier', $supplierNames)->first();
+
+        return view('pemilik.log-transaksi-pembelian',[
+            'buying' => $buying,
+            'supplier' => $supplier
+        ]);
+
+    }
+
     public function lihatKasir(){
 
         $cashiers = User::where('role', 'cashier')

@@ -129,7 +129,7 @@
             <input type="month" name="" id="tgl-transaksi" class="w-fit p-3 rounded-lg shadow-lg border-none">
 
             <div class="bg-white rounded-lg p-4 shadow-md overflow-x-auto">
-                <table id="myTable" class="table table-striped">
+                <table id="myTable"  class="display table table-striped">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -141,19 +141,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i < 6; $i++) <tr>
-                            <td>{{$i + 1}}</td>
+                        @php
+                            $j = 1;
+                        @endphp
+                        @foreach ($last as $lastest)
+                        <tr>
+                            <td>{{$j++}}</td>
+                            @php
+                            $carbonDate = \Carbon\Carbon::parse( $lastest->Tanggal_Transaksi);
+                            $formattedDate = $carbonDate->format('j F Y');
+                            @endphp
                             <td>
-                                <span class="font-bold">24 September 2023</span>
+                                <span class="font-bold">{{ $formattedDate }}</span>
                             </td>
-                            <td>INV-123321</td>
-                            <td>Pembelian</td>
-                            <td>Tunai</td>
+                            <td>{{ $lastest->invoice_code }}</td>
+                            <td>{{ $lastest->Tipe_Transaksi }}</td>
+                            <td>{{ $lastest->recipient_bank }}</td>
                             <td>Rp
-                                {{-- {{ number_format($jumlah , 0, ',', '.') }} --}}
+                                {{ number_format($lastest->Total_Pengeluaran , 0, ',', '.') }}
                             </td>
-                            </tr>
-                            @endfor
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
