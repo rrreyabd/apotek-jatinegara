@@ -102,10 +102,10 @@ public function riwayatTransaksi()
                 return redirect()->back()->with('success', 'Pesanan berhasil diterima.');
             } else if($request->status == 'tolak'){
                 try {
+                    $request->validate([
+                        'alasanTolak' => ['required', 'string', 'min:10', 'regex:/^[a-zA-Z0-9 ]+$/', 'max:255']
+                    ]);
                     DB::beginTransaction();
-                        $request->validate([
-                            'alasanTolak' => ['required', 'string', 'min:10', 'regex:/^[a-zA-Z0-9 ]+$/', 'max:255']
-                        ]);
                         
                         DB::select("CALL order_fail(?, ?, ?)", array($id, auth()->user()->username, $request->alasanTolak));
 
