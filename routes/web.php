@@ -152,13 +152,9 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     
     Route::get('kasir', [OwnerController::class,'lihatKasir'])->name('list-kasir');
     
-    Route::get('transaksi-penjualan', function () {
-        return view('pemilik.log-transaksi-penjualan');
-    });
+    Route::get('transaksi-penjualanan', [OwnerController::class,'log_penjualanan'])->name('list-selling-transaction');
     
-    Route::get('transaksi-pembelian', function () {
-        return view('pemilik.log-transaksi-pembelian');
-    });
+    Route::get('transaksi-pembelian', [OwnerController::class,'log_pembelian'])->name('list-buying-transaction');
     
     Route::get('supplier', [OwnerController::class,'display_supplier'])->name('list-supplier');
     

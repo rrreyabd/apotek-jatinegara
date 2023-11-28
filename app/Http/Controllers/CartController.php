@@ -107,7 +107,6 @@ class CartController extends Controller
                 'order_complete' => now(),
                 'order_status' => 'Offline',
             ]);
-            // dd(auth()->user()->username);
             
             
             foreach ($cart as $item) {
