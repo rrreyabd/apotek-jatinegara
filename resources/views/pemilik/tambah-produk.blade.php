@@ -56,16 +56,7 @@
                         <input type="hidden" name="desc_id" value="{{ $desc_uuid }}">
                         <input type="hidden" name="detail_id" value="{{ $detail_uuid }}">
                         {{-- status --}}
-                        <div class="w-fit rounded-lg border-2 shadow p-1.5 px-3 mt-3">
-                            <select name="status" id="" @selected(true) class="outline-none" required> 
-                                <option disabled selected>Status Obat</option>
-                                @foreach ($status as $item)
-                                        <option value="{{ $item }}">
-                                            {{ $item }}
-                                        </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <input type="hidden" name="status" value="aktif">
                     </div>
 
                     <div class="md:flex md:grid-col-4 gap-8 justify-between">

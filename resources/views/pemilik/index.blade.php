@@ -148,17 +148,17 @@
                         <tr>
                             <td>{{$j++}}</td>
                             @php
-                            $carbonDate = \Carbon\Carbon::parse( $lastest->Tanggal_Transaksi);
+                            $carbonDate = \Carbon\Carbon::parse( $lastest->tanggal_transaksi);
                             $formattedDate = $carbonDate->format('j F Y');
                             @endphp
                             <td>
                                 <span class="font-bold">{{ $formattedDate }}</span>
                             </td>
                             <td>{{ $lastest->invoice_code }}</td>
-                            <td>{{ $lastest->Tipe_Transaksi }}</td>
-                            <td>{{ $lastest->recipient_bank }}</td>
+                            <td>{{ $lastest->tipe_transaksi }}</td>
+                            <td>{{ $lastest->metode_pembayaran }}</td>
                             <td>Rp
-                                {{ number_format($lastest->Total_Pengeluaran , 0, ',', '.') }}
+                                {{ number_format($lastest->total_pengeluaran , 0, ',', '.') }}
                             </td>
                         </tr>
                         @endforeach
