@@ -41,28 +41,57 @@
                         </button>
                     </div>
                     <div class="bg-white p-7 pt-4 rounded-b-xl">
-                        <form action="" method="post">
+                        <form action="{{ route('tambah-kasir') }}" method="post">
+                            @csrf
+                            @method('put')
                             <div class="flex gap-6 p-4">
                                 <table>
                                     <tr>
                                         <td class="py-5"><label for="namaUser">Nama User</label></td>
-                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                        <td class="ps-5"><input type="text" name="username" required value="{{ old('username') }}" class="p-2 px-4 rounded-xl shadow border  @error('username') is-invalid @enderror"></td>
+                                        <td>@error('username')
+                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                            @enderror
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="py-5"><label for="email">Email</label></td>
-                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                        <td class="ps-5"><input type="text" name="email" required value="{{ old('email') }}" class="p-2 px-4 rounded-xl shadow border  @error('email') is-invalid @enderror"></td>
+                                        <td>@error('email')
+                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                            @enderror
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-5"><label for="password">Password</label></td>
+                                        <td class="ps-5"><input type="text" name="password" required value="{{ old('password') }}" class="p-2 px-4 rounded-xl shadow border  @error('password') is-invalid @enderror"></td>
+                                        <td>@error('password')
+                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                            @enderror
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="py-5"><label for="gender">Gender</label></td>
-                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                        <td class="ps-5"><select name="gender" class="p-2 px-4 rounded-xl shadow border" name="gender" id="">
+                                            <option value="pria" >Pria</option>
+                                            <option value="wanita">Wanita</option>
+                                        </select></td>
                                     </tr>
                                     <tr>
                                         <td class="py-5"><label for="nohp">No. Handphone</label></td>
-                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                        <td class="ps-5"><input type="text" name="no_hp" value="{{ old('no_hp') }}" class="p-2 px-4 rounded-xl shadow border  @error('no_hp') is-invalid @enderror"></td>
+                                        <td>@error('no_hp')
+                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                            @enderror
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="py-5"><label for="alamatKasir">Alamat</label></td>
-                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                        <td class="ps-5"><textarea name="address" class="p-2 px-4 rounded-xl shadow border  @error('address') is-invalid @enderror">{{ old('address') }}</textarea></td>
+                                        <td>@error('address')
+                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                            @enderror
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -91,7 +120,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php $i = 1; @endphp
+                        @php 
+                        $i = 1;
+                        $index =1;
+                        @endphp
                         @foreach ($cashiers as $cashier) <tr>
                             <td>{{$i}}</td>
                             <td>
@@ -106,14 +138,14 @@
                                 {{ $cashier->cashier->cashier_address }}
                             </td>
                             <td>
-                                <button onclick="showPopUpEdit()" class="p-2 bg-secondaryColor rounded mx-2"><i
+                                <button onclick="showPopUpEdit({{ $index }})" class="p-2 bg-secondaryColor rounded mx-2"><i
                                         class="fa-regular fa-pen-to-square" style="color: white;"></i></button>
-                                <button onclick="showPopUpDelete()" class="p-2 bg-mediumRed rounded mx-2"><i
+                                <button onclick="showPopUpDelete({{ $index }})" class="p-2 bg-mediumRed rounded mx-2"><i
                                         class="fa-regular fa-trash-can" style="color: white;"></i></button>
 
                                 {{-- Pop up konfirmasi hapus start --}}
                                 <div class="absolute w-screen h-screen backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden"
-                                    id="popupHapus">
+                                    id="popupHapus{{ $index }}">
                                     <div
                                         class="w-[30%] h-[50%] bg-white rounded-2xl shadow-md p-8 flex flex-col gap-6 relative items-center">
                                         <div class="border-2 border-mainColor rounded-full w-fit">
@@ -122,13 +154,18 @@
                                         </div>
 
                                         <p class="text-2xl text-mainColor font-TripBold text-center">Apakah Anda Yakin
-                                            Ingin Menghapus soeharto?</p>
+                                            Ingin Menghapus {{ $cashier->username }}?</p>
 
                                         <div class="flex gap-4">
-                                            <button onclick="showPopUpDelete()"
+                                            <button onclick="showPopUpDelete({{ $index }})"
                                                 class="bg-mediumRed text-white text-2xl p-1 px-5 rounded-lg">Tidak</button>
-                                            <button type="submit"
-                                                class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>
+                                                <form action="{{ route('delete-kasir') }}" method="POST">
+                                                    @csrf
+                                                    @method('put')
+                                                    <input type="hidden" name="id" value="{{ $cashier->cashier->user_id }}">
+                                                    <button type="submit"
+                                                    class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>
+                                                </form>
                                         </div>
                                     </div>
                                 </div>
@@ -136,37 +173,40 @@
 
                                 {{-- MODAL EDIT KASIR START --}}
                                 <div class="top-0 left-0 hidden flex flex-col justify-center items-center absolute z-10 backdrop-blur-sm backdrop-brightness-75 rounded-xl w-full h-screen"
-                                    id="popupEdit">
+                                    id="popupEdit{{ $index }}">
                                     <div class="w-fit flex flex-col justify-center">
                                         <div class="bg-mainColor text-white font-semibold px-10 py-4 rounded-t-xl flex justify-between">
                                             Edit Kasir
-                                            <button onclick="showPopUpEdit()">
+                                            <button onclick="showPopUpEdit({{ $index }})">
                                             <i class="fa-solid fa-xmark fa-xl" style="color: white"></i>
                                             </button>
                                         </div>
                                         <div class="bg-white p-7 pt-4 rounded-b-xl">
-                                            <form action="" method="post">
+                                            <form action="{{ route('edit-kasir') }}" method="post">
                                                 <div class="flex gap-6 p-4">
                                                     <table>
                                                         <tr>
                                                             <td class="py-5"><label for="namaUser">Nama User</label></td>
-                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                            <td class="ps-5"><input type="text" value="{{ $cashier->username }}" readonly class="p-2 px-4 rounded-xl shadow border text-mediumGrey"></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="py-5"><label for="email">Email</label></td>
-                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                            <td class="ps-5"><input type="text" name="email" value="{{ $cashier->email }}" class="p-2 px-4 rounded-xl shadow border  @error('email') is-invalid @enderror"></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="py-5"><label for="gender">Gender</label></td>
-                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                            <td class="ps-5"><select class="p-2 px-4 rounded-xl shadow border" name="gender" id="">
+                                                                <option value="pria" {{ $cashier->cashier->cashier_gender == 'pria' ? 'selected' : '' }}>Pria</option>
+                                                                <option value="wanita" {{ $cashier->cashier->cashier_gender == 'wanita' ? 'selected' : '' }}>Wanita</option>
+                                                            </select></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="py-5"><label for="nohp">No. Handphone</label></td>
-                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                            <td class="ps-5"><input type="text" name="no_hp" class="p-2 px-4 rounded-xl shadow border" value="{{ $cashier->cashier->cashier_phone }}"></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="py-5"><label for="alamatKasir">Alamat</label></td>
-                                                            <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                            <td class="ps-5"><textarea class="p-2 px-4 rounded-xl shadow border h-28" >{{ $cashier->cashier->cashier_address }}</textarea></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -181,7 +221,10 @@
                                 {{-- MODAL EDIT KASIR END --}}
                             </td>
                             </tr>
-                            @php $i++ @endphp
+                            @php 
+                            $i++;
+                            $index++;
+                            @endphp
                             @endforeach
                     </tbody>
                 </table>
@@ -195,8 +238,8 @@
     <script src="{{ asset('js/datatables.js') }}"></script>
 
     <script>
-        const showPopUpDelete = () => {
-            const popup = document.getElementById('popupHapus');
+        const showPopUpDelete = (index) => {
+            const popup = document.getElementById('popupHapus'+ index);
 
             if (popup.classList.contains('hidden')) {
                 popup.classList.remove('hidden')
@@ -205,8 +248,8 @@
             }
         }
 
-        const showPopUpEdit = () => {
-            const popup = document.getElementById('popupEdit');
+        const showPopUpEdit = (index) => {
+            const popup = document.getElementById('popupEdit'+ index);
 
             if (popup.classList.contains('hidden')) {
                 popup.classList.remove('hidden')
