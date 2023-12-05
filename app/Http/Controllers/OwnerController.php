@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Cashier;
 use App\Models\Category;
 use App\Models\Group;
 use App\Models\Unit;
@@ -17,6 +18,7 @@ use App\Models\Supplier;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreCashierRequest;
 use App\Http\Requests\UpdateCashierRequest;
@@ -254,6 +256,32 @@ class OwnerController extends Controller
 
         // dd($cashiers);
         return view ('pemilik.list-kasir', ['cashiers' => $cashiers]);
+    }
+    public function tambahKasir(Request $request){
+        $new_user = new User;
+        $uuid = Str::uuid();
+
+        $new_user->user_id = $uuid;
+        $new_user->username = $request->username;
+        $new_user->email = $request->email;
+        $new_user->role = 'cashier';
+        $new_user->password = $request->password;
+        $new_user->save();
+
+        $new_cashier = new Cashier;
+        $new_cashier -> cashier_id = Str::uuid();
+        $new_cashier -> user_id = $uuid;
+        $new_cashier -> cashier_phone = $request->no_hp;
+        $new_cashier -> cashier_gender = $request->gender;
+        $new_cashier -> cashier_address = $request->address;
+        $new_cashier -> save();
+
+        return redirect('/cashier/kasir')->with('add_status','Kasir berhasil ditambah');
+    }
+    public function deleteKasir(Request $request)
+    {
+        User::where('user_id', $request->id)->delete();
+        return redirect('/cashier/kasir')->with('add_status','Kasir berhasil dihapus');
     }
     public function pendingOrder()
     {

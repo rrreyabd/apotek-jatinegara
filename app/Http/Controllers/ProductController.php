@@ -7,6 +7,8 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Group;
+use App\Models\User;
+use App\Models\Cashier;
 use App\Models\SellingInvoice;
 use App\Models\SellingInvoiceDetail;
 use App\Models\Unit;
