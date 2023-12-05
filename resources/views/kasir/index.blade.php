@@ -111,11 +111,11 @@
             const sidebar = document.getElementById('sidebar');
             const main = document.getElementById('mainContent');
 
-            if (sidebar.classList.contains('-translate-x-80')) {
-                sidebar.classList.remove('-translate-x-80')
+            if (sidebar.classList.contains('-translate-x-96')) {
+                sidebar.classList.remove('-translate-x-96')
                 main.classList.add('brightness-50')
             } else {
-                sidebar.classList.add('-translate-x-80')
+                sidebar.classList.add('-translate-x-96')
                 main.classList.remove('brightness-50')
             }
 

@@ -231,9 +231,9 @@ class ProductController extends Controller
         // akhir filter cari
             
         if(isset($product)) {
-            $product = $product->paginate(9)->withQueryString();
+            $product = $product->orderBy('product_status')->paginate(9)->withQueryString();
         }else{
-            $product = Product::paginate(9)->withQueryString();
+            $product = Product::orderBy('product_status')->paginate(9)->withQueryString();
         }
 
         return view("user.products", [

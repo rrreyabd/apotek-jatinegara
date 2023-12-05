@@ -83,7 +83,6 @@ class OwnerController extends Controller
             "groups"=> $group ?? [],
             "suppliers"=> $supplier ?? [],
             "types" => $type ?? [],
-            "status" => $state ?? [],
         ]);
     }
 
@@ -153,7 +152,7 @@ class OwnerController extends Controller
         $products = Product::find($id);
         
         $validated_data = $request->validate([
-            'gambar_obat' => ['required', 'file', 'max:5120', 'mimes:png,jpeg,jpg'],
+            'gambar_obat' => ['file', 'max:5120', 'mimes:png,jpeg,jpg'],
         ]);
 
         $carbonDate = Carbon::parse($request->expired_date);

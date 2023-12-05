@@ -16,7 +16,7 @@ class CashierController extends Controller
 {
 public function riwayatTransaksi()
     {
-        $histories = SellingInvoice::where('cashier_name',auth()->user()->cashier_name)
+        $histories = SellingInvoice::where('cashier_name',auth()->user()->username)
             ->where('order_status', 'Berhasil')
             ->orWhere('order_status','Offline')
             ->orWhere('order_status','Gagal')
@@ -139,8 +139,8 @@ public function riwayatTransaksi()
                     DB::commit();
                     return redirect()->back()->with('success', 'Pesanan akan diproses untuk pengembalian.');
                 } catch (\Exception $e) {
-                    // throw $e;
-                    return redirect()->back()->with('error', 'Terjadi Kesalahan Refund');
+                    throw $e;
+                    // return redirect()->back()->with('error', 'Terjadi Kesalahan Refund');
                 }
             }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {

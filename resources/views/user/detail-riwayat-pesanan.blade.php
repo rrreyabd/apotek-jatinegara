@@ -135,13 +135,16 @@
                                 <td>
                                     <p class="text-center">{{ $detail->quantity }}</p>
                                 </td>
+                                    @php
+                                        $total = DB::select('SELECT Total_Harga(?,?) AS hasil', array($detail->quantity, $detail->product_sell_price))
+                                    @endphp
                                 <td>
-                                    <p class="text-center font-semibold">Rp {{ number_format($detail->product_sell_price * $detail->quantity , 0, ',', '.') }}</p>
+                                    <p class="text-center font-semibold">Rp {{ number_format($total[0]->hasil , 0, ',', '.') }}</p>
                                 </td>
                             </tr>
                             @php
                                 $no += 1;
-                                $totalHarga += $detail->product_sell_price * $detail->quantity
+                                $totalHarga += $total[0]->hasil
                             @endphp
                             @endforeach
                         </tbody>

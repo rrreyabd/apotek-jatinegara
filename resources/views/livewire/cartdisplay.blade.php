@@ -22,7 +22,7 @@
             @foreach ($cartItems as $item)
             <div class="flex gap-2 mt-4">
                 <div class="h-full flex items-center">
-                    <img src="https://i.pinimg.com/564x/22/04/72/2204725ec0bd13c61131bc099467b04c.jpg"
+                    <img src="{{ asset('img/obat1.jpg')}}"
                     class="w-24 rounded-md" alt="">
                 </div>
 

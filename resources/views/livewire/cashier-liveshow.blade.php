@@ -105,7 +105,7 @@
 
         <div class="bg-white w-52 p-4 flex flex-col rounded-md shadow-md gap-2">
             <div class="h-36 w-full overflow-hidden flex justify-center object-contain rounded-md">
-                <img src="https://i.pinimg.com/564x/22/04/72/2204725ec0bd13c61131bc099467b04c.jpg" class="w-full"
+                <img src="{{ asset('img/obat1.jpg')}}" class="w-full"
                     alt="">
             </div>
 
