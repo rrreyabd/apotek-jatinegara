@@ -27,6 +27,7 @@ class ProductFactory extends Factory
             'description_id' => $description_id,
             'product_name' => fake()->words(5, true),
             'product_status'=> fake()->randomElement(['aktif', 'tidak aktif']),
+            'product_sell_price' => fake()->numberBetween(1000,100000),
         ];
     }
 }

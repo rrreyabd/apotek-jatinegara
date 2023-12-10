@@ -16,7 +16,7 @@ class CashierController extends Controller
 {
 public function riwayatTransaksi()
     {
-        $histories = SellingInvoice::where('cashier_name',auth()->user()->cashier_name)
+        $histories = SellingInvoice::where('cashier_name',auth()->user()->username)
             ->where('order_status', 'Berhasil')
             ->orWhere('order_status','Offline')
             ->orWhere('order_status','Gagal')
@@ -55,17 +55,30 @@ public function riwayatTransaksi()
 
 
     public function finishOrder($id){
+        DB::beginTransaction();
         try {
             $order = SellingInvoice::findOrFail($id);
+            foreach($order->sellingInvoiceDetail as $produk){
+                foreach(Product::where('product_name', $produk->product_name)->first()->detail as $detail){
+                    if($detail->product_stock == 0){
+                        if(Product::where('product_name', $produk->product_name)->first()->detail()->count() > 1){
+                            $detail->delete();
+                        }
+                    }
+                }
+            }
             
             // Ubah status menjadi 'Berhasil'
             $order->order_status = 'Berhasil';
             $order->order_complete = now();
             $order->save();
-    
+
+            DB::commit();
             // Redirect ke halaman atau tindakan yang sesuai
             return redirect()->back()->with('success', 'Status berhasil diperbarui.');
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+        } catch (\Exception $e) {
+            DB::rollBack();
+
             return redirect()->back()->with('error', 'Pesanan tidak ditemukan.');
         }
     }
@@ -116,7 +129,7 @@ public function riwayatTransaksi()
                         }
                         
                     DB::commit();
-                    return redirect()->back()->with('success', 'Pesanan akan diproses untuk pengembalian.');
+                    return redirect()->back()->with('success', 'Pesanan telah ditolak!.');
                 } catch (\Exception $e) {
                     // throw $e;
                     return redirect()->back()->with('error', 'Terjadi Kesalahan Penolakan');
@@ -139,8 +152,8 @@ public function riwayatTransaksi()
                     DB::commit();
                     return redirect()->back()->with('success', 'Pesanan akan diproses untuk pengembalian.');
                 } catch (\Exception $e) {
-                    // throw $e;
-                    return redirect()->back()->with('error', 'Terjadi Kesalahan Refund');
+                    throw $e;
+                    // return redirect()->back()->with('error', 'Terjadi Kesalahan Refund');
                 }
             }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {

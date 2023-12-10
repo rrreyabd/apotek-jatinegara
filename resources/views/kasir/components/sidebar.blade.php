@@ -1,5 +1,5 @@
 {{-- SIDEBAR START --}}
-<nav class="bg-white p-8 w-[20%] shadow-md absolute left-0 top-0 h-[100%] z-10 shadow-semiBlack -translate-x-80 transition-transform duration-300 ease-in-out flex flex-col gap-4" id="sidebar">
+<nav class="bg-white p-8 w-[20%] shadow-md absolute left-0 top-0 h-[100%] z-10 shadow-semiBlack -translate-x-96 transition-transform duration-300 ease-in-out flex flex-col gap-4" id="sidebar">
     <div class="flex justify-between w-full">
         <p class="bg-mainColor text-white font-bold px-4 py-1 rounded-br-xl rounded-tl-xl text-lg">Jati Negara</p>
 

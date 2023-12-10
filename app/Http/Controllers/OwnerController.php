@@ -85,7 +85,6 @@ class OwnerController extends Controller
             "groups"=> $group ?? [],
             "suppliers"=> $supplier ?? [],
             "types" => $type ?? [],
-            "status" => $state ?? [],
         ]);
     }
 
@@ -155,7 +154,7 @@ class OwnerController extends Controller
         $products = Product::find($id);
         
         $validated_data = $request->validate([
-            'gambar_obat' => ['required', 'file', 'max:5120', 'mimes:png,jpeg,jpg'],
+            'gambar_obat' => ['file', 'max:5120', 'mimes:png,jpeg,jpg'],
         ]);
 
         $carbonDate = Carbon::parse($request->expired_date);
@@ -193,6 +192,24 @@ class OwnerController extends Controller
 
     }
 
+    public function delete_product_expired(Request $request){
+        DB::beginTransaction();
+
+        try{
+            ProductDetail::where('detail_id', $request->detail_id)->first()->product->update([
+                'product_status' => 'aktif',
+            ]);
+            ProductDetail::where('detail_id', $request->detail_id)->delete();
+
+            DB::commit();
+            return redirect()->back()->with('success', "Status Kembali Aktif");
+        }catch (\Exception $e) {
+            DB::rollback();
+            // throw $e;
+            return redirect()->back()->with('error', "Terjadi Kesalahan");
+        }
+    }
+
     public function add_batch($id)
     {
         $products = Product::find($id);
@@ -212,7 +229,6 @@ class OwnerController extends Controller
         $new_detail -> detail_id = $request->detail_id;
         $new_detail -> product_buy_price = $request->harga_beli;
         $new_detail -> product_expired = $formatted;
-        $new_detail -> product_sell_price = $request->harga_jual;
         $new_detail -> product_stock = $request->stock;
 
         $new_detail->save();

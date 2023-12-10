@@ -22,42 +22,6 @@ class CartController extends Controller
         ]);
     }
 
-    // public function jumlahItem(Request $request) {
-    //     $cart = Cart::find($request->cart_id);
-
-    //     if( $request->operasi == "kurang" ) {
-    //         if($request->quantity > $cart->product->detail()->orderBy('product_expired')->first()->product_stock) {
-    //             Cart::where('cart_id', $request->cart_id)->update([
-    //                 'quantity'=> $cart->product->detail()->orderBy('product_expired')->first()->product_stock,
-    //             ]);
-    //         }else if($request->quantity <= $cart->product->detail()->orderBy('product_expired')->first()->product_stock && $request->quantity >= 1) {
-    //             Cart::where('cart_id', $request->cart_id)->update([
-    //                 'quantity'=> $request->quantity - 1,
-    //             ]);
-    //         }else{
-    //             Cart::where('cart_id', $request->cart_id)->update([
-    //                 'quantity'=> 1,
-    //             ]);
-    //         }
-    //     }elseif( $request->operasi == 'tambah') {
-    //         if($request->quantity > $cart->product->detail()->orderBy('product_expired')->first()->product_stock) {
-    //             Cart::where('cart_id', $request->cart_id)->update([
-    //                 'quantity'=> $cart->product->detail()->orderBy('product_expired')->first()->product_stock,
-    //             ]);
-    //         }else if($request->quantity <= $cart->product->detail()->orderBy('product_expired')->first()->product_stock && $request->quantity >= 1) {
-    //             Cart::where('cart_id', $request->cart_id)->update([
-    //                 'quantity'=> $request->quantity + 1,
-    //             ]);
-    //         }else{
-    //             Cart::where('cart_id', $request->cart_id)->update([
-    //                 'quantity'=> 1,
-    //             ]);
-    //         }
-    //     }
-        
-    //     return redirect()->back();
-    // }
-
     public function hapusItem(Request $request) {
         if( $request->hapus == "semua" ) {
             Cart::where('user_id', auth()->user()->user_id)->delete();
@@ -115,25 +79,39 @@ class CartController extends Controller
                     'selling_invoice_id' => $uuid,
                     'product_name' => $item->product->product_name,
                     'product_type' => $item->product->description->product_type,
-                    'product_sell_price' => $item->product->detail()->orderBy('product_expired')->first()->product_sell_price,
+                    'product_sell_price' => $item->product->product_sell_price,
                     'quantity' => $item->quantity,
                 ]);
 
-                $stock = $item->product->detail()->orderBy('product_expired')->first()->product_stock - $item->quantity;
+                // mengurangi stock
+                while ($item->quantity > 0) {
+                    if ($item->quantity >= $item->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->product_stock) {
+                        $item->quantity = $item->quantity - $item->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->product_stock;
 
-                ProductDetail::where('product_id',$item->product_id)->update([
-                    'product_stock' => $stock
-                ]);
-
-                if($stock == 0){
-                    if($item->product->detail()->count() <= 1){
-                        $item->product->update([
-                            'product_status' => 'tidak aktif',
-                        ]);
+                        if($item->product->detail()->count() > 1){
+                            $item->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->delete();
+                        }else{
+                            $item->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->update([
+                                'product_stock' => 0,
+                            ]);
+                        }
                     }else{
-                        $item->product->detail()->orderBy('product_expired')->first()->delete();
+                        $item->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->update([
+                            'product_stock' => $item->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->product_stock - $item->quantity,
+                        ]);
+
+                        $item->quantity = 0;
                     }
                 }
+                // akhir mengurangi stock
+
+                // mengubah status jadi tidak aktif
+                if ($item->product->detail()->where('product_stock' , '>', 0)->first() == NULL) {
+                    $item->product->update([
+                        'product_status' => 'tidak aktif',
+                    ]);
+                }
+                // akhir mengubah status menjadi tidak aktif
             }
 
 

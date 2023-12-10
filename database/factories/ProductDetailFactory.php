@@ -32,7 +32,6 @@ class ProductDetailFactory extends Factory
             'product_expired'=> fake()->dateTime(),
             'product_stock' => $stock,
             'product_buy_price' => fake()->numberBetween(1000,100000),
-            'product_sell_price' => fake()->numberBetween(1000,100000),
         ];
     }
 }

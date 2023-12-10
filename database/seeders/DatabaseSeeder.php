@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\Cashier::factory(1)->create();
-        \App\Models\Customer::factory(8)->create();
+        \App\Models\Customer::factory(9)->create();
         \App\Models\Category::factory(8)->create();
         \App\Models\Unit::factory(7)->create();
         \App\Models\Group::factory(4)->create();

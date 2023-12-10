@@ -11,7 +11,7 @@
                 <div class="h-fit w-[230px] shadow-md border-2 shadow-semiBlack rounded-lg p-4 flex flex-col bg-white">
                     <a href="/deskripsi/{{ Str::slug($product->first()->product_name) }}">
                         <div class="px-2 w-full">
-                            <p class="font-semibold text-lg namaObat flex">{{ Str::limit($product->first()->product_name, 16, '...') }}</p>
+                            <p class="font-semibold text-lg namaObat flex">{{ Str::limit($product->first()->product_name, 13, '...') }}</p>
                         </div>
 
                         <center class="relative">
