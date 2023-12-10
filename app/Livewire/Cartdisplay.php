@@ -64,11 +64,11 @@ class Cartdisplay extends Component
         public function incrementButton($cart, $detail_product) {
             // $carts = collect($cart);
             // dd($detail_product['product_stock']);
-            if($cart['quantity'] > $detail_product['product_stock']) {
+            if($cart['quantity'] > $detail_product) {
                 Cart::where('cart_id', $cart['cart_id'])->update([
-                    'quantity'=> $detail_product['product_stock'],
+                    'quantity'=> $detail_product,
                 ]);
-            }else if($cart['quantity'] <= $detail_product['product_stock'] && $cart['quantity'] >= 1) {
+            }else if($cart['quantity'] <= $detail_product && $cart['quantity'] >= 1) {
                 Cart::where('cart_id', $cart['cart_id'])->update([
                     'quantity'=> $cart['quantity'] + 1,
                 ]);

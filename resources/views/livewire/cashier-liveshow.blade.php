@@ -122,12 +122,12 @@
 
             <div class="flex flex-col">
                 <p> <span class="text-secondaryColor font-bold leading-tight break-all">Rp. {{
-                        number_format($item->detail()->orderBy('product_expired')->first()->product_sell_price,
+                        number_format($item->product_sell_price,
                         0,
                         ',', '.') }}</span> / </p>
                 <p> {{ $item->description->unit->unit }}</p>
                 <p class="font-semibold leading-tight break-all">Stok : {{
-                    $item->detail()->orderBy('product_expired')->first()->product_stock }}</p>
+                    $item->detail->sum('product_stock') }}</p>
             </div>
             @auth
             @if ($item->product_status == 'aktif')

@@ -148,6 +148,7 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     Route::put('update-produk-process/{id}', [OwnerController::class, 'edit_product_process'])->name('product-proccess-update');
 
     Route::get('delete-produk/{id}', [OwnerController::class, 'delete_product'])->name('product-delete');
+    Route::post('hapus-expired', [OwnerController::class, 'delete_product_expired'])->name('hapus-expired');
     
     
     Route::get('kasir', [OwnerController::class,'lihatKasir'])->name('list-kasir');

@@ -9,11 +9,11 @@
 
         <div class="flex gap-4 justify-center items-center relative">
             @guest
-            <a href="login" class="text-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor h-[35px] px-3 rounded-lg">
+            <a href="/login" class="text-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor h-[35px] px-3 rounded-lg">
                 Masuk
             </a>
 
-            <a href="register" class="bg-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor text-white h-[35px] px-3 rounded-lg">
+            <a href="/register" class="bg-mainColor font-semibold text-lg border-2 flex items-center text-center border-mainColor text-white h-[35px] px-3 rounded-lg">
                 Daftar
             </a>
             @else
@@ -58,7 +58,7 @@
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
 
-                    <a href="riwayat-pesanan" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
+                    <a href="/riwayat-pesanan" class="flex justify-between px-4 pt-2 pb-4 items-center bg-semiWhite hover:bg-lightGrey duration-300 ease-in-out transition">
                         <div class="flex gap-2 items-center">
                             <i class="fa-solid fa-list"></i>
                             <p>Riwayat Pesanan</p>

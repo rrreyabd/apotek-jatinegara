@@ -135,25 +135,17 @@ class ProductController extends Controller
         if ($request->maksimum || $request->minimum) {
             if ($request->maksimum) {
                 if($request->golongan || $request->kategori || $request->bentuk) {
-                    $product = $product->whereHas('detail', function($query) use ($request) {
-                        $query->where('product_sell_price', '<=', $request->maksimum);
-                    });
-                }else{
-                    $product = Product::whereHas('detail', function($query) use ($request) {
-                        $query->where('product_sell_price', '<=', $request->maksimum);
-                    });
+                        $product = $product->where('product_sell_price', '<=', $request->maksimum);
+                    }else{
+                        $product = Product::where('product_sell_price', '<=', $request->maksimum);
+                    };
                 }
-            }
             
-            if ($request->minimum){
+            if($request->minimum){
                 if($request->golongan || $request->kategori || $request->bentuk || $request->maksimum) {
-                    $product = $product->whereHas('detail', function($query) use ($request) {
-                        $query->where('product_sell_price', '>=', $request->minimum);
-                    });
+                    $product = $product->where('product_sell_price', '>=', $request->minimum);
                 }else{
-                    $product = Product::whereHas('detail', function($query) use ($request) {
-                        $query->where('product_sell_price', '>=', $request->minimum);
-                    });
+                    $product = Product::where('product_sell_price', '>=', $request->minimum);
                 }
             }
         }
@@ -194,29 +186,17 @@ class ProductController extends Controller
 
             if ($request->filter == "Harga Tinggi - Rendah"){
                 if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
-                    $product = $product->join('product_details', 'products.product_id', '=', 'product_details.product_id')
-                    ->orderBy('product_details.product_sell_price', 'DESC')
-                    ->select('products.*', 'product_details.product_sell_price')
-                    ->distinct();
+                    $product = $product->orderBy('product_sell_price', 'DESC');
                 }else{
-                    $product = Product::join('product_details', 'products.product_id', '=', 'product_details.product_id')
-                    ->orderBy('product_details.product_sell_price', 'DESC')
-                    ->select('products.*', 'product_details.product_sell_price')
-                    ->distinct();
+                    $product = Product::orderBy('product_sell_price', 'DESC');
                 }
             }
 
             if ($request->filter == "Harga Rendah - Tinggi"){
                 if($request->golongan || $request->kategori || $request->bentuk || $request->minimum || $request->maksimum) {
-                    $product = $product->join('product_details', 'products.product_id', '=', 'product_details.product_id')
-                    ->orderBy('product_details.product_sell_price', 'ASC')
-                    ->select('products.*', 'product_details.product_sell_price')
-                    ->distinct();
+                    $product = $product->orderBy('product_sell_price', 'ASC');
                 }else{
-                    $product = Product::join('product_details', 'products.product_id', '=', 'product_details.product_id')
-                    ->orderBy('product_details.product_sell_price', 'ASC')
-                    ->select('products.*', 'product_details.product_sell_price')
-                    ->distinct();
+                    $product = Product::orderBy('product_sell_price', 'ASC');
                 }
             }
         }

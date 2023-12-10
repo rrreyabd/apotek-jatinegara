@@ -95,28 +95,48 @@ class CustomerController extends Controller
                     'selling_invoice_id' => $uuid,
                     'product_name' => $produk->product->product_name,
                     'product_type' => $produk->product->description->product_type,
-                    'product_sell_price' => $produk->product->detail()->orderBy('product_expired')->first()->product_sell_price,
+                    'product_sell_price' => $produk->product->product_sell_price,
                     'quantity' => $produk->quantity,
                 ]);
                 // selesai memasukan product ke invoice_detail
 
-                $stock = $produk->product->detail()->orderBy('product_expired')->first()->product_stock - $produk->quantity;
-
+                // $stock = $produk->product->detail()->orderBy('product_expired')->first()->product_stock - $produk->quantity;
+                
                 // mengurangi stock
-                $produk->product->detail()->orderBy('product_expired')->first()->update([
-                    'product_stock' => $stock,
-                ]);
-                // akhir mengurangi stock
+                while ($produk->quantity > 0) {
+                    if ($produk->quantity >= $produk->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->product_stock) {
+                        $produk->quantity = $produk->quantity - $produk->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->product_stock;
 
-                if($stock == 0){
-                    if($produk->product->detail()->count() <= 1){
-                        $produk->product->update([
-                            'product_status' => 'tidak aktif',
+                        $produk->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->update([
+                            'product_stock' => 0,
                         ]);
                     }else{
-                        $produk->product->detail()->orderBy('product_expired')->first()->delete();
+                        $produk->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->update([
+                            'product_stock' => $produk->product->detail()->where('product_stock' , '>', 0)->orderBy('product_expired')->first()->product_stock - $produk->quantity,
+                        ]);
+
+                        $produk->quantity = 0;
                     }
                 }
+                // akhir mengurangi stock
+
+                // mengubah status jadi tidak aktif
+                if ($produk->product->detail()->where('product_stock' , '>', 0)->first() == NULL) {
+                    $produk->product->update([
+                        'product_status' => 'tidak aktif',
+                    ]);
+                }
+                // akhir mengubah status menjadi tidak aktif
+
+                // if($stock == 0){
+                //     if($produk->product->detail()->count() <= 1){
+                //         $produk->product->update([
+                //             'product_status' => 'tidak aktif',
+                //         ]);
+                //     }else{
+                //         $produk->product->detail()->orderBy('product_expired')->first()->delete();
+                //     }
+                // }
             }
             
             foreach($produks as $produk){
@@ -136,8 +156,8 @@ class CustomerController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             $status = false;
-
             DB::rollback();
+            throw $e;
         }
         
         if ($status){
