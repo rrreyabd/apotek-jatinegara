@@ -100,7 +100,7 @@
                                 <td class="w-[160px] h-[140px] invisible">
                                     <img src="{{asset('img/obat1.jpg')}}" alt="" class="sm:visible w-25 p-5">
                                 </td>
-                                <td>
+                                <td class="w-80">
                                     <p class="font-bold">{{ $item->product_name }}</p>
                                 </td>
                                 <td>

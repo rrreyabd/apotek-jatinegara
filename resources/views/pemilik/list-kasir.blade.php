@@ -182,7 +182,9 @@
                                             </button>
                                         </div>
                                         <div class="bg-white p-7 pt-4 rounded-b-xl">
-                                            <form action="{{ route('edit-kasir') }}" method="post">
+                                            <form action="{{ route('edit-kasir',['id'=> $cashier->cashier->cashier_id]) }}" method="post">
+                                                @csrf
+                                                @method('put')
                                                 <div class="flex gap-6 p-4">
                                                     <table>
                                                         <tr>
@@ -202,11 +204,11 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="py-5"><label for="nohp">No. Handphone</label></td>
-                                                            <td class="ps-5"><input type="text" name="no_hp" class="p-2 px-4 rounded-xl shadow border" value="{{ $cashier->cashier->cashier_phone }}"></td>
+                                                            <td class="ps-5"><input type="text" name="no_hp" class="p-2 px-4 rounded-xl shadow border" required value="{{ $cashier->cashier->cashier_phone }}"></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="py-5"><label for="alamatKasir">Alamat</label></td>
-                                                            <td class="ps-5"><textarea class="p-2 px-4 rounded-xl shadow border h-28" >{{ $cashier->cashier->cashier_address }}</textarea></td>
+                                                            <td class="ps-5"><textarea name="address" class="p-2 px-4 rounded-xl shadow border h-28 @error('address') is-invalid @enderror" >{{ $cashier->cashier->cashier_address }}</textarea></td>
                                                         </tr>
                                                     </table>
                                                 </div>
