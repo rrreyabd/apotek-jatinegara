@@ -124,7 +124,8 @@
                         $i = 1;
                         $index =1;
                         @endphp
-                        @foreach ($cashiers as $cashier) <tr>
+                        @foreach ($cashiers as $cashier) 
+                        <tr>
                             <td>{{$i}}</td>
                             <td>
                                 <span class="font-bold">{{ $cashier->username }}</span>
@@ -138,10 +139,12 @@
                                 {{ $cashier->cashier->cashier_address }}
                             </td>
                             <td>
-                                <button onclick="showPopUpEdit({{ $index }})" class="p-2 bg-secondaryColor rounded mx-2"><i
-                                        class="fa-regular fa-pen-to-square" style="color: white;"></i></button>
-                                <button onclick="showPopUpDelete({{ $index }})" class="p-2 bg-mediumRed rounded mx-2"><i
-                                        class="fa-regular fa-trash-can" style="color: white;"></i></button>
+                                <div class="flex">
+                                    <button onclick="showPopUpEdit({{ $index }})" class="p-2 bg-secondaryColor rounded mx-2"><i
+                                            class="fa-regular fa-pen-to-square" style="color: white;"></i></button>
+                                    <button onclick="showPopUpDelete({{ $index }})" class="p-2 bg-mediumRed rounded mx-2"><i
+                                            class="fa-regular fa-trash-can" style="color: white;"></i></button>
+                                </div>         
 
                                 {{-- Pop up konfirmasi hapus start --}}
                                 <div class="absolute w-screen h-screen backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden"
@@ -219,15 +222,15 @@
                                     </div>
                                 </div>
                                 {{-- MODAL EDIT KASIR END --}}
-                            </td>
-                            </tr>
                             @php 
                             $i++;
                             $index++;
                             @endphp
                             @endforeach
-                    </tbody>
-                </table>
+                        </td>
+                    </tr>  
+                </tbody>
+            </table> 
             </div>
         </div>
     </main>

@@ -99,10 +99,12 @@
                         <td>{{ $item->supplier_phone }}</td>
                         <td>{{ $item->supplier_address }}</td>
                         <td>
-                            <button onclick="showPopUpEdit()" class="p-2 bg-secondaryColor rounded mx-2"><i
-                                class="fa-regular fa-pen-to-square" style="color: white;"></i></button>
+                            <div class="flex">
+                                <button onclick="showPopUpEdit()" class="p-2 bg-secondaryColor rounded mx-2"><i
+                                    class="fa-regular fa-pen-to-square" style="color: white;"></i></button>
                                 <button onclick="showPopUpDelete()" class="p-2 bg-mediumRed rounded mx-2"><i
                                     class="fa-regular fa-trash-can" style="color: white;"></i></button>
+                            </div>
                                     
                                     {{-- Pop up konfirmasi hapus start --}}
                                     <div class="absolute w-screen h-screen backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden"
