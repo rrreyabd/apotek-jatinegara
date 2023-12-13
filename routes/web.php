@@ -163,6 +163,7 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     Route::get('supplier', [OwnerController::class,'display_supplier'])->name('list-supplier');
     Route::put('tambah-supplier-process', [OwnerController::class, 'add_supplier'])->name('add-supplier');
     Route::put('edit-supplier-process/{id}', [OwnerController::class, 'edit_supplier'])->name('edit-supplier');
+    Route::put('delete-supplier-process/{id}', [OwnerController::class, 'delete_supplier'])->name('delete-supplier');
     
     
     Route::get('user', [OwnerController::class, 'display_user'])->name('list-user');
