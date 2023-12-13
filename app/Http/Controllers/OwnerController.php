@@ -209,7 +209,7 @@ class OwnerController extends Controller
         $products->description->save();
         $products->detail()->orderBy('product_expired')->first()->save();
 
-        return redirect('/owner/produk')->with('update_status','Produk berhasil diperbaharui');
+        return redirect('/owner/produk')->with('edit_status','Produk berhasil diperbaharui');
 
     }
 
@@ -236,7 +236,7 @@ class OwnerController extends Controller
         $new_detail -> product_stock = $request->stock;
 
         $new_detail->save();
-        return redirect('/owner/produk')->with('add_batch_status','Batch produk berhasil ditambah');
+        return redirect('/owner/produk')->with('add_status','Batch produk berhasil ditambah');
     }
 
     public function display_supplier()
@@ -258,7 +258,7 @@ class OwnerController extends Controller
         $new_supplier -> supplier_phone = $request->no_telp;
 
         $new_supplier->save();
-        return redirect('owner/supplier')->with('add_supplier_status','Supplier berhasil ditambah');
+        return redirect('owner/supplier')->with('add_status','Supplier berhasil ditambah');
     }
 
     public function edit_supplier(Request $request,$id)
@@ -269,7 +269,13 @@ class OwnerController extends Controller
         $suppliers -> supplier_phone = $request->no_telp;
 
         $suppliers ->save();
-        return redirect('owner/supplier')->with('edit_supplier_status','Supplier berhasil diedit');
+        return redirect('owner/supplier')->with('edit_status','Supplier berhasil diedit');
+    }
+
+    public function delete_supplier(Request $request,$id)
+    {
+        Supplier::where('supplier_id', $request->id)->delete();
+        return redirect('/owner/supplier')->with('delete_status','Supplier berhasil dihapus');
     }
 
     public function log_penjualanan()
@@ -302,7 +308,6 @@ class OwnerController extends Controller
         $cashiers = User::where('role', 'cashier')
         ->get();
 
-        // dd($cashiers);
         return view ('pemilik.list-kasir', [
             'cashiers' => $cashiers,
             'total' => $this->total_pesanan_online()
