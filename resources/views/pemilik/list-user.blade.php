@@ -73,7 +73,7 @@
                                             <form action="{{ route('delete-user',['id'=> $item->customer_id]) }}" method="post">
                                                 @csrf
                                                 @method('put')
-                                                <button onclick="showPopUpDelete({{ $index }})"
+                                                <button type="button" onclick="showPopUpDelete({{ $index }})"
                                                 class="bg-mediumRed text-white text-2xl p-1 px-5 rounded-lg">Tidak</button>
                                                 <button type="submit"
                                                 class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>

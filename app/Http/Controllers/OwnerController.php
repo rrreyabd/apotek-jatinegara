@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreCashierRequest;
 use App\Http\Requests\UpdateCashierRequest;
 use App\Policies\SellingInvoiceDetailPolicy;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -111,9 +112,22 @@ class OwnerController extends Controller
     public function add_product_process(Request $request)
     {
         $validated_data = $request->validate([
+            'nama_obat' => ['required', 'min:5', 'max:255', 'unique:products,product_name'],
             'gambar_obat' => ['required', 'file', 'max:5120', 'mimes:png,jpeg,jpg'],
+            'kategori' => ['required'],
+            'golongan' => ['required'],
+            'satuan_obat' => ['required'],
+            'NIE' => ['required', 'size:15'],
+            'tipe' => ['required'],
+            'pemasok' => ['required'],
+            'produksi' => ['required', 'min:5', 'max:255'],
+            'deskripsi' => ['required', 'regex:/^[a-zA-Z0-9 -]+$/'],
+            'efek_samping' => ['required', 'regex:/^[a-zA-Z0-9 -]+$/'],
+            'dosis' => ['required', 'regex:/^[a-zA-Z0-9 -]+$/'],
+            'harga_beli' => ['required', 'numeric', 'min:3'],
+            'harga_jual' => ['required', 'numeric', 'min:3'],
+            'stock' => ['required', 'numeric', 'min:0'],
         ]);
-
         
         $carbonDate = Carbon::parse($request->expired_date);
         $formatted = $carbonDate->format('Y-m-d H:i:s');
@@ -186,7 +200,7 @@ class OwnerController extends Controller
         $products -> detail()-> orderBy('product_expired')-> first()-> product_buy_price = $request->harga_beli;
         $products -> detail()->orderBy('product_expired')->first()->product_expired = $formatted;
         $products -> description -> group_id = $request->golongan;
-        $products -> detail()-> orderBy('product_expired')-> first()-> product_sell_price = $request->harga_jual;
+        $products -> product_sell_price = $request->harga_jual;
         $products -> detail()->orderBy('product_expired')->first()->product_stock = $request->stock;
         $products -> description -> unit_id = $request->satuan_obat;
         $products -> description -> product_DPN = $request->NIE;
@@ -267,25 +281,43 @@ class OwnerController extends Controller
 
     public function add_supplier(Request $request)
     {
-        $new_supplier = new Supplier;
-        $new_supplier -> supplier_id = Str::uuid();
-        $new_supplier -> supplier = $request->nama_supplier;
-        $new_supplier -> supplier_address = $request->alamat;
-        $new_supplier -> supplier_phone = $request->no_telp;
+        try{
+            $request->validate([
+                'nama_supplier' => ['required', 'string', 'min:5', 'max:255', 'unique:suppliers,supplier'],
+                'no_telp' => ['required','numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
+                'alamat' => ['required', 'min:10', 'max:255']
+            ]);
 
-        $new_supplier->save();
-        return redirect('owner/supplier')->with('add_supplier_status','Supplier berhasil ditambah');
+            $new_supplier = new Supplier;
+            $new_supplier -> supplier_id = Str::uuid();
+            $new_supplier -> supplier = $request->nama_supplier;
+            $new_supplier -> supplier_address = $request->alamat;
+            $new_supplier -> supplier_phone = $request->no_telp;
+    
+            $new_supplier->save();
+            return redirect('owner/supplier')->with('add_status','Supplier Berhasil Ditambah');
+        }catch(Exception $e){
+            return redirect('/owner/supplier')->with('error_status','Terjadi Kesalahan')->with('error', $e->validator->errors()->messages());
+        }
     }
 
     public function edit_supplier(Request $request,$id)
     {
-        $suppliers = Supplier::find($id);
-        $suppliers -> supplier = $request->nama_supplier;
-        $suppliers -> supplier_address = $request->alamat;
-        $suppliers -> supplier_phone = $request->no_telp;
+        try{
+            $request->validate([
+                'no_telp' => ['required','numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
+                'alamat' => ['required', 'min:10', 'max:255']
+            ]);
 
-        $suppliers ->save();
-        return redirect('owner/supplier')->with('edit_supplier_status','Supplier berhasil diedit');
+            $suppliers = Supplier::find($id);
+            $suppliers -> supplier_address = $request->alamat;
+            $suppliers -> supplier_phone = $request->no_telp;
+
+            $suppliers ->save();
+            return redirect('owner/supplier')->with('add_status','Supplier Berhasil Diedit');
+        }catch(Exception $e){
+            return redirect('/owner/supplier')->with('error_status','Terjadi Kesalahan')->with('error', $e->validator->errors()->messages());
+        }
     }
 
     public function log_penjualanan()
@@ -326,36 +358,57 @@ class OwnerController extends Controller
     }
 
     public function tambahKasir(Request $request){
-        $new_user = new User;
-        $uuid = Str::uuid();
-
-        $new_user->user_id = $uuid;
-        $new_user->username = $request->username;
-        $new_user->email = $request->email;
-        $new_user->role = 'cashier';
-        $new_user->password = $request->password;
-        $new_user->save();
-
-        $new_cashier = new Cashier;
-        $new_cashier -> cashier_id = Str::uuid();
-        $new_cashier -> user_id = $uuid;
-        $new_cashier -> cashier_phone = $request->no_hp;
-        $new_cashier -> cashier_gender = $request->gender;
-        $new_cashier -> cashier_address = $request->address;
-        $new_cashier -> save();
-
-        return redirect('/owner/kasir')->with('add_status','Kasir berhasil ditambah');
+        try{
+            $request->validate([
+                'username' => ['required', 'string', 'min:5', 'max:255', 'regex:/^[^\s]+$/', 'unique:users'],
+                'email' => ['required', 'email:dns', 'unique:users'],
+                'password' => ['required', 'min:8', 'regex:/^[^\s]+$/'],
+                'nohp' => ['required','numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
+                'address' => ['required', 'min:10']
+            ]);
+    
+            $new_user = new User;
+            $uuid = Str::uuid();
+    
+            $new_user->user_id = $uuid;
+            $new_user->username = $request->username;
+            $new_user->email = $request->email;
+            $new_user->role = 'cashier';
+            $new_user->password = $request->password;
+            $new_user->save();
+    
+            $new_cashier = new Cashier;
+            $new_cashier -> cashier_id = Str::uuid();
+            $new_cashier -> user_id = $uuid;
+            $new_cashier -> cashier_phone = $request->nohp;
+            $new_cashier -> cashier_gender = $request->gender;
+            $new_cashier -> cashier_address = $request->address;
+            $new_cashier -> save();
+    
+            return redirect('/owner/kasir')->with('add_status','Kasir Berhasil Ditambah');
+        }catch(Exception $e){
+            return redirect('/owner/kasir')->with('error_status','Terjadi Kesalahan')->with('error', $e->validator->errors()->messages());
+        }
     }
     
     public function editKasir(Request $request,$id)
     {
-        $cashiers= Cashier::find($id);
-        $cashiers -> cashier_phone = $request->no_hp;
-        $cashiers -> cashier_gender = $request->gender;
-        $cashiers -> cashier_address = $request->address;
-        
-        $cashiers -> save();
-        return redirect('/owner/kasir')->with('edit_status','Kasir berhasil diedit');
+        try{
+            $request->validate([
+                'nohp' => ['required','numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
+                'address' => ['required', 'min:10']
+            ]);
+
+            $cashiers= Cashier::find($id);
+            $cashiers -> cashier_phone = $request->nohp;
+            $cashiers -> cashier_gender = $request->gender;
+            $cashiers -> cashier_address = $request->address;
+            
+            $cashiers -> save();
+            return redirect('/owner/kasir')->with('edit_status','Kasir Berhasil Diedit');
+        }catch(Exception $e){
+            return redirect('/owner/kasir')->with('edit_status','Terjadi Kesalahan')->with('error', $e->validator->errors()->messages());
+        }
     }
 
     public function deleteKasir(Request $request)

@@ -22,11 +22,7 @@
                 <i class="fa-solid fa-arrow-left" style="color: white;"></i>
             </a>
             @php
-            
                 $uuid = $product->product_id;
-                $numericValue = hexdec(substr($uuid, -12));
-                $formatted = 'P-' . str_pad($numericValue, 4, '0', STR_PAD_LEFT);
-
             @endphp
             <p class="text-3xl font-TripBold my-3 mt-8">Edit Produk</p>
 
@@ -37,17 +33,26 @@
                     @method('PUT')
 
                     <div class="flex flex-col justify-center items-center mb-3">
-                        <p class="text-3xl font-TripBold">{{ $formatted }}</p>
+                        <p class="text-3xl font-TripBold">{{ $product->product_name }}</p>
                         {{-- status --}}
                         <div class="w-fit rounded-lg border-2 shadow p-1.5 px-3 mt-3">
                             <select name="status" id="" @selected(true) class="outline-none">
-                                @foreach ($status as $item)
+                                @if ($product->product_status != 'exp')
+                                    @foreach ($status as $item)
                                         <option value="{{ $item }}" {{ $product->product_status == $item ? 'selected' : '' }}>
                                             {{ $item }}
                                         </option>
                                     @endforeach
-                            </select>
-                        </div>
+                                @else
+                                    <option value="{{ $product->product_status }}">
+                                        Expired
+                                    </option>
+                                    @endif
+                                </select>
+                            </div>
+                            @if ($product->product_status == 'exp')
+                                <p class="text-s text-red-500">Tambahkan Batch Baru Dengan Exp > 3bulan untuk membuka status dari <a href="/owner/detail-produk/{{ $product->product_id }}" class="underline text-blue-700">detail produk</a></p>
+                            @endif
                     </div>
 
                     <div class="md:flex md:grid-col-4 gap-8 justify-between">
