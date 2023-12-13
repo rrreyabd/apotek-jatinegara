@@ -143,7 +143,7 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     Route::put('tambah-produk-process', [OwnerController::class, 'add_product_process'])->name('add-product-process');
     Route::get('tambah-batch-produk/{id}', [OwnerController::class, 'add_batch'])->name('add-product-batch');
     Route::put('tambah-batch-proccess', [OwnerController::class, 'add_batch_process'])->name('add-batch-process');
-
+    
     Route::get('edit-produk/{id}', [OwnerController::class, 'edit_product'])->name('product-edit');
     Route::put('update-produk-process/{id}', [OwnerController::class, 'edit_product_process'])->name('product-proccess-update');
 
@@ -152,7 +152,7 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     
     
     Route::get('kasir', [OwnerController::class,'lihatKasir'])->name('list-kasir');
-    Route::put('edit-kasir', [OwnerController::class,'editKasir'])->name('edit-kasir');
+    Route::put('edit-kasir/{id}', [OwnerController::class,'editKasir'])->name('edit-kasir');
     Route::put('tambah-kasir', [OwnerController::class,'tambahKasir'])->name('tambah-kasir');
     Route::put('delete-kasir', [OwnerController::class,'deleteKasir'])->name('delete-kasir');
     
@@ -161,8 +161,12 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     Route::get('transaksi-pembelian', [OwnerController::class,'log_pembelian'])->name('list-buying-transaction');
     
     Route::get('supplier', [OwnerController::class,'display_supplier'])->name('list-supplier');
+    Route::put('tambah-supplier-process', [OwnerController::class, 'add_supplier'])->name('add-supplier');
+    Route::put('edit-supplier-process/{id}', [OwnerController::class, 'edit_supplier'])->name('edit-supplier');
+    
     
     Route::get('user', [OwnerController::class, 'display_user'])->name('list-user');
+    Route::put('delete-user-process/{id}', [OwnerController::class, 'delete_user'])->name('delete-user');
 
     Route::get('pesanan-pending', [OwnerController::class, 'pendingOrder'])->name('pesanan-pending');
     Route::post('pesanan-pending/{sellingInvoiceID}', [OwnerController::class, 'refund'])->name('owner-refund');

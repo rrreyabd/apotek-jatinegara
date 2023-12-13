@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Cashier;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Group;
 use App\Models\Unit;
 use App\Models\SellingInvoice;
@@ -47,19 +48,37 @@ class OwnerController extends Controller
         ]);
     }
 
+    public function total_pesanan_online()
+    {
+        $total_pesanan_online = SellingInvoice::where('order_status','Berhasil')->count();
+        return $total_pesanan_online;
+    }
+    
     public function display_user()
     {
-        $total_pesanan_online = SellingInvoice::where('order_status','Berhasil')->count();;
+        $user = Customer::all();
         return view('pemilik.list-user', [
-            'total' => $total_pesanan_online
+            'user' => $user,
+            'total' => $this->total_pesanan_online()
         ]);
     }
+
+    public function delete_user(Request $request, $id)
+    {
+        $user = Customer::find($id);
+        User::where('user_id',$user->user_id)->delete();
+
+        Customer::where('customer_id', $request->id)->delete();
+        return redirect('/owner/user')->with('delete_status','User berhasil dihapus');
+    }
+
     public function display_product()
     {
         $products = Product::all();
         
         return view('pemilik.list-produk',[
-            'product' => $products
+            'product' => $products,
+            'total' => $this->total_pesanan_online()
         ]);
     }
     public function detail_product($id)
@@ -67,7 +86,8 @@ class OwnerController extends Controller
         $products = Product::find($id);
 
         return view('pemilik.detail-produk',[
-            'product' => $products
+            'product' => $products,
+            'total' => $this->total_pesanan_online()
         ]);
     }
 
@@ -240,15 +260,41 @@ class OwnerController extends Controller
         $supplier = Supplier::orderBy('supplier')->get();
 
         return view('pemilik.list-supplier',[
-            'suppliers' => $supplier
+            'suppliers' => $supplier,
+            'total' => $this->total_pesanan_online()
         ]);
     }
+
+    public function add_supplier(Request $request)
+    {
+        $new_supplier = new Supplier;
+        $new_supplier -> supplier_id = Str::uuid();
+        $new_supplier -> supplier = $request->nama_supplier;
+        $new_supplier -> supplier_address = $request->alamat;
+        $new_supplier -> supplier_phone = $request->no_telp;
+
+        $new_supplier->save();
+        return redirect('owner/supplier')->with('add_supplier_status','Supplier berhasil ditambah');
+    }
+
+    public function edit_supplier(Request $request,$id)
+    {
+        $suppliers = Supplier::find($id);
+        $suppliers -> supplier = $request->nama_supplier;
+        $suppliers -> supplier_address = $request->alamat;
+        $suppliers -> supplier_phone = $request->no_telp;
+
+        $suppliers ->save();
+        return redirect('owner/supplier')->with('edit_supplier_status','Supplier berhasil diedit');
+    }
+
     public function log_penjualanan()
     {
         $selling = SellingInvoice::get();
 
         return view('pemilik.log-transaksi-penjualan',[
-            'sellings' => $selling
+            'sellings' => $selling,
+            'total' => $this->total_pesanan_online()
         ]);
 
     }
@@ -261,7 +307,8 @@ class OwnerController extends Controller
 
         return view('pemilik.log-transaksi-pembelian',[
             'buying' => $buying,
-            'supplier' => $supplier
+            'supplier' => $supplier,
+            'total' => $this->total_pesanan_online()
         ]);
 
     }
@@ -272,8 +319,12 @@ class OwnerController extends Controller
         ->get();
 
         // dd($cashiers);
-        return view ('pemilik.list-kasir', ['cashiers' => $cashiers]);
+        return view ('pemilik.list-kasir', [
+            'cashiers' => $cashiers,
+            'total' => $this->total_pesanan_online()
+        ]);
     }
+
     public function tambahKasir(Request $request){
         $new_user = new User;
         $uuid = Str::uuid();
@@ -293,24 +344,36 @@ class OwnerController extends Controller
         $new_cashier -> cashier_address = $request->address;
         $new_cashier -> save();
 
-        return redirect('/cashier/kasir')->with('add_status','Kasir berhasil ditambah');
+        return redirect('/owner/kasir')->with('add_status','Kasir berhasil ditambah');
     }
+    
+    public function editKasir(Request $request,$id)
+    {
+        $cashiers= Cashier::find($id);
+        $cashiers -> cashier_phone = $request->no_hp;
+        $cashiers -> cashier_gender = $request->gender;
+        $cashiers -> cashier_address = $request->address;
+        
+        $cashiers -> save();
+        return redirect('/owner/kasir')->with('edit_status','Kasir berhasil diedit');
+    }
+
     public function deleteKasir(Request $request)
     {
         User::where('user_id', $request->id)->delete();
-        return redirect('/cashier/kasir')->with('add_status','Kasir berhasil dihapus');
+        return redirect('/owner/kasir')->with('delete_status','Kasir berhasil dihapus');
     }
+
     public function pendingOrder()
     {
         $pendingOrders = SellingInvoice::where('order_status', 'Menunggu Pengembalian')
             ->orderBy('order_date', 'desc')
             ->get();
-            // dd($pendingOrders);
-
-            $total = SellingInvoice::where('order_status', 'Menunggu Pengembalian')
-            ->count();
     
-        return view('pemilik.pesanan-pending', ['pendingOrders' => $pendingOrders,  'total' => $total]);
+        return view('pemilik.pesanan-pending', [
+            'pendingOrders' => $pendingOrders, 
+            'total' => $this->total_pesanan_online()
+        ]);
     }
     
     public function resep_dokter(Request $request){
