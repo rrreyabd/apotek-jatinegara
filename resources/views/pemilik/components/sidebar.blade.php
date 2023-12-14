@@ -69,6 +69,13 @@
         </div>
 
         <div class="overflow-x-hidden text-mediumGrey my-4" style="transition: 0.3s;">
+            <a href="/log" class="flex items-center text-lg">
+                <i class="fa-regular fa-folder-open me-3"></i>
+                <p>Log</p>
+            </a>
+        </div>
+
+        <div class="overflow-x-hidden text-mediumGrey my-4" style="transition: 0.3s;">
             <form action="/logout" method="POST">
                 @csrf
                 <button class="flex justify-cent text-lger items-center">
