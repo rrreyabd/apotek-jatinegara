@@ -30,10 +30,24 @@ return new class extends Migration
             b.product_dosage,
             b.product_indication,
             b.product_notice,
-            g.product_expired,
-            g.product_stock,
-            g.product_buy_price,
-            g.product_sell_price
+            (
+        		SELECT g_sub.product_expired
+        		FROM product_details g_sub
+                WHERE g_sub.product_stock > 0
+				AND g_sub.product_id = a.product_id
+        		ORDER BY g_sub.product_expired
+        		LIMIT 1
+    		) AS product_expired,
+            SUM(g.product_stock) AS product_stock,
+            (
+        		SELECT g_sub.product_buy_price
+        		FROM product_details g_sub
+        		WHERE g_sub.product_stock > 0
+                AND g_sub.product_id = a.product_id
+                ORDER BY g_sub.product_expired
+        		LIMIT 1
+    		) AS product_buy_price,
+			a.product_sell_price
         FROM
             products a
         JOIN
@@ -47,17 +61,24 @@ return new class extends Migration
         JOIN
             suppliers f ON b.supplier_id = f.supplier_id
         JOIN
-            (
-                SELECT
-                    product_id,
-                    product_expired,
-                    product_stock,
-                    product_buy_price,
-                    product_sell_price,
-                    ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY product_expired ASC) AS RowNum
-                FROM
-                    product_details
-            ) AS g ON a.product_id = g.product_id;";
+        	product_details g ON a.product_id = g.product_id
+		GROUP BY
+			a.product_id,
+            a.product_name,
+            a.product_status,
+            c.category,
+            d.`group`,
+            e.unit,
+            f.supplier,
+            b.product_type,
+            b.product_photo,
+            b.product_manufacture,
+            b.product_DPN,
+            b.product_sideEffect,
+            b.product_description,
+            b.product_dosage,
+            b.product_indication,
+            b.product_notice";
 
         DB::statement($sql);
     }

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Pemilik Apotek | Kasir</title>
+    <title>Pemilik Apotek | Transaksi Pembelian</title>
     @vite('resources/css/app.css')
 
     {{-- FONT AWESOME --}}
@@ -14,6 +14,21 @@
 
     {{-- DATATABLES --}}
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
+    <!-- DataTables Buttons -->
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 </head>
 
 <body class="font-Inter relative">
@@ -134,14 +149,14 @@
                                                 </div>
 
                                                 <div class="flex flex-col gap-8 mt-8 overflow-y-auto h-72">
-                                                    <table class="w-full">
+                                                    <table class="w-full" id="table_list">
                                                         <tr class="border-2 border-b-mainColor border-transparent text-mainColor font-bold w-[100%] justify-between">
-                                                            <td class="pb-2 text-center">No</td>
-                                                            <td class="pb-2">Nama</td>
-                                                            <td class="pb-2 text-center">Tanggal Kadaluarsa</td>
-                                                            <td class="pb-2 text-center">Jumlah</td>
-                                                            <td class="pb-2 text-center">Harga</td>
-                                                            <td class="pb-2">Total</td>
+                                                            <th class="pb-2 text-center">No</th>
+                                                            <th class="pb-2">Nama</th>
+                                                            <th class="pb-2 text-center">Tanggal Kadaluarsa</th>
+                                                            <th class="pb-2 text-center">Jumlah</th>
+                                                            <th class="pb-2 text-center">Harga</th>
+                                                            <th class="pb-2">Total</th>
                                                         </tr>
                                                         @php
                                                             $j =1;
@@ -175,6 +190,12 @@
                                                         <p class="text-secondaryColor">Rp
                                                             {{ number_format($subtotal , 0, ',', '.') }}</p>
                                                     </div>
+                                                </div>
+                                                <div class="flex gap-4 mt-4">
+                                                    <button onclick="printModalContent(<?= $index ?>)" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
+                                                        <i class="fa-solid fa-print"></i>
+                                                        Print
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -242,6 +263,34 @@
         for (let i = 0; i < 1; i++) {
             initializeDropdown('dropdown-button' + i, 'dropdown-menu' + i);
         }
+    </script>
+
+    <script>
+        function printModalContent(index) {
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+
+            const printDocument = iframe.contentWindow.document;
+            printDocument.open();
+            printDocument.write('<html><head><title>Print</title></head><body>');
+
+            const modal = document.getElementById('detailModal' + index);
+            const modalClone = modal.cloneNode(true);
+            modalClone.classList.remove('hidden');
+            printDocument.body.appendChild(modalClone);
+
+            printDocument.write('</body></html>');
+            printDocument.close();
+
+            iframe.onload = function () {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+                console.log "Hello";
+                document.body.removeChild(iframe);
+            };
+        }
+
     </script>
 </body>
 

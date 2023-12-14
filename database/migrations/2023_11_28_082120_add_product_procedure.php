@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -52,11 +53,11 @@ return new class extends Migration
             INSERT INTO product_descriptions (description_id, category_id, group_id, unit_id, product_DPN, product_type, supplier_id, product_manufacture, product_description, product_sideEffect, product_dosage, product_indication, product_notice, product_photo)
             VALUES (desc_id, kategori, golongan, satuan_obat, NIE, tipe, pemasok, produksi, deskripsi, efek_samping, dosis, indikasi, peringatan, gambar_obat_file);
         
-            INSERT INTO products (product_id, product_status, product_name, description_id)
-            VALUES (product_id, product_status, product_name, desc_id);
+            INSERT INTO products (product_id, product_status, product_name, product_sell_price, description_id)
+            VALUES (product_id, product_status, product_name, harga_jual, desc_id);
         
-            INSERT INTO product_details (product_id, detail_id, product_buy_price, product_expired, product_sell_price, product_stock)
-            VALUES (product_id, detail_id, harga_beli, expired_date, harga_jual, stock);
+            INSERT INTO product_details (product_id, detail_id, product_buy_price, product_expired, product_stock)
+            VALUES (product_id, detail_id, harga_beli, expired_date, stock);
             
             COMMIT;
             

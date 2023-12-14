@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Cashier;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Group;
 use App\Models\Unit;
 use App\Models\SellingInvoice;
@@ -17,6 +19,7 @@ use App\Models\Supplier;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreCashierRequest;
 use App\Http\Requests\UpdateCashierRequest;
@@ -45,19 +48,37 @@ class OwnerController extends Controller
         ]);
     }
 
+    public function total_pesanan_online()
+    {
+        $total_pesanan_online = SellingInvoice::where('order_status','Berhasil')->count();
+        return $total_pesanan_online;
+    }
+    
     public function display_user()
     {
-        $total_pesanan_online = SellingInvoice::where('order_status','Berhasil')->count();;
+        $user = Customer::all();
         return view('pemilik.list-user', [
-            'total' => $total_pesanan_online
+            'user' => $user,
+            'total' => $this->total_pesanan_online()
         ]);
     }
+
+    public function delete_user(Request $request, $id)
+    {
+        $user = Customer::find($id);
+        User::where('user_id',$user->user_id)->delete();
+
+        Customer::where('customer_id', $request->id)->delete();
+        return redirect('/owner/user')->with('delete_status','User berhasil dihapus');
+    }
+
     public function display_product()
     {
         $products = Product::all();
         
         return view('pemilik.list-produk',[
-            'product' => $products
+            'product' => $products,
+            'total' => $this->total_pesanan_online()
         ]);
     }
     public function detail_product($id)
@@ -65,7 +86,8 @@ class OwnerController extends Controller
         $products = Product::find($id);
 
         return view('pemilik.detail-produk',[
-            'product' => $products
+            'product' => $products,
+            'total' => $this->total_pesanan_online()
         ]);
     }
 
@@ -83,7 +105,6 @@ class OwnerController extends Controller
             "groups"=> $group ?? [],
             "suppliers"=> $supplier ?? [],
             "types" => $type ?? [],
-            "status" => $state ?? [],
         ]);
     }
 
@@ -153,7 +174,7 @@ class OwnerController extends Controller
         $products = Product::find($id);
         
         $validated_data = $request->validate([
-            'gambar_obat' => ['required', 'file', 'max:5120', 'mimes:png,jpeg,jpg'],
+            'gambar_obat' => ['file', 'max:5120', 'mimes:png,jpeg,jpg'],
         ]);
 
         $carbonDate = Carbon::parse($request->expired_date);
@@ -187,8 +208,26 @@ class OwnerController extends Controller
         $products->description->save();
         $products->detail()->orderBy('product_expired')->first()->save();
 
-        return redirect('/owner/produk')->with('update_status','Produk berhasil diperbaharui');
+        return redirect('/owner/produk')->with('edit_status','Produk berhasil diperbaharui');
 
+    }
+
+    public function delete_product_expired(Request $request){
+        DB::beginTransaction();
+
+        try{
+            ProductDetail::where('detail_id', $request->detail_id)->first()->product->update([
+                'product_status' => 'aktif',
+            ]);
+            ProductDetail::where('detail_id', $request->detail_id)->delete();
+
+            DB::commit();
+            return redirect()->back()->with('success', "Status Kembali Aktif");
+        }catch (\Exception $e) {
+            DB::rollback();
+            // throw $e;
+            return redirect()->back()->with('error', "Terjadi Kesalahan");
+        }
     }
 
     public function add_batch($id)
@@ -210,11 +249,10 @@ class OwnerController extends Controller
         $new_detail -> detail_id = $request->detail_id;
         $new_detail -> product_buy_price = $request->harga_beli;
         $new_detail -> product_expired = $formatted;
-        $new_detail -> product_sell_price = $request->harga_jual;
         $new_detail -> product_stock = $request->stock;
 
         $new_detail->save();
-        return redirect('/owner/produk')->with('add_batch_status','Batch produk berhasil ditambah');
+        return redirect('/owner/produk')->with('add_status','Batch produk berhasil ditambah');
     }
 
     public function display_supplier()
@@ -222,15 +260,47 @@ class OwnerController extends Controller
         $supplier = Supplier::orderBy('supplier')->get();
 
         return view('pemilik.list-supplier',[
-            'suppliers' => $supplier
+            'suppliers' => $supplier,
+            'total' => $this->total_pesanan_online()
         ]);
     }
+
+    public function add_supplier(Request $request)
+    {
+        $new_supplier = new Supplier;
+        $new_supplier -> supplier_id = Str::uuid();
+        $new_supplier -> supplier = $request->nama_supplier;
+        $new_supplier -> supplier_address = $request->alamat;
+        $new_supplier -> supplier_phone = $request->no_telp;
+
+        $new_supplier->save();
+        return redirect('owner/supplier')->with('add_status','Supplier berhasil ditambah');
+    }
+
+    public function edit_supplier(Request $request,$id)
+    {
+        $suppliers = Supplier::find($id);
+        $suppliers -> supplier = $request->nama_supplier;
+        $suppliers -> supplier_address = $request->alamat;
+        $suppliers -> supplier_phone = $request->no_telp;
+
+        $suppliers ->save();
+        return redirect('owner/supplier')->with('edit_status','Supplier berhasil diedit');
+    }
+
+    public function delete_supplier(Request $request,$id)
+    {
+        Supplier::where('supplier_id', $request->id)->delete();
+        return redirect('/owner/supplier')->with('delete_status','Supplier berhasil dihapus');
+    }
+
     public function log_penjualanan()
     {
         $selling = SellingInvoice::get();
 
         return view('pemilik.log-transaksi-penjualan',[
-            'sellings' => $selling
+            'sellings' => $selling,
+            'total' => $this->total_pesanan_online()
         ]);
 
     }
@@ -243,7 +313,8 @@ class OwnerController extends Controller
 
         return view('pemilik.log-transaksi-pembelian',[
             'buying' => $buying,
-            'supplier' => $supplier
+            'supplier' => $supplier,
+            'total' => $this->total_pesanan_online()
         ]);
 
     }
@@ -253,20 +324,61 @@ class OwnerController extends Controller
         $cashiers = User::where('role', 'cashier')
         ->get();
 
-        // dd($cashiers);
-        return view ('pemilik.list-kasir', ['cashiers' => $cashiers]);
+        return view ('pemilik.list-kasir', [
+            'cashiers' => $cashiers,
+            'total' => $this->total_pesanan_online()
+        ]);
     }
+
+    public function tambahKasir(Request $request){
+        $new_user = new User;
+        $uuid = Str::uuid();
+
+        $new_user->user_id = $uuid;
+        $new_user->username = $request->username;
+        $new_user->email = $request->email;
+        $new_user->role = 'cashier';
+        $new_user->password = $request->password;
+        $new_user->save();
+
+        $new_cashier = new Cashier;
+        $new_cashier -> cashier_id = Str::uuid();
+        $new_cashier -> user_id = $uuid;
+        $new_cashier -> cashier_phone = $request->no_hp;
+        $new_cashier -> cashier_gender = $request->gender;
+        $new_cashier -> cashier_address = $request->address;
+        $new_cashier -> save();
+
+        return redirect('/owner/kasir')->with('add_status','Kasir berhasil ditambah');
+    }
+    
+    public function editKasir(Request $request,$id)
+    {
+        $cashiers= Cashier::find($id);
+        $cashiers -> cashier_phone = $request->no_hp;
+        $cashiers -> cashier_gender = $request->gender;
+        $cashiers -> cashier_address = $request->address;
+        
+        $cashiers -> save();
+        return redirect('/owner/kasir')->with('edit_status','Kasir berhasil diedit');
+    }
+
+    public function deleteKasir(Request $request)
+    {
+        User::where('user_id', $request->id)->delete();
+        return redirect('/owner/kasir')->with('delete_status','Kasir berhasil dihapus');
+    }
+
     public function pendingOrder()
     {
         $pendingOrders = SellingInvoice::where('order_status', 'Menunggu Pengembalian')
             ->orderBy('order_date', 'desc')
             ->get();
-            // dd($pendingOrders);
-
-            $total = SellingInvoice::where('order_status', 'Menunggu Pengembalian')
-            ->count();
     
-        return view('pemilik.pesanan-pending', ['pendingOrders' => $pendingOrders,  'total' => $total]);
+        return view('pemilik.pesanan-pending', [
+            'pendingOrders' => $pendingOrders, 
+            'total' => $this->total_pesanan_online()
+        ]);
     }
     
     public function resep_dokter(Request $request){

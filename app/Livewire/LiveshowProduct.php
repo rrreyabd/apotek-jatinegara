@@ -188,7 +188,7 @@ class LiveshowProduct extends Component
             }
         // akhir filter cari
 
-        $this->products = $product->get();
+        $this->products = $product->orderBy('product_status')->get();
 
         // dd($this->products);
     }

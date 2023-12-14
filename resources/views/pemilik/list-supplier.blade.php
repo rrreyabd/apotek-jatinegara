@@ -42,24 +42,31 @@
                         </button>
                     </div>
                     <div class="bg-white p-7 rounded-b-xl">
-                        <form action="" method="post">
+                        <form action="{{ route('add-supplier') }}" method="post">
+                            @csrf
+                            @method('put')
                             <div class="flex gap-6 p-4">
                                 <table>
                                     <tr>
                                         <td><label for="namaSupplier">Nama Supplier</label></td>
-                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-5"><label for="kodeSupplier">Kode Supplier</label></td>
-                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border @error('nama_supplier') is-invalid @enderror" required value="{{ old('nama_supplier') }}" name="nama_supplier"></td>
+                                        @error('nama_supplier')
+                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                        @enderror
                                     </tr>
                                     <tr>
                                         <td class="py-5"><label for="noTelpSupplier">No Telp Supplier</label></td>
-                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border @error('no_telp') is-invalid @enderror" required value="{{ old('no_telp') }}" name="no_telp"></td>
+                                        @error('no_telp')
+                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                        @enderror
                                     </tr>
                                     <tr>
                                         <td class="py-5"><label for="alamatSupplier">Alamat Supplier</label></td>
-                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border"></td>
+                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border @error('alamat') is-invalid @enderror" required value="{{ old('alamat') }}" name="alamat"></td>
+                                        @error('alamat')
+                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                        @enderror
                                     </tr>
                                 </table>
                             </div>
@@ -88,6 +95,7 @@
                 <tbody>
                     @php
                         $i = 1;
+                        $index = 1;
                     @endphp
                     @foreach ($suppliers as $item)
                         
@@ -99,14 +107,14 @@
                         <td>{{ $item->supplier_phone }}</td>
                         <td>{{ $item->supplier_address }}</td>
                         <td>
-                            <button onclick="showPopUpEdit()" class="p-2 bg-secondaryColor rounded mx-2"><i
+                            <button onclick="showPopUpEdit({{ $index }})" class="p-2 bg-secondaryColor rounded mx-2"><i
                                 class="fa-regular fa-pen-to-square" style="color: white;"></i></button>
-                                <button onclick="showPopUpDelete()" class="p-2 bg-mediumRed rounded mx-2"><i
+                                <button onclick="showPopUpDelete({{ $index }})" class="p-2 bg-mediumRed rounded mx-2"><i
                                     class="fa-regular fa-trash-can" style="color: white;"></i></button>
                                     
                                     {{-- Pop up konfirmasi hapus start --}}
                                     <div class="absolute w-screen h-screen backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden"
-                                    id="popupHapus">
+                                    id="popupHapus{{ $index }}">
                                     <div
                                     class="w-[30%] h-[50%] bg-white rounded-2xl shadow-md p-8 flex flex-col gap-6 relative items-center">
                                     <div class="border-2 border-mainColor rounded-full w-fit">
@@ -115,13 +123,17 @@
                                     </div>
                                     
                                     <p class="text-2xl text-mainColor font-TripBold text-center">Apakah Anda Yakin
-                                        Ingin Menghapus soeharto?</p>
+                                        Ingin Menghapus {{ $item->supplier }}?</p>
                                         
                                         <div class="flex gap-4">
-                                            <button onclick="showPopUpDelete()"
-                                            class="bg-mediumRed text-white text-2xl p-1 px-5 rounded-lg">Tidak</button>
-                                            <button type="submit"
-                                            class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>
+                                            <form action="{{ route('delete-supplier',['id'=> $item->supplier_id]) }}" method="post">
+                                                @csrf
+                                                @method('put')
+                                                <button onclick="showPopUpDelete({{ $index }})"
+                                                class="bg-mediumRed text-white text-2xl p-1 px-5 rounded-lg">Tidak</button>
+                                                <button type="submit"
+                                                class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -129,29 +141,40 @@
                                 
                                 {{-- MODAL EDIT SUPPLIER START --}}
                                 <div class="top-0 left-0 hidden flex flex-col justify-center items-center absolute z-10 backdrop-blur-sm backdrop-brightness-75 rounded-xl w-full h-screen"
-                                id="popupEdit">
+                                id="popupEdit{{ $index }}">
                                 <div class="w-fit flex flex-col justify-center">
                                     <div class="bg-mainColor text-white font-semibold px-10 py-4 rounded-t-xl flex justify-between">
                                         Edit Supplier
-                                        <button onclick="showPopUpEdit()">
+                                        <button onclick="showPopUpEdit({{ $index }})">
                                             <i class="fa-solid fa-xmark fa-xl" style="color: white"></i>
                                         </button>
                                     </div>
                                     <div class="bg-white p-7 pt-4 rounded-b-xl">
-                                        <form action="" method="post">
+                                        <form action="{{ route('edit-supplier',['id'=> $item->supplier_id]) }}" method="post">
+                                            @csrf
+                                            @method('put')
                                             <div class="flex gap-6 p-4">
                                                 <table>
                                                     <tr>
-                                                        <td class="py-5"><label for="namaSupplier">Nama Supplier</label></td>
-                                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                        <td><label for="namaSupplier">Nama Supplier</label></td>
+                                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border @error('nama_supplier') is-invalid @enderror" required value="{{ $item->supplier }}" name="nama_supplier"></td>
+                                                        @error('nama_supplier')
+                                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                                        @enderror
                                                     </tr>
                                                     <tr>
-                                                        <td class="py-5"><label for="noTelepon">no Telepon</label></td>
-                                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                        <td class="py-5"><label for="noTelpSupplier">No Telp Supplier</label></td>
+                                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border @error('no_telp') is-invalid @enderror" required value="{{ $item->supplier_phone }}" name="no_telp"></td>
+                                                        @error('no_telp')
+                                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                                        @enderror
                                                     </tr>
                                                     <tr>
-                                                        <td class="py-5"><label for="alamatSupplier">Alamat</label></td>
-                                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border" value=""></td>
+                                                        <td class="py-5"><label for="alamatSupplier">Alamat Supplier</label></td>
+                                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border @error('alamat') is-invalid @enderror" required value="{{ $item->supplier_address }}" name="alamat"></td>
+                                                        @error('alamat')
+                                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                                        @enderror
                                                     </tr>
                                                 </table>
                                             </div>
@@ -166,6 +189,9 @@
                             {{-- MODAL EDIT SUPPLIER END --}}
                         </td>
                     </tr>
+                    @php
+                        $index++;
+                    @endphp
                     @endforeach
                 </tbody>
             </table>
@@ -179,8 +205,8 @@
     <script src="{{ asset('js/datatables.js') }}"></script>
 
     <script>
-        const showPopUpDelete = () => {
-            const popup = document.getElementById('popupHapus');
+        const showPopUpDelete = (index) => {
+            const popup = document.getElementById('popupHapus'+index);
 
             if (popup.classList.contains('hidden')) {
                 popup.classList.remove('hidden')
@@ -189,8 +215,8 @@
             }
         }
 
-        const showPopUpEdit = () => {
-            const popup = document.getElementById('popupEdit');
+        const showPopUpEdit = (index) => {
+            const popup = document.getElementById('popupEdit'+index);
 
             if (popup.classList.contains('hidden')) {
                 popup.classList.remove('hidden')

@@ -38,22 +38,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i < 6; $i++) <tr>
-                            <td>{{$i + 1}}</td>
+                        @php
+                            $i = 1;
+                            $index = 1;
+                        @endphp
+                        @foreach ($user as $item)
+                        <tr>
+                            <td>{{$i++}}</td>
                             <td>
-                                <span class="font-bold">Agus</span>
+                                <span class="font-bold">{{ $item->user->username }}</span>
                             </td>
-                            <td>agusngantuk@buk.com</td>
+                            <td>{{ $item->user->email }}</td>
                             <td>
-                                081234567890
+                                {{ $item->customer_phone }}
                             </td>
                             <td>
-                                <button onclick="showPopUpDelete()" class="p-2 bg-mediumRed rounded"><i
+                                <button onclick="showPopUpDelete({{ $index }})" class="p-2 bg-mediumRed rounded"><i
                                         class="fa-regular fa-trash-can" style="color: white;"></i></button>
 
                                 {{-- Pop up konfirmasi hapus start --}}
                                 <div class="absolute w-screen h-screen backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden"
-                                    id="popup">
+                                    id="popup{{ $index }}">
                                     <div
                                         class="w-[30%] h-[50%] bg-white rounded-2xl shadow-md p-8 flex flex-col gap-6 relative items-center">
                                         <div class="border-2 border-mainColor rounded-full w-fit">
@@ -62,20 +67,27 @@
                                         </div>
 
                                         <p class="text-2xl text-mainColor font-TripBold text-center">Apakah Anda Yakin
-                                            Ingin Menghapus soeharto?</p>
+                                            Ingin Menghapus {{ $item->user->username }}?</p>
 
                                         <div class="flex gap-4">
-                                            <button onclick="showPopUpDelete()"
+                                            <form action="{{ route('delete-user',['id'=> $item->customer_id]) }}" method="post">
+                                                @csrf
+                                                @method('put')
+                                                <button onclick="showPopUpDelete({{ $index }})"
                                                 class="bg-mediumRed text-white text-2xl p-1 px-5 rounded-lg">Tidak</button>
-                                            <button type="submit"
+                                                <button type="submit"
                                                 class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                                 {{-- Pop up konfirmasi hapus end --}}
                             </td>
                             </tr>
-                            @endfor
+                            @php
+                                $index++;
+                            @endphp
+                            @endforeach
                     </tbody>
                 </table>
             </div>
@@ -88,8 +100,8 @@
     <script src="{{ asset('js/datatables.js') }}"></script>
 
     <script>
-        const showPopUpDelete = () => {
-            const popup = document.getElementById('popup');
+        const showPopUpDelete = (index) => {
+            const popup = document.getElementById('popup'+index);
 
             if (popup.classList.contains('hidden')) {
                 popup.classList.remove('hidden')
