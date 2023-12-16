@@ -40,7 +40,6 @@
                     </div>
                 @elseif (session('error_status'))
                     <div class="absolute top-4 left-[42.5vw] bg-red-500 shadow-md w-[25vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
-                        <i class="text-white fa-solid fa-circle-check"></i>
                         <p class="text-lg text-white font-semibold"> {{ session('error_status') }} </p>
                     </div>
                 @endif
@@ -267,7 +266,8 @@
                                                                 <label for="alamatKasir">Alamat</label>
                                                             </td>
                                                             <td class="ps-5">
-                                                                <textarea name="address" class="p-2 px-4 rounded-xl shadow border h-28 @error('address') is-invalid @enderror" >{{ $cashier->cashier->cashier_address }}
+                                                                <textarea name="address" class="p-2 px-4 rounded-xl shadow border h-28 @error('address') is-invalid @enderror" placeholder="{{ $cashier->cashier->cashier_address }}">
+                                                                    {{ $cashier->cashier->cashier_address }}
                                                                 </textarea>
                                                             </td>
                                                         </tr>
