@@ -23,9 +23,29 @@
 
         <div class="flex flex-col gap-8 mt-10">
             <div class="md:flex justify-between mb-5">
-                <p class="text-3xl font-bold mb-2">List Supplier</p>
+                <div>
+                    <p class="text-3xl font-bold mb-2">List Supplier</p>
 
-                <button onclick="showTambahData()" class="px-6 py-2.5 rounded-lg bg-mainColor text-white font-semibold">
+                    @if (session('error'))
+                        @foreach (session('error') as $error)
+                            <div class="text-md text-mediumRed">{{ $error[0] }}</div>
+                        @endforeach
+                    @endif
+                </div>
+
+                @if (session('add_status'))
+                    <div class="absolute top-4 left-[42.5vw] bg-mainColor shadow-md w-[25vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
+                        <i class="text-white fa-solid fa-circle-check"></i>
+                        <p class="text-lg text-white font-semibold"> {{ session('add_status') }} </p>
+                    </div>
+                @elseif (session('error_status'))
+                    <div class="absolute top-4 left-[42.5vw] bg-red-500 shadow-md w-[25vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
+                        <i class="text-white fa-solid fa-circle-check"></i>
+                        <p class="text-lg text-white font-semibold"> {{ session('error_status') }} </p>
+                    </div>
+                @endif
+
+                <button onclick="showTambahData()" class="px-6 h-12 py-2.5 rounded-lg bg-mainColor text-white font-semibold">
                     <i class="fa-solid fa-plus pe-2"></i>
                     Tambah Supplier
                 </button>
@@ -107,10 +127,12 @@
                         <td>{{ $item->supplier_phone }}</td>
                         <td>{{ $item->supplier_address }}</td>
                         <td>
-                            <button onclick="showPopUpEdit({{ $index }})" class="p-2 bg-secondaryColor rounded mx-2"><i
+                            <div class="flex">
+                                <button onclick="showPopUpEdit({{ $index }})" class="p-2 bg-secondaryColor rounded mx-2"><i
                                 class="fa-regular fa-pen-to-square" style="color: white;"></i></button>
                                 <button onclick="showPopUpDelete({{ $index }})" class="p-2 bg-mediumRed rounded mx-2"><i
                                     class="fa-regular fa-trash-can" style="color: white;"></i></button>
+                            </div>
                                     
                                     {{-- Pop up konfirmasi hapus start --}}
                                     <div class="absolute w-screen h-screen backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden"
@@ -156,22 +178,34 @@
                                             <div class="flex gap-6 p-4">
                                                 <table>
                                                     <tr>
-                                                        <td><label for="namaSupplier">Nama Supplier</label></td>
-                                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border @error('nama_supplier') is-invalid @enderror" required value="{{ $item->supplier }}" name="nama_supplier"></td>
+                                                        <td>
+                                                            <label for="namaSupplier">Nama Supplier</label>
+                                                        </td>
+                                                        <td class="ps-5">
+                                                            <input type="text" class="p-2 px-4 rounded-xl shadow border @error('nama_supplier') is-invalid @enderror text-slate-400" required value="{{ $item->supplier }}" name="nama_supplier" readonly>
+                                                        </td>
                                                         @error('nama_supplier')
                                                             <div class="text-xs text-mediumRed">{{ $message }}</div>
                                                         @enderror
                                                     </tr>
                                                     <tr>
-                                                        <td class="py-5"><label for="noTelpSupplier">No Telp Supplier</label></td>
-                                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border @error('no_telp') is-invalid @enderror" required value="{{ $item->supplier_phone }}" name="no_telp"></td>
+                                                        <td class="py-5">
+                                                            <label for="noTelpSupplier">No Telp Supplier</label>
+                                                        </td>
+                                                        <td class="ps-5">
+                                                            <input type="text" class="p-2 px-4 rounded-xl shadow border @error('no_telp') is-invalid @enderror" required value="{{ $item->supplier_phone }}" name="no_telp">
+                                                        </td>
                                                         @error('no_telp')
                                                             <div class="text-xs text-mediumRed">{{ $message }}</div>
                                                         @enderror
                                                     </tr>
                                                     <tr>
-                                                        <td class="py-5"><label for="alamatSupplier">Alamat Supplier</label></td>
-                                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border @error('alamat') is-invalid @enderror" required value="{{ $item->supplier_address }}" name="alamat"></td>
+                                                        <td class="py-5">
+                                                            <label for="alamatSupplier">Alamat Supplier</label>
+                                                        </td>
+                                                        <td class="ps-5">
+                                                            <input type="text" class="p-2 px-4 rounded-xl shadow border @error('alamat') is-invalid @enderror" required value="{{ $item->supplier_address }}" name="alamat">
+                                                        </td>
                                                         @error('alamat')
                                                             <div class="text-xs text-mediumRed">{{ $message }}</div>
                                                         @enderror

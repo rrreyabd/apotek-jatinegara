@@ -152,8 +152,8 @@ public function riwayatTransaksi()
                     DB::commit();
                     return redirect()->back()->with('success', 'Pesanan akan diproses untuk pengembalian.');
                 } catch (\Exception $e) {
-                    throw $e;
-                    // return redirect()->back()->with('error', 'Terjadi Kesalahan Refund');
+                    // throw $e;
+                    return redirect()->back()->with('error', 'Terjadi Kesalahan Refund');
                 }
             }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {

@@ -21,6 +21,17 @@
     <main class="p-10 font-Inter bg-plat min-h-[100vh] h-full" id="mainContent">
         @include('pemilik.components.navbar')
 
+        @if (session('add_status'))
+            <div class="absolute top-4 left-[42.5vw] bg-mainColor shadow-md w-[25vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
+                <i class="text-white fa-solid fa-circle-check"></i>
+                <p class="text-lg text-white font-semibold"> {{ session('add_status') }} </p>
+            </div>
+        @elseif (session('error_status'))
+            <div class="absolute top-4 left-[42.5vw] bg-red-500 shadow-md w-[25vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
+                <p class="text-lg text-white font-semibold"> {{ session('error_status') }} </p>
+            </div>
+        @endif
+
         <div class="flex flex-col gap-8 mt-10">
             <div class="md:flex justify-between">
                 <p class="text-3xl font-bold mb-2">List Pengguna</p>
@@ -73,7 +84,7 @@
                                             <form action="{{ route('delete-user',['id'=> $item->customer_id]) }}" method="post">
                                                 @csrf
                                                 @method('put')
-                                                <button onclick="showPopUpDelete({{ $index }})"
+                                                <button type="button" onclick="showPopUpDelete({{ $index }})"
                                                 class="bg-mediumRed text-white text-2xl p-1 px-5 rounded-lg">Tidak</button>
                                                 <button type="submit"
                                                 class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>

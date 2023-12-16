@@ -50,7 +50,7 @@
                         <i class="fa-solid fa-note-sticky"></i>
                         {{ $purcase->invoice_code }}
                     </a>
-                    @elseif ($purcase->order_status == 'Refund')
+                @elseif ($purcase->order_status == 'Refund')
                     {{-- keluarin gambar --}}
                     <a href="/refund/{{ $purcase->refund_file }}/{{ $purcase->selling_invoice_id }}" class="underline me-1 text-lg">
                         <i class="fa-solid fa-note-sticky"></i>

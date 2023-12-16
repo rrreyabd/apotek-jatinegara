@@ -28,7 +28,7 @@
         <div class="p-10 flex flex-col">
 
             {{-- back button --}}
-            <a href="{{ url()->previous()}}" class="p-3 px-4 rounded-full bg-mainColor w-fit">
+            <a href="/owner/produk" class="p-3 px-4 rounded-full bg-mainColor w-fit">
                 <i class="fa-solid fa-arrow-left" style="color: white;"></i>
             </a>
 
@@ -43,15 +43,12 @@
 
                     @php
                         $uuid = \Illuminate\Support\Str::uuid();
-                        $numericValue = hexdec(substr($uuid, -12));
-                        $formatted = 'P-' . str_pad($numericValue, 4, '0', STR_PAD_LEFT);
-
                         $desc_uuid = \Illuminate\Support\Str::uuid();
                         $detail_uuid = \Illuminate\Support\Str::uuid();
 
                     @endphp
                     <div class="flex flex-col justify-center items-center mb-3">
-                        <p class="text-3xl font-TripBold">{{ $formatted }}</p>
+                        <p class="text-3xl font-TripBold">Tambah Produk</p>
                         <input type="hidden" name="id" value="{{ $uuid }}">
                         <input type="hidden" name="desc_id" value="{{ $desc_uuid }}">
                         <input type="hidden" name="detail_id" value="{{ $detail_uuid }}">

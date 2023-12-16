@@ -19,7 +19,7 @@
         <div class="p-10 flex flex-col">
 
             {{-- back button --}}
-            <a href="javascript:history.back()" class="p-3 px-4 rounded-full bg-mainColor w-fit">
+            <a href="/owner/produk" class="p-3 px-4 rounded-full bg-mainColor w-fit">
                 <i class="fa-solid fa-arrow-left" style="color: white;"></i>
             </a>
 
