@@ -18,7 +18,7 @@
 <body class="font-Inter relative">
     @include("pemilik.components.sidebar")
     <main class="p-10 font-Inter bg-plat min-h-[100vh] h-full" id="mainContent">
-        {{-- @include("pemilik.components.navbar") --}}
+        @include("pemilik.components.navbar")
 
         <div class="flex flex-col gap-8 mt-10">
             <p class="text-3xl font-bold">Log Apotek</p>
@@ -38,22 +38,27 @@
                     <tbody>
                         @php $i = 1;  @endphp
                         @php $index = 1;  @endphp
-                        @for ($j = 0; $j < 10; $j++)
+                        @foreach ($logs as $log)
+                            
                         <tr>
                             <td>{{$i}}</td>
                             <td>
-                                <span class="font-bold">Kasir</span>
+                                <span class="font-bold">{{ $log->username }}</span>
                             </td>
-                            <td> 18 November 2023</td>
+                            @php
+                            $date = \Carbon\Carbon::parse($log->log_time);
+                            $convertedDate = $date->format('j F Y');
+                            @endphp
+                            <td> {{ $convertedDate }}</td>
                             <td> 
-                                <span class="font-bold">Insert</span>
+                                <span class="font-bold">{{ $log->log_description }}</span>
                             </td>
-                            <td> Nilai lama </td>
-                            <td> Nilai baru </td>
+                            <td> {{ $log->old_value }} </td>
+                            <td> {{ $log->new_value }} </td>
                         </tr>
                         @php  $i++   @endphp
                         @php  $index++   @endphp
-                        @endfor
+                        @endforeach
                     </tbody>
                 </table>
             </div>

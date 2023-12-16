@@ -16,6 +16,7 @@ use App\Models\ProductDescription;
 use App\Models\ProductDetail;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\Log;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -388,6 +389,7 @@ class OwnerController extends Controller
             'file'=> $request->img,
         ]);
     }
+
     public function refund(Request $request, $id){
         try{
         $order = SellingInvoice::findOrFail($id);
@@ -408,8 +410,19 @@ class OwnerController extends Controller
             'order_status' => 'Refund',
         ]);
         return redirect()->back()->with('success', 'Berhasil melakukan refund.');
-    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
         return redirect()->back()->with('error', 'Pesanan tidak ditemukan.');
+        }
     }
-}
+
+    public function display_log()
+    {
+        $logs = Log::all();
+        return view('pemilik.log',[
+            'logs' => $logs,
+            'total' => $this->total_pesanan_online()
+        ]);
+    }
+
+    
 }
