@@ -39,13 +39,32 @@ class OwnerController extends Controller
         $count_user = User::where('role', 'user')->count();
         $count_pending = SellingInvoice::where('order_status','Menunggu Pengembalian')->count();
 
+        $result = DB::table('selling_invoices')
+            ->selectRaw('YEAR(MIN(order_complete)) as minYear, YEAR(MAX(order_complete)) as maxYear')
+            ->whereNotNull('order_complete')
+            ->first();
+
+        $minYear = $result->minYear;
+        $maxYear = $result->maxYear;
+
+        $results = DB::table('selling_invoices')
+            ->selectRaw('YEAR(order_complete) as year')
+            ->selectRaw('total_keuntungan(CONCAT(YEAR(order_complete), "-01-01"), CONCAT(YEAR(order_complete), "-12-31")) as total_profit')
+            ->whereYear('order_complete', '>=', $minYear)
+            ->whereYear('order_complete', '<=', $maxYear)
+            ->whereNotNull('order_complete')
+            ->get();
+        
+        $resultsArray = $results->toArray();
+
         return view ('pemilik.index', [
             'popular' => $popular,
             'last' => $last,
             'product' => $count_product,
             'supplier' => $count_supplier,
             'pending' => $count_pending,
-            'user' => $count_user
+            'user' => $count_user,
+            'results' => $resultsArray
         ]);
     }
 
@@ -424,5 +443,4 @@ class OwnerController extends Controller
         ]);
     }
 
-    
 }
