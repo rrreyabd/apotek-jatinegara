@@ -16,6 +16,7 @@ use App\Models\ProductDescription;
 use App\Models\ProductDetail;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\Log;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -39,13 +40,32 @@ class OwnerController extends Controller
         $count_user = User::where('role', 'user')->count();
         $count_pending = SellingInvoice::where('order_status','Menunggu Pengembalian')->count();
 
+        $result = DB::table('selling_invoices')
+            ->selectRaw('YEAR(MIN(order_complete)) as minYear, YEAR(MAX(order_complete)) as maxYear')
+            ->whereNotNull('order_complete')
+            ->first();
+
+        $minYear = $result->minYear;
+        $maxYear = $result->maxYear;
+
+        $results = DB::table('selling_invoices')
+            ->selectRaw('YEAR(order_complete) as year')
+            ->selectRaw('total_keuntungan(CONCAT(YEAR(order_complete), "-01-01"), CONCAT(YEAR(order_complete), "-12-31")) as total_profit')
+            ->whereYear('order_complete', '>=', $minYear)
+            ->whereYear('order_complete', '<=', $maxYear)
+            ->whereNotNull('order_complete')
+            ->get();
+        
+        $resultsArray = $results->toArray();
+
         return view ('pemilik.index', [
             'popular' => $popular,
             'last' => $last,
             'product' => $count_product,
             'supplier' => $count_supplier,
             'pending' => $count_pending,
-            'user' => $count_user
+            'user' => $count_user,
+            'results' => $resultsArray
         ]);
     }
 
@@ -253,9 +273,8 @@ class OwnerController extends Controller
         $products->save();
         $products->description->save();
         $products->detail()->orderBy('product_expired')->first()->save();
-
+        
         return redirect('/owner/produk')->with('success','Produk berhasil diperbaharui');
-
     }
 
     public function delete_product_expired(Request $request){
@@ -298,7 +317,7 @@ class OwnerController extends Controller
         $new_detail -> product_stock = $request->stock;
 
         $new_detail->save();
-        return redirect('/owner/produk')->with('add_batch_status','Batch produk berhasil ditambah');
+        return redirect('/owner/produk')->with('add_status','Batch produk berhasil ditambah');
     }
 
     public function display_supplier()
@@ -340,7 +359,6 @@ class OwnerController extends Controller
                 'no_telp' => ['required','numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
                 'alamat' => ['required', 'min:10', 'max:255']
             ]);
-
             $suppliers = Supplier::find($id);
             $suppliers -> supplier_address = $request->alamat;
             $suppliers -> supplier_phone = $request->no_telp;
@@ -350,6 +368,12 @@ class OwnerController extends Controller
         }catch(Exception $e){
             return redirect('/owner/supplier')->with('error_status','Terjadi Kesalahan')->with('error', $e->validator->errors()->messages());
         }
+    }
+
+    public function delete_supplier(Request $request,$id)
+    {
+        Supplier::where('supplier_id', $request->id)->delete();
+        return redirect('/owner/supplier')->with('delete_status','Supplier berhasil dihapus');
     }
 
     public function log_penjualanan()
@@ -382,7 +406,6 @@ class OwnerController extends Controller
         $cashiers = User::where('role', 'cashier')
         ->get();
 
-        // dd($cashiers);
         return view ('pemilik.list-kasir', [
             'cashiers' => $cashiers,
             'total' => $this->total_pesanan_online()
@@ -468,6 +491,7 @@ class OwnerController extends Controller
             'file'=> $request->img,
         ]);
     }
+
     public function refund(Request $request, $id){
         try{
         $order = SellingInvoice::findOrFail($id);
@@ -488,8 +512,18 @@ class OwnerController extends Controller
             'order_status' => 'Refund',
         ]);
         return redirect()->back()->with('success', 'Berhasil melakukan refund.');
-    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
         return redirect()->back()->with('error', 'Pesanan tidak ditemukan.');
+        }
     }
-}
+
+    public function display_log()
+    {
+        $logs = Log::all();
+        return view('pemilik.log',[
+            'logs' => $logs,
+            'total' => $this->total_pesanan_online()
+        ]);
+    }
+
 }

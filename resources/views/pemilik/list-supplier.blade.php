@@ -148,10 +148,14 @@
                                         Ingin Menghapus {{ $item->supplier }}?</p>
                                         
                                         <div class="flex gap-4">
-                                            <button onclick="showPopUpDelete({{ $index }})"
-                                            class="bg-mediumRed text-white text-2xl p-1 px-5 rounded-lg">Tidak</button>
-                                            <button type="submit"
-                                            class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>
+                                            <form action="{{ route('delete-supplier',['id'=> $item->supplier_id]) }}" method="post">
+                                                @csrf
+                                                @method('put')
+                                                <button onclick="showPopUpDelete({{ $index }})"
+                                                class="bg-mediumRed text-white text-2xl p-1 px-5 rounded-lg">Tidak</button>
+                                                <button type="submit"
+                                                class="bg-green-600 text-white text-2xl p-1 px-10 rounded-lg">Ya</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

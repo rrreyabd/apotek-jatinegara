@@ -14,6 +14,8 @@
 
     {{-- DATATABLES --}}
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    {{-- CHART.JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="font-Inter relative">
@@ -113,13 +115,48 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-lg shadow-lg w-full flex flex-col items-center justify-center">
-                    <p class="text-xl font-bold">Laporan Penjualan</p>
+                    <p class="text-xl font-bold">Laporan Keuntungan</p>
 
                     {{-- line --}}
                     <div class="w-[90%] shadow border border-mainColor my-3"></div>
 
                     {{-- chart start --}}
-                    
+                    <canvas id="myChart" width="400" height="350"></canvas>
+
+                    <script>
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                
+                        var labels = <?php echo json_encode(array_column($results, 'year')); ?>;
+                        var data = <?php echo json_encode(array_column($results, 'total_profit')); ?>;
+
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Total Profit',
+                                    data: data,
+                                    backgroundColor: 'rgb(26 136 137)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                            scales: {
+                                x: [{
+                                    ticks: {
+                                        autoSkip: false, 
+                                        maxRotation: 0, 
+                                        minRotation: 0  
+                                    }
+                                }],
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                        });
+                    </script>
                     {{-- chart end --}}
 
                 </div>
