@@ -193,7 +193,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="py-5"><label for="email">Email</label></td>
-                                                            <td class="ps-5"><input type="text" name="email" value="{{ $cashier->email }}" class="p-2 px-4 rounded-xl shadow border  @error('email') is-invalid @enderror"></td>
+                                                            <td class="ps-5"><input type="email" name="email" value="{{ $cashier->email }}" class="p-2 px-4 rounded-xl shadow border  @error('email') is-invalid @enderror"></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="py-5"><label for="gender">Gender</label></td>
