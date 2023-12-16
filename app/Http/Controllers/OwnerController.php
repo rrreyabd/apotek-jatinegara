@@ -121,13 +121,17 @@ class OwnerController extends Controller
             'tipe' => ['required'],
             'pemasok' => ['required'],
             'produksi' => ['required', 'min:5', 'max:255'],
-            'deskripsi' => ['required', 'regex:/^[a-zA-Z0-9 -]+$/'],
-            'efek_samping' => ['required', 'regex:/^[a-zA-Z0-9 -]+$/'],
-            'dosis' => ['required', 'regex:/^[a-zA-Z0-9 -]+$/'],
+            'deskripsi' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
+            'efek_samping' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
+            'dosis' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
             'harga_beli' => ['required', 'numeric', 'min:3'],
             'harga_jual' => ['required', 'numeric', 'min:3'],
             'stock' => ['required', 'numeric', 'min:0'],
-        ]);
+            'expired_date' => 'required|date|after_or_equal:3 months',
+            ], 
+            [
+            'expired_date.after_or_equal' => 'Tanggal harus lebih dari 3 bulan dari sekarang.',
+            ]);
         
         $carbonDate = Carbon::parse($request->expired_date);
         $formatted = $carbonDate->format('Y-m-d H:i:s');
@@ -170,7 +174,7 @@ class OwnerController extends Controller
         $unit = Unit::orderBy('unit')->get();
         $supplier = Supplier::orderBy('supplier')->get();
         $type = ProductDescription::distinct()->pluck('product_type');
-        $state = Product::distinct()->pluck('product_status');
+        $state = ['aktif', 'tidak aktif'];
 
         return view('pemilik.edit-produk',[
             "product"=> $products ?? NULL,
@@ -186,22 +190,50 @@ class OwnerController extends Controller
     public function edit_product_process(Request $request,$id)
     {
         $products = Product::find($id);
+
+        if($products->product_name == $request->nama_obat){
+            $validated_data = $request->validate([
+                'nama_obat' => ['required', 'min:5', 'max:255'],
+                'gambar_obat' => ['file', 'max:5120', 'mimes:png,jpeg,jpg'],
+                'kategori' => ['required'],
+                'golongan' => ['required'],
+                'satuan_obat' => ['required'],
+                'NIE' => ['required', 'size:15'],
+                'tipe' => ['required'],
+                'pemasok' => ['required'],
+                'produksi' => ['required', 'min:5', 'max:255'],
+                'deskripsi' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
+                'efek_samping' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
+                'dosis' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
+                'harga_jual' => ['required', 'numeric', 'min:3'],
+            ]);
+        }else{
+            $validated_data = $request->validate([
+                'nama_obat' => ['required', 'min:5', 'max:255', 'unique:products,product_name'],
+                'gambar_obat' => ['file', 'max:5120', 'mimes:png,jpeg,jpg'],
+                'kategori' => ['required'],
+                'golongan' => ['required'],
+                'satuan_obat' => ['required'],
+                'NIE' => ['required', 'size:15'],
+                'tipe' => ['required'],
+                'pemasok' => ['required'],
+                'produksi' => ['required', 'min:5', 'max:255'],
+                'deskripsi' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
+                'efek_samping' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
+                'dosis' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
+                'harga_jual' => ['required', 'numeric', 'min:3'],
+            ]);
+        }
         
         $validated_data = $request->validate([
             'gambar_obat' => ['file', 'max:5120', 'mimes:png,jpeg,jpg'],
         ]);
 
-        $carbonDate = Carbon::parse($request->expired_date);
-        $formatted = $carbonDate->format('Y-m-d H:i:s');
-
         $products -> product_status = $request->status;
         $products -> product_name = $request->nama_obat;
         $products -> description -> category_id = $request->kategori;
-        $products -> detail()-> orderBy('product_expired')-> first()-> product_buy_price = $request->harga_beli;
-        $products -> detail()->orderBy('product_expired')->first()->product_expired = $formatted;
         $products -> description -> group_id = $request->golongan;
         $products -> product_sell_price = $request->harga_jual;
-        $products -> detail()->orderBy('product_expired')->first()->product_stock = $request->stock;
         $products -> description -> unit_id = $request->satuan_obat;
         $products -> description -> product_DPN = $request->NIE;
         $products -> description->product_type = $request->tipe;
@@ -222,7 +254,7 @@ class OwnerController extends Controller
         $products->description->save();
         $products->detail()->orderBy('product_expired')->first()->save();
 
-        return redirect('/owner/produk')->with('update_status','Produk berhasil diperbaharui');
+        return redirect('/owner/produk')->with('success','Produk berhasil diperbaharui');
 
     }
 
