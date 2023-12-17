@@ -16,7 +16,7 @@ class CashierController extends Controller
 {
 public function riwayatTransaksi()
     {
-        $histories = SellingInvoice::where('cashier_name',auth()->user()->cashier_name)
+        $histories = SellingInvoice::where('cashier_name',auth()->user()->username)
             ->where('order_status', 'Berhasil')
             ->orWhere('order_status','Offline')
             ->orWhere('order_status','Gagal')

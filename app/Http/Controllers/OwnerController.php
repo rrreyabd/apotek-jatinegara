@@ -83,7 +83,7 @@ class OwnerController extends Controller
             "groups"=> $group ?? [],
             "suppliers"=> $supplier ?? [],
             "types" => $type ?? [],
-            "status" => $state ?? [],
+            // "status" => $state ?? [],
         ]);
     }
 
