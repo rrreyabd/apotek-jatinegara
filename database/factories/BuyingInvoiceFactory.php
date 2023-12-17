@@ -22,7 +22,7 @@ class BuyingInvoiceFactory extends Factory
 
         return [
             'buying_invoice_id' => fake()->uuid,
-            'order_date'=> fake()->dateTime(),
+            'order_date'=> fake()->dateTimeBetween('-7 year', 'now'),
             'supplier_name'=> $supplier,
         ];
     }
