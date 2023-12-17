@@ -33,14 +33,13 @@ class OwnerController extends Controller
 {
     public function display()
     {
-        $popular = PopularProduct::take(3)->get();
-        $last = LastTransaction::orderBy('Tanggal_Transaksi')->get();
-        $count_product = Product::count();
-        $count_supplier = Supplier::count();
-        $count_user = User::where('role', 'user')->count();
-        $count_pending = SellingInvoice::where('order_status','Menunggu Pengembalian')->count();
+        $popular = PopularProduct::on('owner')->take(3)->get();
+        $count_product = Product::on('owner')->count();
+        $count_supplier = Supplier::on('owner')->count();
+        $count_user = User::on('owner')->where('role', 'user')->count();
+        $count_pending = SellingInvoice::on('owner')->where('order_status','Menunggu Pengembalian')->count();
 
-        $result = DB::table('selling_invoices')
+        $result = DB::connection('owner')->table('selling_invoices')
             ->selectRaw('YEAR(MIN(order_complete)) as minYear, YEAR(MAX(order_complete)) as maxYear')
             ->whereNotNull('order_complete')
             ->first();
@@ -48,7 +47,7 @@ class OwnerController extends Controller
         $minYear = $result->minYear;
         $maxYear = $result->maxYear;
 
-        $results = DB::table('selling_invoices')
+        $results = DB::connection('owner')->table('selling_invoices')
             ->selectRaw('YEAR(order_complete) as year')
             ->selectRaw('total_keuntungan(CONCAT(YEAR(order_complete), "-01-01"), CONCAT(YEAR(order_complete), "-12-31")) as total_profit')
             ->whereYear('order_complete', '>=', $minYear)
@@ -60,7 +59,6 @@ class OwnerController extends Controller
 
         return view ('pemilik.index', [
             'popular' => $popular,
-            'last' => $last,
             'product' => $count_product,
             'supplier' => $count_supplier,
             'pending' => $count_pending,
@@ -71,13 +69,13 @@ class OwnerController extends Controller
 
     public function total_pesanan_online()
     {
-        $total_pesanan_online = SellingInvoice::where('order_status','Berhasil')->count();
+        $total_pesanan_online = SellingInvoice::on('owner')->where('order_status','Berhasil')->count();
         return $total_pesanan_online;
     }
     
     public function display_user()
     {
-        $user = Customer::all();
+        $user = Customer::on('owner')->get();
         return view('pemilik.list-user', [
             'user' => $user,
             'total' => $this->total_pesanan_online()
@@ -88,20 +86,20 @@ class OwnerController extends Controller
     {
         DB::beginTransaction();
         try{
-            $user = Customer::find($id);
+            $user = Customer::on('owner')->find($id);
 
             // insert log
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($user->user->username, auth()->user()->username, 'username', 'delete', $user->user->username, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($user->user->username, auth()->user()->username, 'username', 'delete', $user->user->username, '-'));
 
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($user->user->username, auth()->user()->username, 'email', 'delete', $user->user->email, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($user->user->username, auth()->user()->username, 'email', 'delete', $user->user->email, '-'));
 
             if($user->customer_phone != NULL){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($user->user->username, auth()->user()->username, 'nomor telepon', 'delete', $user->customer_phone, '-'));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($user->user->username, auth()->user()->username, 'nomor telepon', 'delete', $user->customer_phone, '-'));
             }
             // akhir insert log
 
-            User::where('user_id',$user->user_id)->delete();
-            Customer::where('customer_id', $request->id)->delete();
+            User::on('owner')->where('user_id',$user->user_id)->delete();
+            Customer::on('owner')->where('customer_id', $request->id)->delete();
 
             DB::commit();
             return redirect('/owner/user')->with('add_status','User berhasil dihapus');
@@ -114,7 +112,7 @@ class OwnerController extends Controller
 
     public function display_product()
     {
-        $products = Product::all();
+        $products = Product::on('owner')->get();
         
         return view('pemilik.list-produk',[
             'product' => $products,
@@ -123,7 +121,7 @@ class OwnerController extends Controller
     }
     public function detail_product($id)
     {
-        $products = Product::find($id);
+        $products = Product::on('owner')->find($id);
 
         return view('pemilik.detail-produk',[
             'product' => $products,
@@ -133,11 +131,11 @@ class OwnerController extends Controller
 
     public function add_product()
     {
-        $category = Category::orderBy('category')->get();
-        $group = Group::orderBy('group')->get();
-        $unit = Unit::orderBy('unit')->get();
-        $supplier = Supplier::orderBy('supplier')->get();
-        $type = ProductDescription::distinct()->pluck('product_type');
+        $category = Category::on('owner')->orderBy('category')->get();
+        $group = Group::on('owner')->orderBy('group')->get();
+        $unit = Unit::on('owner')->orderBy('unit')->get();
+        $supplier = Supplier::on('owner')->orderBy('supplier')->get();
+        $type = ProductDescription::on('owner')->distinct()->pluck('product_type');
 
         return view('pemilik.tambah-produk',[
             "categories"=> $category ?? [],
@@ -172,15 +170,12 @@ class OwnerController extends Controller
             'expired_date.after_or_equal' => 'Tanggal harus lebih dari 3 bulan dari sekarang.',
             ]);
 
-            DB::beginTransaction();
             try{
                 $carbonDate = Carbon::parse($request->expired_date);
                 $formatted = $carbonDate->format('Y-m-d H:i:s');
                 $GambarObat = $validated_data['gambar_obat']->store('gambar-obat');
-                
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'product', 'insert', '-', $request->nama_obat));
 
-                DB::select('CALL add_product_procedure(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+                DB::connection('owner')->select('CALL add_product_procedure(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                     $request->id,
                     $request->desc_id,
                     $request->nama_obat,
@@ -205,23 +200,23 @@ class OwnerController extends Controller
                     $request->stock,
                     $request->detail_id
                 ]);
-                
-                DB::commit();
+
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'product', 'insert', '-', $request->nama_obat));
+
                 return redirect('/owner/produk')->with('add_status','Produk berhasil ditambah');
             }catch(Exception $e){
-                DB::rollBack();
                 return redirect('/owner/produk')->with('error_status','Produk gagal ditambah');
             }
         }
 
     public function edit_product($id)
     {
-        $products = Product::findOrFail($id);
-        $category = Category::orderBy('category')->get();
-        $group = Group::orderBy('group')->get();
-        $unit = Unit::orderBy('unit')->get();
-        $supplier = Supplier::orderBy('supplier')->get();
-        $type = ProductDescription::distinct()->pluck('product_type');
+        $products = Product::on('owner')->findOrFail($id);
+        $category = Category::on('owner')->orderBy('category')->get();
+        $group = Group::on('owner')->orderBy('group')->get();
+        $unit = Unit::on('owner')->orderBy('unit')->get();
+        $supplier = Supplier::on('owner')->orderBy('supplier')->get();
+        $type = ProductDescription::on('owner')->distinct()->pluck('product_type');
         $state = ['aktif', 'tidak aktif'];
 
         return view('pemilik.edit-produk',[
@@ -237,7 +232,7 @@ class OwnerController extends Controller
 
     public function edit_product_process(Request $request,$id)
     {
-        $products = Product::find($id);
+        $products = Product::on('owner')->find($id);
 
         if($products->product_name == $request->nama_obat){
             $validated_data = $request->validate([
@@ -281,63 +276,63 @@ class OwnerController extends Controller
         try{
             // insert log
             if($products->product_status != $request->status){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'status obat', 'update', $products->product_status, $request->status));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'status obat', 'update', $products->product_status, $request->status));
             }
 
             if($products->product_name != $request->nama_obat){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'nama obat', 'update', $products->product_name, $request->nama_obat));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'nama obat', 'update', $products->product_name, $request->nama_obat));
             }
 
             if($products->description->category_id != $request->kategori){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'kategori obat', 'update', Category::where('category_id', $products->description->category)->category, Category::where('category_id', $request->kategori)->category));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'kategori obat', 'update', Category::on('owner')->where('category_id', $products->description->category)->category, Category::on('owner')->where('category_id', $request->kategori)->category));
             }
 
             if($products->description->group_id != $request->golongan){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'golongan obat', 'update', Group::where('group_id', $products->description->group)->group, Group::where('group_id', $request->golongan)->group));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'golongan obat', 'update', Group::on('owner')->where('group_id', $products->description->group)->group, Group::on('owner')->where('group_id', $request->golongan)->group));
             }
 
             if($products->product_sell_price != $request->harga_jual){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'harga jual obat', 'update', $products->product_sell_price, $request->harga_jual));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'harga jual obat', 'update', $products->product_sell_price, $request->harga_jual));
             }
 
             if($products->description->unit_id != $request->satuan_obat){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'satuan obat', 'update', Unit::where('unit_id', $products->description->unit)->unit, Unit::where('unit_id', $request->satuan_obat)->unit));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'satuan obat', 'update', Unit::on('owner')->where('unit_id', $products->description->unit)->unit, Unit::on('owner')->where('unit_id', $request->satuan_obat)->unit));
             }
 
             if($products->description->supplier_id != $request->pemasok){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'pemasok obat', 'update', Supplier::where('supplier_id', $products->description->supplier_id)->supplier), Supplier::where('supplier_id', $request->pemasok)->supplier);
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'pemasok obat', 'update', Supplier::on('owner')->where('supplier_id', $products->description->supplier_id)->supplier), Supplier::on('owner')->where('supplier_id', $request->pemasok)->supplier);
             }
 
             if($products->description->product_DPN != $request->NIE){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'NIE obat', 'update', $products->description->product_DPN, $request->NIE));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'NIE obat', 'update', $products->description->product_DPN, $request->NIE));
             }
 
             if($products->description->product_type != $request->tipe){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'tipe obat', 'update', $products->description->product_type, $request->tipe));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'tipe obat', 'update', $products->description->product_type, $request->tipe));
             }
 
             if($products->description->product_manufacture != $request->produksi){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'tipe obat', 'update', $products->description->product_manufacture, $request->produksi));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'tipe obat', 'update', $products->description->product_manufacture, $request->produksi));
             }
 
             if($products->description->product_description != $request->deskripsi){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'deskripsi obat', 'update', $products->description->product_description, $request->deskripsi));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'deskripsi obat', 'update', $products->description->product_description, $request->deskripsi));
             }
 
             if($products->description->product_sideEffect != $request->efek_samping){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'deskripsi obat', 'update', $products->description->product_sideEffect, $request->efek_samping));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'deskripsi obat', 'update', $products->description->product_sideEffect, $request->efek_samping));
             }
 
             if($products->description->product_dosage != $request->dosis){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'dosis obat', 'update', $products->description->product_dosage, $request->dosis));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'dosis obat', 'update', $products->description->product_dosage, $request->dosis));
             }
 
             if($products->description->product_indication != $request->indikasi){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'indikasi obat', 'update', $products->description->product_indication, $request->indikasi));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'indikasi obat', 'update', $products->description->product_indication, $request->indikasi));
             }
 
             if($products->description->product_notice != $request->peringatan){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'peringatan obat', 'update', $products->description->product_notice, $request->peringatan));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'peringatan obat', 'update', $products->description->product_notice, $request->peringatan));
             }
             // akhir insert log 
 
@@ -379,13 +374,13 @@ class OwnerController extends Controller
 
         try{
             // insert log
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(ProductDetail::where('detail_id', $request->detail_id)->first()->product->product_name, auth()->user()->username, 'tanggal obat expired', 'delete', ProductDetail::where('detail_id', $request->detail_id)->first()->product_expired, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(ProductDetail::where('detail_id', $request->detail_id)->first()->product->product_name, auth()->user()->username, 'tanggal obat expired', 'delete', ProductDetail::where('detail_id', $request->detail_id)->first()->product_expired, '-'));
 
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(ProductDetail::where('detail_id', $request->detail_id)->first()->product->product_name, auth()->user()->username, 'stock obat expired', 'delete', ProductDetail::where('detail_id', $request->detail_id)->first()->product_stock, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(ProductDetail::where('detail_id', $request->detail_id)->first()->product->product_name, auth()->user()->username, 'stock obat expired', 'delete', ProductDetail::where('detail_id', $request->detail_id)->first()->product_stock, '-'));
 
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(ProductDetail::where('detail_id', $request->detail_id)->first()->product->product_name, auth()->user()->username, 'harga beli obat expired', 'delete', ProductDetail::where('detail_id', $request->detail_id)->first()->product_buy_price, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(ProductDetail::where('detail_id', $request->detail_id)->first()->product->product_name, auth()->user()->username, 'harga beli obat expired', 'delete', ProductDetail::where('detail_id', $request->detail_id)->first()->product_buy_price, '-'));
 
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(ProductDetail::where('detail_id', $request->detail_id)->first()->product->product_name, auth()->user()->username, 'status obat expired', 'update', 'exp', 'aktif'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(ProductDetail::where('detail_id', $request->detail_id)->first()->product->product_name, auth()->user()->username, 'status obat expired', 'update', 'exp', 'aktif'));
             // akhir insert log
 
             ProductDetail::where('detail_id', $request->detail_id)->first()->product->update([
@@ -404,7 +399,7 @@ class OwnerController extends Controller
 
     public function add_batch($id)
     {
-        $products = Product::find($id);
+        $products = Product::on('owner')->find($id);
 
         return view('pemilik.tambah-batch',[
             'product' => $products
@@ -419,11 +414,11 @@ class OwnerController extends Controller
         DB::beginTransaction();
         try{
             // insert log
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch harga beli', 'insert', '-', $request->harga_beli));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch harga beli', 'insert', '-', $request->harga_beli));
 
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch expired', 'insert', '-', $formatted));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch expired', 'insert', '-', $formatted));
         
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch stock', 'insert', '-', $request->stock));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch stock', 'insert', '-', $request->stock));
             // akhir insert log
 
             $new_detail = new ProductDetail;
@@ -445,7 +440,7 @@ class OwnerController extends Controller
 
     public function display_supplier()
     {
-        $supplier = Supplier::orderBy('supplier')->get();
+        $supplier = Supplier::on('owner')->orderBy('supplier')->get();
 
         return view('pemilik.list-supplier',[
             'suppliers' => $supplier,
@@ -463,7 +458,7 @@ class OwnerController extends Controller
         
         DB::beginTransaction();
         try{
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_supplier, auth()->user()->username, 'supplier', 'insert', '-', $request->nama_supplier));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_supplier, auth()->user()->username, 'supplier', 'insert', '-', $request->nama_supplier));
             
             $new_supplier = new Supplier;
             $new_supplier -> supplier_id = Str::uuid();
@@ -478,7 +473,7 @@ class OwnerController extends Controller
         }catch(Exception $e){
             DB::rollBack();
 
-            return redirect('/owner/supplier')->with('error_status','Terjadi Kesalahan')->with('error', $e->validator->errors()->messages());
+            return redirect('/owner/supplier')->with('error_status','Terjadi Kesalahan');
         }
     }
 
@@ -491,14 +486,14 @@ class OwnerController extends Controller
 
         DB::beginTransaction();
         try{
-            $suppliers = Supplier::find($id);
+            $suppliers = Supplier::on('owner')->find($id);
 
             if($suppliers->supplier_address != $request->alamat){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($suppliers->supplier, auth()->user()->username, 'alamat supplier', 'update', $suppliers->supplier_address, $request->alamat));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($suppliers->supplier, auth()->user()->username, 'alamat supplier', 'update', $suppliers->supplier_address, $request->alamat));
             }
 
             if($suppliers->supplier_phone != $request->no_telp){
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($suppliers->supplier, auth()->user()->username, 'nomor telpon supplier', 'update', $suppliers->supplier_phone, $request->no_telp));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($suppliers->supplier, auth()->user()->username, 'nomor telpon supplier', 'update', $suppliers->supplier_phone, $request->no_telp));
             }
 
             $suppliers -> supplier_address = $request->alamat;
@@ -510,8 +505,9 @@ class OwnerController extends Controller
             return redirect('owner/supplier')->with('add_status','Supplier Berhasil Diedit');
         }catch(Exception $e){
             DB::rollBack();
+            throw $e;
 
-            return redirect('/owner/supplier')->with('error_status','Terjadi Kesalahan')->with('error', $e->validator->errors()->messages());
+            return redirect('/owner/supplier')->with('error_status','Terjadi Kesalahan');
         }
     }
 
@@ -519,11 +515,11 @@ class OwnerController extends Controller
     {
         DB::beginTransaction();
         try{
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->supplier, auth()->user()->username, 'nama supplier', 'delete', Supplier::where('supplier_id', $request->id)->supplier, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->supplier, auth()->user()->username, 'nama supplier', 'delete', Supplier::where('supplier_id', $request->id)->supplier, '-'));
 
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->supplier, auth()->user()->username, 'alamat supplier', 'delete', Supplier::where('supplier_id', $request->id)->supplier_address, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->supplier, auth()->user()->username, 'alamat supplier', 'delete', Supplier::where('supplier_id', $request->id)->supplier_address, '-'));
 
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->supplier, auth()->user()->username, 'nomor telepon supplier', 'delete', Supplier::where('supplier_id', $request->id)->supplier_phone, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->supplier, auth()->user()->username, 'nomor telepon supplier', 'delete', Supplier::where('supplier_id', $request->id)->supplier_phone, '-'));
 
             Supplier::where('supplier_id', $request->id)->delete();
 
@@ -538,7 +534,7 @@ class OwnerController extends Controller
 
     public function log_penjualanan()
     {
-        $selling = SellingInvoice::get();
+        $selling = SellingInvoice::on('owner')->get();
 
         return view('pemilik.log-transaksi-penjualan',[
             'sellings' => $selling,
@@ -549,9 +545,9 @@ class OwnerController extends Controller
 
     public function log_pembelian()
     {
-        $buying = BuyingInvoice::get();
+        $buying = BuyingInvoice::on('owner')->get();
         $supplierNames = $buying->pluck('supplier_name')->all();
-        $supplier = Supplier::whereIn('supplier', $supplierNames)->first();
+        $supplier = Supplier::on('owner')->whereIn('supplier', $supplierNames)->first();
 
         return view('pemilik.log-transaksi-pembelian',[
             'buying' => $buying,
@@ -563,7 +559,7 @@ class OwnerController extends Controller
 
     public function lihatKasir(){
 
-        $cashiers = User::where('role', 'cashier')
+        $cashiers = User::on('owner')->where('role', 'cashier')
         ->get();
 
         return view ('pemilik.list-kasir', [
@@ -583,7 +579,7 @@ class OwnerController extends Controller
 
         DB::beginTransaction();
         try{
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->username, auth()->user()->username, 'cashier', 'insert', '-', $request->username));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->username, auth()->user()->username, 'cashier', 'insert', '-', $request->username));
 
             $new_user = new User;
             $uuid = Str::uuid();
@@ -624,15 +620,15 @@ class OwnerController extends Controller
             $cashiers= Cashier::find($id);
 
             if ($cashiers->cashier_phone != $request->nohp) {
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'nomor telpon cashier', 'update', $cashiers->cashier_phone, $request->nohp));
+                DB::connect('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'nomor telpon cashier', 'update', $cashiers->cashier_phone, $request->nohp));
             }
 
             if ($cashiers->cashier_gender != $request->gender) {
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'gender cashier', 'update', $cashiers->cashier_gender, $request->gender));
+                DB::connect('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'gender cashier', 'update', $cashiers->cashier_gender, $request->gender));
             }
 
             if ($cashiers->cashier_address != $request->address) {
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'alamat cashier', 'update', $cashiers->cashier_address, $request->address));
+                DB::connect('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'alamat cashier', 'update', $cashiers->cashier_address, $request->address));
             }
 
             $cashiers -> cashier_phone = $request->nohp;
@@ -656,9 +652,9 @@ class OwnerController extends Controller
         DB::beginTransaction();
 
         try{
-            DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(User::where('user_id', $request->id)->username, auth()->user()->username, 'kasir', 'delete', User::where('user_id', $request->id)->username, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(User::where('user_id', $request->id)->first()->username, auth()->user()->username, 'kasir', 'delete', User::on('owner')->where('user_id', $request->id)->first()->username, '-'));
 
-            User::where('user_id', $request->id)->delete();
+            User::on('owner')->where('user_id', $request->id)->delete();
 
             DB::commit();
             return redirect('/owner/kasir')->with('add_status','Kasir berhasil dihapus');
@@ -671,7 +667,7 @@ class OwnerController extends Controller
 
     public function pendingOrder()
     {
-        $pendingOrders = SellingInvoice::where('order_status', 'Menunggu Pengembalian')
+        $pendingOrders = SellingInvoice::on('owner')->where('order_status', 'Menunggu Pengembalian')
             ->orderBy('order_date', 'desc')
             ->get();
     
@@ -689,11 +685,15 @@ class OwnerController extends Controller
         ]);
     }
 
+    public function bukti_pembayaran(Request $request){
+        return view('pemilik.show-image',[
+            'title' => 'Bukti Pembayaran',
+            'root' => 'bukti-pembayaran',
+            'file'=> $request->img,
+        ]);
+    }
+
     public function refund(Request $request, $id){
-        try{
-        $order = SellingInvoice::findOrFail($id);
-        // dd($request->buktiRefund);
-        
         $validated_data = $request->validate([
             'buktiRefund' => ['required', 'file', 'max:5120', 'mimes:pdf,png,jpeg,jpg'],
         ], [
@@ -702,21 +702,31 @@ class OwnerController extends Controller
             'buktiRefund.max' => 'Dokumen yang dilampirkan tidak boleh lebih dari 5 mb',
             'buktiRefund.mimes' => 'Format dokumen yang diterima adalah PDF, PNG, JPEG, or JPG file.',
         ]);
+
+        DB::beginTransaction();
+        try{
+        $order = SellingInvoice::on('owner')->findOrFail($id);
+
+        DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($order->invoice_code, auth()->user()->username, 'status', 'update', 'Menunggu Pengembalian', 'Refund'));
+        
         $refund_file = basename($validated_data['buktiRefund']->store('refund'));
         
         $order->update([
             'refund_file' =>$refund_file,
             'order_status' => 'Refund',
         ]);
-        return redirect()->back()->with('success', 'Berhasil melakukan refund.');
+
+        DB::commit();
+        return redirect()->back()->with('add_status', 'Berhasil melakukan refund.');
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
-        return redirect()->back()->with('error', 'Pesanan tidak ditemukan.');
+        DB::rollBack();
+        return redirect()->back()->with('error_status', 'Pesanan tidak ditemukan.');
         }
     }
 
     public function display_log()
     {
-        $logs = Log::all();
+        $logs = Log::on('owner')->get();
         return view('pemilik.log',[
             'logs' => $logs,
             'total' => $this->total_pesanan_online()

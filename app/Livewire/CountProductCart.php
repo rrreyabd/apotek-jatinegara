@@ -21,38 +21,38 @@ class CountProductCart extends Component
 
     public function decrement() {
             if($this->quantity > $this->stock_product) {
-                Cart::where('cart_id', $this->cart_id)->update([
+                Cart::on('user')->where('cart_id', $this->cart_id)->update([
                     'quantity'=> $this->stock_product,
                 ]);
             }else if($this->quantity <= $this->stock_product && $this->quantity >= 1) {
-                Cart::where('cart_id', $this->cart_id)->update([
+                Cart::on('user')->where('cart_id', $this->cart_id)->update([
                     'quantity'=> $this->quantity - 1,
                 ]);
             }else{
-                Cart::where('cart_id', $this->cart_id)->update([
+                Cart::on('user')->where('cart_id', $this->cart_id)->update([
                     'quantity'=> 1,
                 ]);
             }
-            $this->quantity = Cart::where('cart_id', $this->cart_id)->first()->quantity;
+            $this->quantity = Cart::on('user')->where('cart_id', $this->cart_id)->first()->quantity;
             $this->dispatch('quantity', $this->cart_id, $this->quantity);
         
     }
 
     public function increment() {
             if($this->quantity > $this->stock_product) {
-                Cart::where('cart_id', $this->cart_id)->update([
+                Cart::on('user')->where('cart_id', $this->cart_id)->update([
                     'quantity'=> $this->stock_product,
                 ]);
             }else if($this->quantity <= $this->stock_product && $this->quantity >= 1) {
-                Cart::where('cart_id', $this->cart_id)->update([
+                Cart::on('user')->where('cart_id', $this->cart_id)->update([
                     'quantity'=> $this->quantity + 1,
                 ]);
             }else{
-                Cart::where('cart_id', $this->cart_id)->update([
+                Cart::on('user')->where('cart_id', $this->cart_id)->update([
                     'quantity'=> 1,
                 ]);
             }
-            $this->quantity = Cart::where('cart_id', $this->cart_id)->first()->quantity;
+            $this->quantity = Cart::on('user')->where('cart_id', $this->cart_id)->first()->quantity;
             $this->dispatch('quantity', $this->cart_id, $this->quantity);
     }
     public function render()

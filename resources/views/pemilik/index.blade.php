@@ -163,45 +163,7 @@
             </div>
 
             <p class="font-bold text-2xl mt-5">Transaksi Terakhir</p>
-            <input type="month" name="" id="tgl-transaksi" class="w-fit p-3 rounded-lg shadow-lg border-none">
-
-            <div class="bg-white rounded-lg p-4 shadow-md overflow-x-auto">
-                <table id="myTable"  class="display table table-striped">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Tanggal Transaksi</th>
-                            <th>No. Invoice</th>
-                            <th>Tipe Transaksi</th>
-                            <th>Metode Pembayaran</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $j = 1;
-                        @endphp
-                        @foreach ($last as $lastest)
-                        <tr>
-                            <td>{{$j++}}</td>
-                            @php
-                            $carbonDate = \Carbon\Carbon::parse( $lastest->tanggal_transaksi);
-                            $formattedDate = $carbonDate->format('j F Y');
-                            @endphp
-                            <td>
-                                <span class="font-bold">{{ $formattedDate }}</span>
-                            </td>
-                            <td>{{ $lastest->invoice_code }}</td>
-                            <td>{{ $lastest->tipe_transaksi }}</td>
-                            <td>{{ $lastest->metode_pembayaran }}</td>
-                            <td>Rp
-                                {{ number_format($lastest->total_pengeluaran , 0, ',', '.') }}
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            <livewire:transaksi-terakhir/>
         </div>
     </main>
 

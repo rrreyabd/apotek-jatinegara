@@ -24,19 +24,19 @@ class CartController extends Controller
 
     public function hapusItem(Request $request) {
         if( $request->hapus == "semua" ) {
-            Cart::where('user_id', auth()->user()->user_id)->delete();
+            Cart::on('user')->where('user_id', auth()->user()->user_id)->delete();
         }elseif( $request->hapus == 'satuan') {
-            Cart::where('cart_id', $request->cart_id)->delete();
+            Cart::on('user')->where('cart_id', $request->cart_id)->delete();
         }
         
         return redirect()->back();
     }
 
     public function tambahItem(Request $request) {
-        $carts = Cart::where('product_id', $request->product_id)->where('user_id', auth()->user()->user_id)->get();
+        $carts = Cart::on('user')->where('product_id', $request->product_id)->where('user_id', auth()->user()->user_id)->get();
 
-        if($carts->first() == NULL && Cart::where('user_id', auth()->user()->user_id)->count() < 30){
-            Cart::create([
+        if($carts->first() == NULL && Cart::on('user')->where('user_id', auth()->user()->user_id)->count() < 30){
+            Cart::on('user')->create([
                 'cart_id' => Str::uuid(),
                 'user_id' => auth()->user()->user_id,
                 'product_id' => $request->product_id,
@@ -50,7 +50,7 @@ class CartController extends Controller
     }
 
     public function hapus_keranjang() {
-        Cart::where('user_id', auth()->user()->user_id)->delete();
+        Cart::on('user')->where('user_id', auth()->user()->user_id)->delete();
         return redirect()->back();
     }
 
@@ -60,10 +60,10 @@ class CartController extends Controller
         $uuid = Str::uuid();
         
         try{
-            $cart = Cart::where('user_id', auth()->user()->user_id)->get();
-            $produk_id = SellingInvoice::orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();
+            $cart = Cart::on('cashier')->where('user_id', auth()->user()->user_id)->get();
+            $produk_id = SellingInvoice::on('cashier')->orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();
             $number = intval(str_replace("INV-", "", $produk_id)) + 1;
-            SellingInvoice::create([
+            SellingInvoice::on('cashier')->create([
                 'selling_invoice_id' => $uuid,
                 'invoice_code' => 'INV-' . str_pad($number, 6, '0', STR_PAD_LEFT),
                 'cashier_name' => auth()->user()->username,
@@ -74,7 +74,7 @@ class CartController extends Controller
             
             
             foreach ($cart as $item) {
-                SellingInvoiceDetail::create([
+                SellingInvoiceDetail::on('cashier')->create([
                     'selling_detail_id' => Str::uuid(),
                     'selling_invoice_id' => $uuid,
                     'product_name' => $item->product->product_name,

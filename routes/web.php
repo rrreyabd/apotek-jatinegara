@@ -67,26 +67,13 @@ Route::get('/s&k', function () {
 Route::get('/cara-belanja', function () {
         return view('user.cara-belanja');
 });
-// akhir halaman akses tanpa login
-
-// halama user, cashier, owner
-Route::middleware(['auth', 'verified', 'cekRole:user,cashies,owner'])->group(function () {
-});
-// akhir halaman user, cashier, owner
+// akhir halaman akses tanpa login\
 
 // halaman user
 Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/user-profile', [UserController::class, 'profile'])->name('profile-user');
     Route::post('/user-profile', [UserController::class, 'ubah'])->name('change-profile');
     Route::post('/hapus-akun', [UserController::class, 'hapus'])->name('delete-profile');
-
-    Route::get('/pembayaran', function () {
-        return view('user.pembayaran');
-    });
-
-    Route::get('/detail-pesanan', function () {
-            return view('user.detail-pesanan');
-    });
 
     Route::get('/riwayat-pesanan', [UserController::class,'riwayatTransaksi'])->name('riwayat-transaksi');
     Route::get('/detail-riwayat-pesanan', [UserController::class,'detailRiwayatTransaksi'])->name('detail-riwayat-transaksi');
@@ -104,8 +91,6 @@ Route::middleware(['auth', 'verified', 'cekRole:user'])->group(function () {
     Route::get('/refund/{file}/{id}', [CustomerController::class, 'refund'])->name('refund');
 
     Route::get('/cetak-struk/{id}', [CustomerController::class,'cetak_struk'])->name('cetak_struk');
-
-    Route::get('/generate-pdf/{id}', [printPDFController::class, 'generatePdf']);
 });
 // akhir halaman user
 
@@ -172,6 +157,7 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     Route::get('pesanan-pending', [OwnerController::class, 'pendingOrder'])->name('pesanan-pending');
     Route::post('pesanan-pending/{sellingInvoiceID}', [OwnerController::class, 'refund'])->name('owner-refund');
     Route::get('resep_dokter/{img}', [OwnerController::class, 'resep_dokter']);
+    Route::get('bukti-pembayaran/{img}', [OwnerController::class, 'bukti_pembayaran']);
     Route::get('log', [OwnerController::class, 'display_log']);
 
 });

@@ -16,7 +16,7 @@ class CashierController extends Controller
 {
 public function riwayatTransaksi()
     {
-        $histories = SellingInvoice::where('cashier_name',auth()->user()->username)
+        $histories = SellingInvoice::on('cashier')->where('cashier_name',auth()->user()->username)
             ->where('order_status', 'Berhasil')
             ->orWhere('order_status','Offline')
             ->orWhere('order_status','Gagal')
@@ -25,26 +25,26 @@ public function riwayatTransaksi()
             ->get();
             // dd($histories);
 
-        $total = SellingInvoice::where('order_status', 'Menunggu Konfirmasi')
+        $total = SellingInvoice::on('cashier')->where('order_status', 'Menunggu Konfirmasi')
             ->count();
     
         return view('kasir.riwayat-transaksi', ['histories' => $histories, 'total' => $total]);
     }
     public function pendingOrder()
     {
-        $pendingOrders = SellingInvoice::where('order_status', 'Menunggu Pengambilan')
+        $pendingOrders = SellingInvoice::on('cashier')->where('order_status', 'Menunggu Pengambilan')
             ->orderBy('order_date', 'desc')
             ->get();
             // dd($pendingOrders);
 
-            $total = SellingInvoice::where('order_status', 'Menunggu Konfirmasi')
+            $total = SellingInvoice::on('cashier')->where('order_status', 'Menunggu Konfirmasi')
             ->count();
     
         return view('kasir.pesanan-pending', ['pendingOrders' => $pendingOrders,  'total' => $total]);
     }
     
     public function onlineOrder(){
-        $onlineOrders = SellingInvoice::where('order_status', 'Menunggu Konfirmasi')
+        $onlineOrders = SellingInvoice::on('cashier')->where('order_status', 'Menunggu Konfirmasi')
             ->orderBy('order_date', 'desc')
             ->get();
             // dd($onlineOrders);
@@ -57,11 +57,11 @@ public function riwayatTransaksi()
     public function finishOrder($id){
         DB::beginTransaction();
         try {
-            $order = SellingInvoice::findOrFail($id);
+            $order = SellingInvoice::on('cashier')->findOrFail($id);
             foreach($order->sellingInvoiceDetail as $produk){
-                foreach(Product::where('product_name', $produk->product_name)->first()->detail as $detail){
+                foreach(Product::on('cashier')->where('product_name', $produk->product_name)->first()->detail as $detail){
                     if($detail->product_stock == 0){
-                        if(Product::where('product_name', $produk->product_name)->first()->detail()->count() > 1){
+                        if(Product::on('cashier')->where('product_name', $produk->product_name)->first()->detail()->count() > 1){
                             $detail->delete();
                         }
                     }
@@ -86,14 +86,14 @@ public function riwayatTransaksi()
     public function failOrder($id){
         try {
             DB::beginTransaction();
-            $order = SellingInvoice::findOrFail($id);
+            $order = SellingInvoice::on('cashier')->findOrFail($id);
             
-            DB::select("CALL order_fail(?, ?, ?)", array($id, auth()->user()->username, "Telah Melewati Batas Waktu Pengambilan, Tidak Akan Dilakukan Refund!!"));
+            DB::connection('cashier')->select("CALL order_fail(?, ?, ?)", array($id, auth()->user()->username, "Telah Melewati Batas Waktu Pengambilan, Tidak Akan Dilakukan Refund!!"));
 
             foreach($order->sellingInvoiceDetail as $detail) {
-                $product_id = Product::where('product_name', $detail->product_name)->first()->product_id;
+                $product_id = Product::on('cashier')->where('product_name', $detail->product_name)->first()->product_id;
                 // dd($product_id);
-                DB::select("CALL stock_back(?, ?)", array($detail->quantity, $product_id));
+                DB::connection('cashier')->select("CALL stock_back(?, ?)", array($detail->quantity, $product_id));
             }
             DB::commit();
     
@@ -106,11 +106,11 @@ public function riwayatTransaksi()
 
     public function updateStatus(Request $request, $id){
         try{
-            $order = SellingInvoice::findOrFail($id);
+            $order = SellingInvoice::on('cashier')->findOrFail($id);
             
             
             if($request->status == 'terima'){
-                DB::select("CALL order_success(?, ?)", array($id, auth()->user()->username));
+                DB::connection('cashier')->select("CALL order_success(?, ?)", array($id, auth()->user()->username));
                 
                 return redirect()->back()->with('success', 'Pesanan berhasil diterima.');
             } else if($request->status == 'tolak'){
@@ -120,12 +120,12 @@ public function riwayatTransaksi()
                     ]);
                     DB::beginTransaction();
                         
-                        DB::select("CALL order_fail(?, ?, ?)", array($id, auth()->user()->username, $request->alasanTolak));
+                        DB::connection('cashier')->select("CALL order_fail(?, ?, ?)", array($id, auth()->user()->username, $request->alasanTolak));
 
                         foreach($order->sellingInvoiceDetail as $detail) {
-                            $product_id = Product::where('product_name', $detail->product_name)->first()->product_id;
+                            $product_id = Product::on('cashier')->where('product_name', $detail->product_name)->first()->product_id;
                             // dd($product_id);
-                            DB::select("CALL stock_back(?, ?)", array($detail->quantity, $product_id));
+                            DB::connection('cashier')->select("CALL stock_back(?, ?)", array($detail->quantity, $product_id));
                         }
                         
                     DB::commit();
@@ -140,13 +140,13 @@ public function riwayatTransaksi()
                         $request->validate([
                             'alasanRefund' => ['required', 'string', 'min:10', 'regex:/^[a-zA-Z0-9 ]+$/', 'max:255']
                         ]);
-                        DB::select("CALL order_refund(?, ?, ?)", array($id, auth()->user()->username, $request->alasanRefund));
+                        DB::connection('cashier')->select("CALL order_refund(?, ?, ?)", array($id, auth()->user()->username, $request->alasanRefund));
 
 
                         foreach($order->sellingInvoiceDetail as $detail) {
-                            $product_id = Product::where('product_name', $detail->product_name)->first()->product_id;
+                            $product_id = Product::on('cashier')->where('product_name', $detail->product_name)->first()->product_id;
                             // dd($product_id);
-                            DB::select("CALL stock_back(?, ?)", array($detail->quantity, $product_id));
+                            DB::connection('cashier')->select("CALL stock_back(?, ?)", array($detail->quantity, $product_id));
                         }
                         
                     DB::commit();

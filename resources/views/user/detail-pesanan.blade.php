@@ -87,14 +87,14 @@
                         {{ $message }}
                     </div>
                 @enderror
-                <input type="text" name="nama" placeholder="Nama Pengambil Pesanan" value="" required class="h-12 px-4 rounded-2xl shadow-md">
+                <input type="text" name="nama" placeholder="Nama Pengambil Pesanan" value="{{ auth()->user()->username }}" required class="h-12 px-4 rounded-2xl shadow-md">
                 @error('nama')
                     <div class="text-sm text-red-200 ms-3 mb-0 text-left">
                         {{ $message }}
                     </div>
                 @enderror
                 
-                <input type="number" name="nomor_telepon" placeholder="No. HP" value="" required class="h-12 px-4 rounded-2xl shadow-md">
+                <input type="number" name="nomor_telepon" placeholder="No. HP" value="{{ auth()->user()->customer->customer_phone }}" required class="h-12 px-4 rounded-2xl shadow-md">
                 @error('nomor_telepon')
                     <div class="text-sm text-red-200 ms-3 mb-0 text-left">
                         {{ $message }}

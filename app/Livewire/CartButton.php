@@ -18,12 +18,12 @@ class CartButton extends Component
 
     public function addToCart($user_id,$product_id)
     {
-        $existingCart = Cart::where('user_id', $this->user_id)
+        $existingCart = Cart::on('user')->where('user_id', $this->user_id)
         ->where('product_id', $this->product_id)
         ->first();
 
     if (!$existingCart) {
-        Cart::create([
+        Cart::on('user')->create([
             "cart_id" => Str::uuid(),
             'user_id' => $this->user_id,
             'product_id' => $this->product_id,

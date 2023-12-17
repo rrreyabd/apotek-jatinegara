@@ -68,7 +68,10 @@
                         <td>
                             <div class="w-full flex gap-2 items-center">
                                 {{-- GREEN = BERHASIL, YELLOW = REFUND, RED = GAGAL --}}
-                                @if ($item->order_status == "Offline" || $item->order_status == "Berhasil")
+                                @if ($item->order_status == "Offline")
+                                    <i class="text-green-600 fa-solid fa-circle"></i>
+                                    <p class="font-bold">Offline</p>
+                                @elseif($item->order_status == "Berhasil")
                                     <i class="text-green-600 fa-solid fa-circle"></i>
                                     <p class="font-bold">Berhasil</p>
                                 @elseif($item->order_status == "Gagal")
@@ -104,7 +107,10 @@
 
                                         <div class="flex gap-2 items-center">
                                             {{-- GREEN = BERHASIL, YELLOW = REFUND, RED = GAGAL --}}
-                                            @if ($item->order_status == "Offline" || $item->order_status == "Berhasil")
+                                            @if ($item->order_status == "Offline")
+                                                <i class="text-green-600 fa-solid fa-circle"></i>
+                                                <p class="font-bold">Offline</p>
+                                            @elseif($item->order_status == "Berhasil")
                                                 <i class="text-green-600 fa-solid fa-circle"></i>
                                                 <p class="font-bold">Berhasil</p>
                                             @elseif($item->order_status == "Gagal")
@@ -190,8 +196,8 @@
                                                 <p class="font-bold">Metode Pembayaran :</p>
                                                 <p>{{ $item->recipient_bank }}</p>
                                                 <p class="font-bold">Bukti Pembayaran :</p>
-                                                <a href="/cashier/img" target="_blank"
-                                                    class="text-blue-600 underline">hehehe.jpg</a>
+                                                <a href="/owner/bukti-pembayaran/{{ $item->recipient_payment }}" target="_blank"
+                                                    class="text-blue-600 underline">{{ $item->recipient_payment }}</a>
                                                 <p class="font-bold">Catatan :</p>
                                                 <p>{{ $item->recipient_request }}</p>
                                             </div>
