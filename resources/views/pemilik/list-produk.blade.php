@@ -30,16 +30,16 @@
             <div class="md:flex justify-between">
                 <p class="text-3xl font-bold mb-2">List Produk</p>
 
-                @if (session('success'))
+                @if (session('add_status'))
                     <div class="absolute top-4 left-[42.5vw] bg-mainColor shadow-md w-[25vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
                         <i class="text-white fa-solid fa-circle-check"></i>
-                        <p class="text-lg text-white font-semibold"> {{ session('success') }} </p>
+                        <p class="text-lg text-white font-semibold"> {{ session('add_status') }} </p>
                     </div>
                 @endif
-                @if (session('error'))
+                @if (session('error_status'))
                     <div class="absolute top-4 left-[42.5vw] bg-red-600 shadow-md w-[15vw] h-14 z-20 gap-2 items-center px-4 animate-notif opacity-0 justify-center rounded-md flex unselectable">
                         <i class="text-white fa-solid fa-triangle-exclamation"></i>
-                        <p class="text-lg text-white font-semibold"> {{ session('error') }} </p>
+                        <p class="text-lg text-white font-semibold"> {{ session('error_status') }} </p>
                     </div>
                 @endif
 

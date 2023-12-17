@@ -39,7 +39,6 @@
                         @php $i = 1;  @endphp
                         @php $index = 1;  @endphp
                         @foreach ($logs as $log)
-                            
                         <tr>
                             <td>{{$i}}</td>
                             <td>
@@ -51,7 +50,7 @@
                             @endphp
                             <td> {{ $convertedDate }}</td>
                             <td> 
-                                <span class="font-bold">{{ $log->log_description }}</span>
+                                <span class="font-bold">{{ $log->log_description }} {{ $log->log_target }} ({{ $log->invoice_code }})</span>
                             </td>
                             <td> {{ $log->old_value }} </td>
                             <td> {{ $log->new_value }} </td>
