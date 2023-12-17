@@ -1,4 +1,4 @@
-<div class="font-TripBold bg-white h-screen fixed w-0 z-10" id="sidebar" style="transition: 0.3s;">
+<div class="font-TripBold bg-white h-screen fixed w-0 z-10 " id="sidebar" style="transition: 0.3s;">
     <div class="overflow-x-hidden overflow-y-hidden pt-10 flex justify-center w-full" style="transition: 0.3s;">
         <p class="bg-mainColor text-white font-bold px-7 py-1 rounded-br-xl rounded-tl-xl text-lg">Jati Negara</p>
     </div>
@@ -65,6 +65,13 @@
             <a href="/owner/pesanan-pending" class="flex items-center text-lg">
                 <i class="fa-solid fa-spinner me-3"></i>
                 <p>Pesanan Pending</p>
+            </a>
+        </div>
+
+        <div class="overflow-x-hidden text-mediumGrey my-4" style="transition: 0.3s;">
+            <a href="/owner/log" class="flex items-center text-lg">
+                <i class="fa-regular fa-folder-open me-3"></i>
+                <p>Log</p>
             </a>
         </div>
 

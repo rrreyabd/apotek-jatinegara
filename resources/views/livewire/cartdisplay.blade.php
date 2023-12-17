@@ -22,7 +22,7 @@
             @foreach ($cartItems as $item)
             <div class="flex gap-2 mt-4">
                 <div class="h-full flex items-center">
-                    <img src="https://i.pinimg.com/564x/22/04/72/2204725ec0bd13c61131bc099467b04c.jpg"
+                    <img src="{{ asset('img/obat1.jpg')}}"
                     class="w-24 rounded-md" alt="">
                 </div>
 
@@ -35,7 +35,7 @@
                     <div class="flex justify-between">
                         <div class="w-[50%] text-secondaryColor font-bold break-all leading-tight">
                             Rp. {{
-                            number_format($item->product->detail()->orderBy('product_expired')->first()->product_sell_price,
+                            number_format($item->product->product_sell_price,
                             0,
                             ',', '.') }} <span class="text-black"> /
                             </span>
@@ -59,12 +59,12 @@
                                     @endif
 
                                         <input type="number" min="1" class="font-semibold w-8 text-center" value="{{ $item->quantity }}" readonly>
-                                    @if ($item->quantity == $item->product->detail()->orderBy('product_expired')->first()->product_stock)
+                                    @if ($item->quantity >= $item->product->detail->sum('product_stock'))
                                         <button wire:click="incrementButton" disabled>
                                             <i class="text-mediumGrey fa-solid fa-plus"></i>
                                         </button>
                                     @else
-                                        <button wire:click="incrementButton({{ $item }}, {{ $item->product->detail()->orderBy('product_expired')->first() }})">
+                                        <button wire:click="incrementButton({{ $item }}, {{ $item->product->detail()->sum('product_stock') }})">
                                             <i class="text-mainColor fa-solid fa-plus"></i>
                                         </button>
                                     @endif
@@ -75,7 +75,7 @@
                 </div>
             </div>
             @php
-                $jumlah += $item->product->detail()->orderBy('product_expired')->first()->product_sell_price * $item->quantity
+                $jumlah += $item->product->product_sell_price * $item->quantity
             @endphp
             @endforeach
         </div>

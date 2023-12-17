@@ -59,7 +59,7 @@
                         <div class="flex-col w-full">
                             <p class="mt-5">Nama Obat</p>
                             <input type="text" id="" placeholder="Nama Obat" name="nama_obat" required 
-                                class="p-2 w-full border rounded-xl shadow @error('nama_obat') is-invalid @enderror" value="{{ $product->product_name }}" readonly>
+                                class="p-2 w-full text-slate-400 border rounded-xl shadow @error('nama_obat') is-invalid @enderror" value="{{ $product->product_name }}" readonly>
 
                             <p class="mt-5">Harga Beli Obat</p>
                             <input type="text" id="" placeholder="Harga Beli Obat" name="harga_beli" required
@@ -81,7 +81,7 @@
 
                             <p class="mt-5">Harga Jual Obat</p>
                             <input type="text" id="" placeholder="Harga Jual Obat" name="harga_jual" required
-                                class="p-2 w-full border rounded-xl shadow @error('harga_jual') is-invalid @enderror" value="{{ old('harga_jual') }}">
+                                class="p-2 w-full text-slate-400 border rounded-xl shadow @error('harga_jual') is-invalid @enderror" value="{{ number_format($product->product_sell_price, 0, ',', '.') }}" readonly>
                                 @error('harga_jual')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
                                 @enderror

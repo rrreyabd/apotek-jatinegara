@@ -18,7 +18,7 @@
 
         <div class="flex justify-between items-center">
             <div class="px-2 flex flex-col justify-center w-[80%] whitespace-normal break-words">
-                <p><span class="font-TripBold text-secondaryColor">Rp. {{ number_format($product->detail()->orderBy('product_expired')->first()->product_sell_price, 0,
+                <p><span class="font-TripBold text-secondaryColor">Rp. {{ number_format($product->product_sell_price, 0,
                         ',', '.') }}</span> / </br> {{ $product->description->unit->unit }}</span></p>
                 <p class="font-semibold">Stok: {{ $product->detail()->orderBy('product_expired')->first()->product_stock }}</p>
             </div>

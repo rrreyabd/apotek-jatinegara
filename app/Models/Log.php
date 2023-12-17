@@ -13,7 +13,7 @@ class Log extends Model
         'log_id',
         'log_time',
         'invoice_code',
-        'cashier_name',
+        'username',
         'log_target',
         'log_description',
         'old_value',
