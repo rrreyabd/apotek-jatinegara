@@ -32,7 +32,7 @@ class OwnerController extends Controller
 {
     public function display()
     {
-        $popular = PopularProduct::take(3)->get();
+        $popular = PopularProduct::take(4)->get();
         $last = LastTransaction::orderBy('Tanggal_Transaksi')->get();
         $count_product = Product::count();
         $count_supplier = Supplier::count();
@@ -48,14 +48,15 @@ class OwnerController extends Controller
         $maxYear = $result->maxYear;
 
         $results = DB::table('selling_invoices')
-            ->selectRaw('YEAR(order_complete) as year')
-            ->selectRaw('total_keuntungan(CONCAT(YEAR(order_complete), "-01-01"), CONCAT(YEAR(order_complete), "-12-31")) as total_profit')
-            ->whereYear('order_complete', '>=', $minYear)
-            ->whereYear('order_complete', '<=', $maxYear)
-            ->whereNotNull('order_complete')
-            ->get();
-        
-        $resultsArray = $results->toArray();
+        ->selectRaw('DISTINCT YEAR(order_complete) as year')
+        ->selectRaw('total_keuntungan(CONCAT(YEAR(order_complete), "-01-01"), CONCAT(YEAR(order_complete), "-12-31")) as total_profit')
+        ->whereYear('order_complete', '>=', $minYear)
+        ->whereYear('order_complete', '<=', $maxYear)
+        ->whereNotNull('order_complete')
+        ->groupBy(DB::raw('YEAR(order_complete), selling_invoices.order_complete'))
+        ->get();
+
+$resultsArray = $results->toArray();
 
         return view ('pemilik.index', [
             'popular' => $popular,
