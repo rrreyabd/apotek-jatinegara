@@ -43,6 +43,16 @@ return new class extends Migration
         
             DECLARE existing_invoice_id CHAR(36);
 
+            DECLARE is_transaction_successful BOOLEAN DEFAULT TRUE;
+
+            DECLARE EXIT HANDLER FOR SQLEXCEPTION
+            BEGIN
+                SET is_transaction_successful = FALSE;
+                ROLLBACK;
+            END;
+
+            START TRANSACTION;
+
             SELECT bi.buying_invoice_id INTO existing_invoice_id
             FROM buying_invoices bi
             JOIN suppliers s ON bi.supplier_name COLLATE utf8mb4_unicode_ci = s.supplier COLLATE utf8mb4_unicode_ci
@@ -73,6 +83,10 @@ return new class extends Migration
 
             INSERT INTO buying_invoice_details (buying_detail_id, buying_invoice_id, product_name, product_buy_price, exp_date, quantity)
             VALUES (UUID(), existing_invoice_id, product_name, harga_beli, expired_date, stock);
+
+            IF is_transaction_successful THEN
+                COMMIT;
+            END IF;
             
         END;
         ";
