@@ -105,8 +105,12 @@
 
         <div class="bg-white w-52 p-4 flex flex-col rounded-md shadow-md gap-2">
             <div class="h-36 w-full overflow-hidden flex justify-center object-contain rounded-md">
-                <img src="{{ asset('img/obat1.jpg')}}" class="w-full"
-                    alt="">
+                @if (file_exists(public_path('storage/gambar-obat/' . $item->description->product_photo)) && $item->description->product_photo !== NULL)
+                    <img src="{{ asset('storage/gambar-obat/' . $item->description->product_photo) }}" alt="" class="w-full">
+                @else
+                    <img src="{{ asset('img/obat1.jpg')}}" class="w-full" alt="">
+                @endif
+
             </div>
 
             <p class="w-full font-semibold text-base namaObat leading-tight break-all h-[40px]">

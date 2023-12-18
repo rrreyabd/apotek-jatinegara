@@ -19,7 +19,11 @@
                             <span class="bg-red-500 text-white font-semibold px-2 py-1 text-sm rounded-md absolute top-1 left-2">Resep</span>
                             @endif
 
-                            <img src="{{ asset('img/obat1.jpg')}}" width="150px" alt="" draggable="false">    
+                            @if (file_exists(public_path('storage/gambar-obat/' . $product->first()->product_photo)) && $product->first()->product_photo !== NULL)
+                                <img src="{{ asset('storage/gambar-obat/' . $product->first()->product_photo) }}" width="150px" alt="" draggable="false">
+                            @else
+                                <img src="{{ asset('img/obat1.jpg')}}" width="150px" alt="" draggable="false">    
+                            @endif
                         </center>
                     </a>
 

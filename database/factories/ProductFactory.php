@@ -25,7 +25,7 @@ class ProductFactory extends Factory
         return [
             'product_id' => fake()->uuid,
             'description_id' => $description_id,
-            'product_name' => fake()->words(5, true),
+            'product_name' => fake()->text(50),
             'product_status'=> fake()->randomElement(['aktif', 'tidak aktif']),
             'product_sell_price' => fake()->numberBetween(1000,100000),
         ];
