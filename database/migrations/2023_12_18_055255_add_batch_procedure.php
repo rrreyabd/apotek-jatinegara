@@ -18,6 +18,14 @@ return new class extends Migration
         BEGIN
             DECLARE existing_invoice_id CHAR(36);
 
+            DECLARE is_transaction_successful BOOLEAN DEFAULT TRUE;
+
+            DECLARE EXIT HANDLER FOR SQLEXCEPTION
+            BEGIN
+                SET is_transaction_successful = FALSE;
+                ROLLBACK;
+            END;
+
             START TRANSACTION;
 
             SELECT bi.buying_invoice_id INTO existing_invoice_id
@@ -45,7 +53,9 @@ return new class extends Migration
             INSERT INTO buying_invoice_details (buying_detail_id, buying_invoice_id, product_name, product_buy_price, exp_date, quantity)
             VALUES (UUID(), existing_invoice_id, (SELECT product_name FROM products WHERE product_id = product_id_param COLLATE utf8mb4_unicode_ci), harga_beli_param, expired_date_param, stock_param);
 
-            COMMIT;
+            IF is_transaction_successful THEN
+                COMMIT;
+            END IF;
         END;
         ";
         DB::unprepared($sql);

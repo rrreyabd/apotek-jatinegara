@@ -164,7 +164,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex gap-4 mt-4">
-                                                    <a href="{{ route('invoice-supplier',['id'=> $uuid]) }}" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
+                                                    <a href="{{ route('invoice-supplier',['id'=> $uuid]) }}" target="_blank" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
                                                         <i class="fa-solid fa-print"></i>
                                                         Download Invoice
                                                     </a>

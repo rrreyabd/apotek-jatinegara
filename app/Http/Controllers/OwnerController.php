@@ -173,7 +173,6 @@ $resultsArray = $results->toArray();
             'expired_date.after_or_equal' => 'Tanggal harus lebih dari 3 bulan dari sekarang.',
             ]);
 
-            DB::beginTransaction();
             try{
                 $carbonDate = Carbon::parse($request->expired_date);
                 $formatted = $carbonDate->format('Y-m-d H:i:s');
@@ -206,10 +205,9 @@ $resultsArray = $results->toArray();
                     $request->detail_id
                 ]);
                 
-                DB::commit();
                 return redirect('/owner/produk')->with('add_status','Produk berhasil ditambah');
             }catch(Exception $e){
-                DB::rollBack();
+                throw $e;
                 return redirect('/owner/produk')->with('error_status','Produk gagal ditambah');
             }
         }

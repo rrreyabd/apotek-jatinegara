@@ -178,9 +178,4 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
 });
 // akhir halaman owner
 
-Route::get('/new-invoice', function()
-{
-    return view('pemilik.new-invoice');
-});
-
 require __DIR__.'/auth.php';

@@ -3,134 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $invoice_number }}</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Invoice {{ $invoice_number }}</title>
     @vite('resources/css/app.css')
-
+    
     <style>
-      /* Gaya khusus untuk cetak */
-      @media print {
-          body {
-              font-size: 12pt;
-              -webkit-print-color-adjust: exact;
-          }
+        th {
+            height: 30px
+        }
 
-          .background_black {
-            background-color: black !important;
-            color: white !important;
-          }
+        td {
+            padding-left: 10px;
+            padding-right: 10px;
+            min-height: 50px;
+            height: 70px;
+            max-height: fit-content;
+        }
 
-          /* Sembunyikan elemen yang tidak perlu dicetak */
-          .no-print {
-              display: none;
-          }
-      }
-  </style>
+        tr {
+            border-bottom: 2px solid black;
+        }
+        /* Gaya khusus untuk cetak */
+        @media print {
+            body {
+                font-size: 12pt;
+                -webkit-print-color-adjust: exact;
+            }
+  
+            .background_black {
+              background-color: black !important;
+              color: white !important;
+            }
+  
+            /* Sembunyikan elemen yang tidak perlu dicetak */
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
 </head>
-<body class="font-Inter">
-  <div class="no-print w-screen flex">
-    <button type="button" onclick="prints()" class="no-print bg-mainColor rounded-lg px-5 py-3 my-5 text-end text-white m-auto">Unduh Halaman sebagai PDF</button>
-  </div>
-<div class="pt-10" id="print-content">
-  <button class="w-[140px] h-[40px] ms-8 bg-black background_black rounded-tl-3xl rounded-br-3xl shadow text-xl text-white font-bold text-center">Jati Negara</button>
-    <div class="p-8">
-      <div class="mt-4">
-          <div class="flex justify-between">
-              <div class="w-1/2">
-                  <h1 class="text-2xl font-Inter">Faktur diberikan kepada :</h1>
-                  <h1 class="text-2xl font-bold font-Inter">{{ $invoice->supplier_name }}</h1>
-                  <table border="1">
-                    <tr>
-                        <td class="w-1/2 text-left">No.Telepon : </td>
-                        <td class="font-normal">{{ $supplier->supplier_phone }}</td>
-                    </tr>
-                    <tr>
-                      <td class="w-1/2 text-left" >Alamat  : </td>
-                      <td class="w-full">{{ $supplier->supplier_address }}</td>
-                    </tr>
-                </table>              
-              </div>
-              <div class="text-right w-96">
-                  <h1 class="text-8xl font-bold">FAKTUR</h1>
-                  <table class="w-full text-justif">
-                    <tr>
-                      <td class="w-1/2 text-left">No Faktur : </td>
-                      <td class="w-full">{{ $invoice_number }}</td>
-                    </tr>
-                    <tr>
-                      <td class="w-1/2 text-left">Tanggal Pembelian : </td>
-                      <td class="w-full">{{ date('d M Y',strtotime($invoice->order_date)) }}</td>
-                    </tr>
-                  </table>
-                <div class="w-96 mt-2 border-4 border-black"></div>
-              </div>
-          </div>
-      </div>
-      <div class="mt-4">
-      <table class="w-full">
-          <thead>
-            <tr>
-              <th class="bg-zinc-600 text-white font-bold font-Inter px-2 py-1">No</th>
-              <th class="bg-zinc-600 text-white font-bold font-Inter px-2 py-1">Deskripsi Barang</th>
-              <th class="bg-zinc-600 text-white font-bold font-Inter px-2 py-1">Harga</th>
-              <th class="bg-zinc-600 text-white font-bold font-Inter px-2 py-1">Jumlah</th>
-              <th class="bg-zinc-600 text-white font-bold font-Inter px-2 py-1">Subtotal</th>            
-            </tr>
-          </thead>
-          <tbody class="text-center">
-            @php
-                $i=1;
-            @endphp
-            @foreach ($invoice->buyingInvoiceDetail as $product)
-            <tr>
-              <td class="bg-white border border-black border-opacity-30 px-2 py-1">{{ $i }}</td>
-              <td class="bg-white border border-black border-opacity-30 px-2 py-1">{{ $product->product_name }}</td>
-              <td class="bg-white border border-black border-opacity-30 px-2 py-1">Rp. {{ number_format($product->product_buy_price, 0, ',', '.') }}</td>
-              <td class="bg-white border border-black border-opacity-30 px-2 py-1">{{ $product->quantity }}</td>
-              <td class="bg-white border border-black border-opacity-30 text-right px-2 py-1">Rp. {{ number_format($product->product_buy_price * $product->quantity, 0, ',', '.') }}</td>
-            </tr>
-            @php
-                $i++;
-            @endphp
-            @endforeach
-          </tbody>
-        </table>
-      </div>
-      <div class="py-5">
-        <table>
-        <tr>
-          <td>Metode Pembayaran : </td>
-          <td> Tunai</td>
-        </tr>
-        <tr>
-          <td>Tanggal Pembelian :</td>
-          <td>{{ date('d M Y',strtotime($invoice->order_date)) }}</td>
-        </tr>
-      </table>
-      </div>
+<body class="flex justify-center font-Roboto bg-gray-100">
 
-      <div>
-        <table>
-          <tr>
-            <td class="font-bold">Syarat dan Ketentuan :</td>
-          </tr>
-          <tr>
-            <td class="text-lg">Transaksi yang sudah direspon oleh Apotek Jati Negara tidak dapat dibatalkan, kecuali dalam kondisi adanya pembatalan dari pihak Apotek Jati Negara</td>
-          </tr>
-        </table>
-      </div>
-  <div class="flex justify-evenly items-center w-full mt-10 h-32 bg-black background_black">
-    <div class="">
-      <p class="text-white font-bold text-2xl">APOTEK JATI NEGARA</p>
-      <p class="text-white font-bold text-sm">CP : 0812-3456-7890 (Aliong)</p>
+    <div class="fixed right-10 top-8 print:hidden">
+        <button onclick="prints()" type="button" class="bg-black text-white font-semibold px-4 py-2 rounded-md">Download Invoice</button>
     </div>
-      <p class="text-justify text-white w-1/3">Jl. Prof. H. M. Yamin No.116, Sidodadi, Kec. Medan Timur, Kota Medan, Sumatera Utara 20233</p>
-  </div>
-</div>
 
-<script>
-  function prints() {
+    <section class="w-[45rem] print:w-full bg-white flex flex-col print:justify-between print:h-full">
+        <header class="mt-16">
+            <nav class="flex justify-between">
+                <div class="bg-black px-7 py-6 w-[50%] flex justify-end items-center">
+                    <p class="tracking-widest text-4xl text-white font-semibold">INVOICE</p>
+                </div>
+
+                <div class="flex items-center gap-6 w-fit justify-end">
+                    <div class="flex flex-col font-bold items-end">
+                        <p class="tracking-widest text-2xl">INVOICE NUMBER</p>
+                        <p class="text-mediumGrey text-lg">{{ $invoice_number }}</p>
+                    </div>
+
+                    <div class="bg-black h-10 aspect-square"></div>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="py-8 tracking-wider flex flex-col gap-4">
+                <p class="font-bold pl-20 text-xl">APOTEK JATI NEGARA</p>
+                <hr class="w-64 border border-black">
+
+                <div class="flex flex-col pl-20 gap-4">
+                    <p class="font-bold">DIBERIKAN KEPADA :</p>
+                    <div class="flex flex-col">
+                        <p class="font-bold text-xl">{{ $invoice->supplier_name }}</p>
+                        <p class="font-bold text-mediumGrey">{{ $supplier->supplier_phone }}</p>
+                        <p class="font-bold text-mediumGrey w-[60%]">{{ $supplier->supplier_address }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex justify-center">
+                <table class="w-[90%]">
+                    <tr class="bg-black text-white">
+                        <th class="w-[35ch] tracking-widest">PRODUK</th>
+                        <th class="tracking-widest">HARGA</th>
+                        <th class="tracking-widest">JUMLAH</th>
+                        <th class="tracking-widest">TOTAL</th>
+                    </tr>
+                    @php
+                        $total = 0;
+                    @endphp
+                    @foreach ($invoice->buyingInvoiceDetail as $product)
+                    @php
+                        $total += $product->product_buy_price * $product->quantity;
+                    @endphp
+                    <tr>
+                        <td>{{ $product->product_name }}</td>
+                        <td class="text-center">Rp. {{ number_format($product->product_buy_price, 0, ',', '.') }}</td>
+                        <td class="text-center">{{ $product->quantity }}</td>
+                        <td class="text-center">Rp. {{ number_format($product->product_buy_price * $product->quantity, 0, ',', '.') }}</td>
+                    </tr>
+                    @endforeach
+                </table>
+            </div>
+
+            <div class="w-full flex justify-center pt-4">
+                <div class="w-[90%] flex justify-between">
+                    <p class="font-bold tracking-widest">TOTAL : </p>
+                    <p class="font-bold">Rp. {{ number_format($total, 0, ',', '.') }}</p>
+                </div>
+            </div>
+
+            <div class="w-full flex justify-center pt-4">
+                <div class="flex flex-col w-[90%] font-semibold">
+                    <p>Metode Pembayaran : <span class="font-bold"> Tunai </span> </p>
+                    <p>Tanggal Pembelian : <span class="font-bold"> {{ date('d M Y',strtotime($invoice->order_date)) }} </span> </p>
+                </div>
+            </div>  
+
+            <div class="w-full flex justify-center pt-4">
+                <div class="flex flex-col w-[90%]">
+                    <p class="font-bold text-xl tracking-widest">SYARAT DAN KETENTUAN</p>
+                    <p class="font-semibold text-mediumGrey">Transaksi yang sudah direspon oleh Apotek Jati Negara tidak dapat dibatalkan, kecuali dalam kondisi adanya pembatalan dari pihak Apotek Jati Negara</p>
+                </div>
+            </div>  
+        </main>
+
+        <footer class="w-full flex justify-center mt-16 print:mt-10">
+            <div class="bg-black text-white flex justify-between w-[90%] px-16 py-8">
+                <div class="flex flex-col justify-center w-3/5">
+                    <p class="text-xl tracking-widest font-bold">APOTEK JATI NEGARA</p>
+                    <p class="text-md font-semibold">CP : 0812-3456-7890 (Aliong)</p>
+                </div>
+                
+                <div class="w-2/5">
+                    <p>Jl. Prof. H. M. Yamin No.116, Sidodadi, Kec. Medan Timur, Kota Medan, Sumatera Utara 20233</p>
+                </div>
+            </div>
+        </footer>
+
+    </section>
+
+    <script>
+        function prints() {
             window.print();
         }
-</script>
+    </script>
 </body>
 </html>
