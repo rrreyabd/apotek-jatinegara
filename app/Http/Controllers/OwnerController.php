@@ -144,6 +144,7 @@ class OwnerController extends Controller
             "groups"=> $group ?? [],
             "suppliers"=> $supplier ?? [],
             "types" => $type ?? [],
+            // "status" => $state ?? [],
         ]);
     }
 
@@ -739,6 +740,53 @@ class OwnerController extends Controller
         ]);
     }
 
+
+    public function report(Request $request)
+    {
+        $request->validate([
+            'tanggal' => 'required|date_format:Y-m',
+        ]);
+
+        $date = $request->input('tanggal');
+        
+        // Mengekstrak bulan dan tahun dari tanggal yang dipilih
+        list($selectedYear, $selectedMonth) = explode('-', $date . '-01');
+
+        // Menggabungkan hasil dari kedua tabel
+        $report = LastTransaction::whereMonth('Tanggal_Transaksi', $selectedMonth)
+        ->whereYear('Tanggal_Transaksi', $selectedYear)
+        ->orderBy('Tanggal_Transaksi')
+        ->get();
+
+        $expenses = LastTransaction::whereMonth('Tanggal_Transaksi', $selectedMonth)
+        ->whereYear('Tanggal_Transaksi', $selectedYear)
+        ->where('tipe_transaksi', 'pembelian')
+        ->get();
+        
+        $sales = LastTransaction::whereMonth('Tanggal_Transaksi', $selectedMonth)
+        ->whereYear('Tanggal_Transaksi', $selectedYear)
+        ->where('tipe_transaksi', 'penjualan')
+        ->get();
+
+        if ($report->isEmpty()) {
+            // Array kosong, atur sesuai kebutuhan
+            $reportData = [];
+            return redirect()->back()->with('error', 'Tidak ada transaksi di bulan ini.');
+
+        } else {
+            // Array tidak kosong, dapat diakses dengan aman
+            $reportData = $report;
+            // ... operasi lainnya
+        }
+        // dd($report);
+            return view('pemilik.laporan-keuangan', ['reports'=>$report,
+        'month'=>$selectedMonth,
+        'year'=>$selectedYear,
+        'expenses'=>$expenses,
+        'sales'=>$sales
+        ]);
+    }
+
     public function display_invoice($id)
     {
         $faktur = BuyingInvoice::find($id);
@@ -753,5 +801,4 @@ class OwnerController extends Controller
             'supplier' => $supplier
         ]);
     }
-
 }
