@@ -161,9 +161,9 @@ $resultsArray = $results->toArray();
             'tipe' => ['required'],
             'pemasok' => ['required'],
             'produksi' => ['required', 'min:5', 'max:255'],
-            'deskripsi' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
-            'efek_samping' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
-            'dosis' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
+            'deskripsi' => ['required', 'regex:/^[a-zA-Z0-9\s.,\-\n\r]+$/'],
+            'efek_samping' => ['required', 'regex:/^[a-zA-Z0-9\s.,\-\n\r]+$/'],
+            'dosis' => ['required', 'regex:/^[a-zA-Z0-9\s.,\-\n\r]+$/'],
             'harga_beli' => ['required', 'numeric', 'min:3'],
             'harga_jual' => ['required', 'numeric', 'min:3'],
             'stock' => ['required', 'numeric', 'min:0'],
@@ -179,11 +179,10 @@ $resultsArray = $results->toArray();
                 $formatted = $carbonDate->format('Y-m-d H:i:s');
                 $GambarObat = $validated_data['gambar_obat']->store('gambar-obat');
                 
-                DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'product', 'insert', '-', $request->nama_obat));
+                DB::statement('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'product', 'insert', '-', $request->nama_obat));
 
-                DB::select('CALL add_product_procedure(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+                DB::statement('CALL add_product_procedure(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                     $request->id,
-                    $request->desc_id,
                     $request->nama_obat,
                     $request->status,
                     str_replace("gambar-obat/","",$GambarObat),
@@ -414,32 +413,38 @@ $resultsArray = $results->toArray();
 
     public function add_batch_process(Request $request)
     {
-        $carbonDate = Carbon::parse($request->expired_date);
-        $formatted = $carbonDate->format('Y-m-d H:i:s');
-
-        DB::beginTransaction();
         try{
+            $carbonDate = Carbon::parse($request->expired_date);
+            $formatted = $carbonDate->format('Y-m-d H:i:s');
             // insert log
             DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch harga beli', 'insert', '-', $request->harga_beli));
-
+            
             DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch expired', 'insert', '-', $formatted));
-        
+            
             DB::select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch stock', 'insert', '-', $request->stock));
             // akhir insert log
 
-            $new_detail = new ProductDetail;
-            $new_detail -> product_id = $request->id;
-            $new_detail -> detail_id = $request->detail_id;
-            $new_detail -> product_buy_price = $request->harga_beli;
-            $new_detail -> product_expired = $formatted;
-            $new_detail -> product_stock = $request->stock;
-    
-            $new_detail->save();
+            $product_id = $request->id;
+            $products = Product::findOrFail($product_id);
+            $detail_id = $request->detail_id;
+            $product_buy_price = $request->harga_beli;
+            $product_expired = $formatted;
+            $product_stock = $request->stock;
 
-            DB::commit();
+            $pemasok = $products->description->supplier_id;
+
+            DB::statement('CALL add_batch_procedure(?, ?, ?, ?, ?, ?)', [
+                $pemasok,
+                $product_id,
+                $detail_id,
+                $product_buy_price,
+                $product_expired,
+                $product_stock,
+            ]);
+    
             return redirect('/owner/produk')->with('add_status','Batch produk berhasil ditambah');
         }catch(Exception $e){
-            DB::rollBack();
+            throw $e;
             return redirect('/owner/produk')->with('error_status','Batch produk gagal ditambah');
         }
     }
