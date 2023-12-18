@@ -164,10 +164,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex gap-4 mt-4">
-                                                    <button onclick="printModalContent(<?= $index ?>)" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
+                                                    <a href="{{ route('invoice-supplier',['id'=> $uuid]) }}" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
                                                         <i class="fa-solid fa-print"></i>
-                                                        Print
-                                                    </button>
+                                                        Download Invoice
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -206,27 +206,6 @@
         }
     </script>
 
-    <script>
-        function printModalContent(index) {
-            const modal = document.getElementById('detailModal' + index);
-
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><title>Print</title>');
-
-            printWindow.document.write('</head><body>');
-            printWindow.document.write(modal.innerHTML);
-            printWindow.document.write('</body></html>');
-
-            printWindow.document.close();
-
-            printWindow.onload = function () {
-                printWindow.print();
-                printWindow.onafterprint = function () {
-                    printWindow.close();
-                };
-            };
-        }
-    </script>
 </body>
 
 </html>
