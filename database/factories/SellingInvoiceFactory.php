@@ -40,8 +40,8 @@ class SellingInvoiceFactory extends Factory
             'recipient_request' => fake()->words(10, true),
             'recipient_bank' => fake()->word(),
             'recipient_payment'=> fake()->word().'.jpg',
-            'order_date' => fake()->dateTime(),
-            'order_complete' => fake()->dateTime(),
+            'order_date' => fake()->dateTimeBetween('-7 year', 'now'),
+            'order_complete' => fake()->dateTimeBetween('-7 year', 'now'),
             'refund_file' => fake()->word().'.jpg',
             'reject_comment' => fake()->words(15, true),
             'order_status' => fake()->randomElement(['Berhasil', 'Gagal', 'Menunggu Pengembalian', 'Menunggu Konfirmasi', 'Menunggu Pengambilan', 'Refund'])

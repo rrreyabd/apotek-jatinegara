@@ -25,7 +25,7 @@ class CashierFactory extends Factory
             'user_id' => $user_id,
             'cashier_phone' => '08'.strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)).strval(fake()->numberBetween(10, 99)),
             'cashier_gender' => Arr::random(['pria', 'wanita']),
-            'cashier_address' => fake()->words(18, true),
+            'cashier_address' => fake()->sentence(10),
         ];
     }
 }

@@ -170,11 +170,13 @@
                                                     <p class="text-mainColor">{{ $item->cashier_name }}</p>
                                                 </div>
                                                 {{-- ALASAN GAGAL KALAU ADA --}}
+                                                @if ($item->order_status == "Gagal")
                                                 <div class="flex font-bold gap-2">
                                                     <p class="w-28">Alasan Gagal</p>
                                                     <p>:</p>
-                                                    <p class="text-mainColor">{{ $item->reject_comment }}</p>
+                                                    <p class="text-mainColor w-[70%]">{{ $item->reject_comment }}</p>
                                                 </div>
+                                                @endif
                                             </div>
                                         </div>
 

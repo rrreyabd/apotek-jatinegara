@@ -155,7 +155,7 @@
                                     </button>
                                 </div>
                             </form>
-                        @else
+                        @elseif ($product->product_status == 'tidak aktif')
                         <div class="flex mt-10">
                             <p class="bg-red-500 ms-auto rounded-md px-5 py-2 font-bold text-white">
                                 Silahkan Beli Obat Baru Untuk Membuka Status Obat Menjadi Aktif!

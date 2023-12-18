@@ -158,9 +158,9 @@ class OwnerController extends Controller
             'tipe' => ['required'],
             'pemasok' => ['required'],
             'produksi' => ['required', 'min:5', 'max:255'],
-            'deskripsi' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
-            'efek_samping' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
-            'dosis' => ['required', 'regex:/^[a-zA-Z0-9 - .]+$/'],
+            'deskripsi' => ['required', 'regex:/^[a-zA-Z0-9\s.,\-\n\r]+$/'],
+            'efek_samping' => ['required', 'regex:/^[a-zA-Z0-9\s.,\-\n\r]+$/'],
+            'dosis' => ['required', 'regex:/^[a-zA-Z0-9\s.,\-\n\r]+$/'],
             'harga_beli' => ['required', 'numeric', 'min:3'],
             'harga_jual' => ['required', 'numeric', 'min:3'],
             'stock' => ['required', 'numeric', 'min:0'],
@@ -174,10 +174,11 @@ class OwnerController extends Controller
                 $carbonDate = Carbon::parse($request->expired_date);
                 $formatted = $carbonDate->format('Y-m-d H:i:s');
                 $GambarObat = $validated_data['gambar_obat']->store('gambar-obat');
+                
+                DB::statement('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'product', 'insert', '-', $request->nama_obat));
 
-                DB::connection('owner')->select('CALL add_product_procedure(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+                DB::connection('owner')->statement('CALL add_product_procedure(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                     $request->id,
-                    $request->desc_id,
                     $request->nama_obat,
                     $request->status,
                     str_replace("gambar-obat/","",$GambarObat),
@@ -390,7 +391,7 @@ class OwnerController extends Controller
 
             DB::commit();
             return redirect()->back()->with('add_status', "Status Kembali Aktif");
-        }catch (\Exception $e) {
+        }catch (Exception $e) {
             DB::rollback();
             // throw $e;
             return redirect()->back()->with('error_status', "Terjadi Kesalahan");
@@ -408,11 +409,9 @@ class OwnerController extends Controller
 
     public function add_batch_process(Request $request)
     {
-        $carbonDate = Carbon::parse($request->expired_date);
-        $formatted = $carbonDate->format('Y-m-d H:i:s');
-
-        DB::beginTransaction();
         try{
+            $carbonDate = Carbon::parse($request->expired_date);
+            $formatted = $carbonDate->format('Y-m-d H:i:s');
             // insert log
             DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch harga beli', 'insert', '-', $request->harga_beli));
 
@@ -421,19 +420,26 @@ class OwnerController extends Controller
             DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch stock', 'insert', '-', $request->stock));
             // akhir insert log
 
-            $new_detail = new ProductDetail;
-            $new_detail -> product_id = $request->id;
-            $new_detail -> detail_id = $request->detail_id;
-            $new_detail -> product_buy_price = $request->harga_beli;
-            $new_detail -> product_expired = $formatted;
-            $new_detail -> product_stock = $request->stock;
-    
-            $new_detail->save();
+            $product_id = $request->id;
+            $products = Product::findOrFail($product_id);
+            $detail_id = $request->detail_id;
+            $product_buy_price = $request->harga_beli;
+            $product_expired = $formatted;
+            $product_stock = $request->stock;
 
-            DB::commit();
+            $pemasok = $products->description->supplier_id;
+
+            DB::statement('CALL add_batch_procedure(?, ?, ?, ?, ?, ?)', [
+                $pemasok,
+                $product_id,
+                $detail_id,
+                $product_buy_price,
+                $product_expired,
+                $product_stock,
+            ]);
+    
             return redirect('/owner/produk')->with('add_status','Batch produk berhasil ditambah');
         }catch(Exception $e){
-            DB::rollBack();
             return redirect('/owner/produk')->with('error_status','Batch produk gagal ditambah');
         }
     }
@@ -505,7 +511,6 @@ class OwnerController extends Controller
             return redirect('owner/supplier')->with('add_status','Supplier Berhasil Diedit');
         }catch(Exception $e){
             DB::rollBack();
-            throw $e;
 
             return redirect('/owner/supplier')->with('error_status','Terjadi Kesalahan');
         }
@@ -641,7 +646,6 @@ class OwnerController extends Controller
             return redirect('/owner/kasir')->with('add_status','Kasir Berhasil Diedit');
         }catch(Exception $e){
             DB::rollBack();
-            throw $e;
 
             return redirect('/owner/kasir')->with('error_status','Terjadi Kesalahan');
         }
@@ -730,6 +734,21 @@ class OwnerController extends Controller
         return view('pemilik.log',[
             'logs' => $logs,
             'total' => $this->total_pesanan_online()
+        ]);
+    }
+
+    public function display_invoice($id)
+    {
+        $faktur = BuyingInvoice::find($id);
+        $uuid = $faktur->buying_invoice_id;
+        $supplier = Supplier::where('supplier',$faktur->supplier_name)->first();
+        $numericValue = hexdec(substr($uuid, -5));
+        $formatted = 'FR-' . str_pad($numericValue, 6, '0', STR_PAD_LEFT);
+
+        return view('pemilik.invoice-pembelian',[
+            'invoice' => $faktur,
+            'invoice_number' => $formatted,
+            'supplier' => $supplier
         ]);
     }
 

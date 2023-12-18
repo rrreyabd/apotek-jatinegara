@@ -129,11 +129,11 @@
                                             </div>
 
                                             <div class="w-[25%]">
-                                                <div>
+                                                <div class="">
                                                     <table class="w-full">
                                                         <tr
                                                             class="border-2 border-b-mainColor border-transparent text-mainColor font-bold w-[100%]">
-                                                            <td class="pb-2">File Resep Dokter</td>
+                                                            <td class="w-[10%] pb-2 text-center">File Resep Dokter</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="py-2 flex gap-2 items-center">

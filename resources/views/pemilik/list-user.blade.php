@@ -68,7 +68,7 @@
                                         class="fa-regular fa-trash-can" style="color: white;"></i></button>
 
                                 {{-- Pop up konfirmasi hapus start --}}
-                                <div class="absolute w-screen h-screen backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden"
+                                <div class="fixed w-screen h-screen backdrop-blur-md top-0 left-0 flex justify-center items-center backdrop-brightness-75 hidden"
                                     id="popup{{ $index }}">
                                     <div
                                         class="w-[30%] h-[50%] bg-white rounded-2xl shadow-md p-8 flex flex-col gap-6 relative items-center">

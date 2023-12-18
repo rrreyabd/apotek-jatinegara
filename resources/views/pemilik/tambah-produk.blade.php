@@ -127,9 +127,9 @@
                             {{-- satuan --}}
                             <div class="w-full rounded-xl border shadow p-2">
                                 <select name="satuan_obat" id="" @selected(true) class="outline-none w-full" required>
-                                    <option disabled selected>Satuan Obat</option>
+                                    <option disabled {{ old('satuan_obat') == null ? 'selected' : '' }}>Satuan Obat</option>
                                     @foreach ($units as $item)
-                                        <option value="{{ $item->unit_id }}">
+                                        <option value="{{ $item->unit_id }}" {{ old('satuan_obat') == $item->unit_id ? 'selected' : '' }}>
                                             {{ $item->unit }}
                                         </option>
                                     @endforeach
@@ -148,9 +148,9 @@
                             {{-- tipe --}}
                             <div class="w-full rounded-xl border shadow p-2">
                                 <select name="tipe" id="" @selected(true) class="outline-none w-full" required>
-                                    <option disabled selected>Tipe Obat</option>
+                                    <option disabled {{ old('tipe') == null ? 'selected' : '' }}>Tipe Obat</option>
                                     @foreach ($types as $item)
-                                        <option value="{{ $item }}">{{ $item }}</option>
+                                        <option value="{{ $item }}" {{ old('tipe') == $item ? 'selected' : '' }}>{{ $item }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -158,15 +158,16 @@
                             <p class="mt-5">Pemasok Obat</p>
                             {{-- pemasok --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="pemasok" id="" @selected(true) class="outline-none w-full" required>
-                                    <option disabled selected>Pemasok Obat</option>
+                                <select name="pemasok" id="" class="outline-none w-full" required>
+                                    <option disabled {{ old('pemasok') == null ? 'selected' : '' }}>Pemasok Obat</option>
                                     @foreach ($suppliers as $item)
-                                        <option value="{{ $item->supplier_id }}">
+                                        <option value="{{ $item->supplier_id }}" {{ old('pemasok') == $item->supplier_id ? 'selected' : '' }}>
                                             {{ $item->supplier }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
+                            
 
                             <p class="mt-5">Produksi dari</p>
                             <input type="text" name="produksi" id="" placeholder="Produksi dari"  required value="{{ old('produksi') }}"
@@ -208,7 +209,7 @@
                         <div class="flex-col w-full">
                             <p class="mt-5">Indikasi Umum Obat</p>
                             <textarea id="" placeholder="Indikasi Umum Obat" name="indikasi"
-                                class="p-2 w-full border rounded-xl shadow"></textarea>
+                                class="p-2 w-full border rounded-xl shadow">{{ old('indikasi') }}</textarea>
                             @error('indikasi')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
                             @enderror
