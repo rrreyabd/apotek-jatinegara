@@ -33,7 +33,7 @@ class OwnerController extends Controller
 {
     public function display()
     {
-        $popular = PopularProduct::on('owner')->take(3)->get();
+        $popular = PopularProduct::on('owner')->take(4)->get();
         $count_product = Product::on('owner')->count();
         $count_supplier = Supplier::on('owner')->count();
         $count_user = User::on('owner')->where('role', 'user')->count();
@@ -365,7 +365,7 @@ class OwnerController extends Controller
             return redirect('/owner/produk')->with('add_status','Produk berhasil diperbaharui');
         }catch(Exception $e){
             DB::rollBack();
-            
+
             return redirect('/owner/produk')->with('error_status','Produk gagal diperbaharui');
         }
     }
