@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->uuid('log_id')->primary();
             $table->timestamp('log_time');
-            $table->string('invoice_code', 20)->nullable();
+            $table->string('invoice_code')->nullable();
             $table->string('username');
             $table->string('log_target', 100);
             $table->enum('log_description', ['insert', 'update', 'delete']);
