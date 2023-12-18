@@ -46,7 +46,11 @@
                 <div class="sm:flex sm:grid-cols-3 md:gap-20 gap-3">
                     {{-- gambar obat --}}
                     <div class="sm:w-1/6 mb-7 border-2 border-black rounded-lg h-fit">
-                        <img src="{{ asset('img/Pencernaan.png/') }}" alt="" class="w-full p-5">
+                        @if (file_exists(public_path('storage/gambar-obat/' . $product->description->product_photo)) && $product->description->product_photo !== NULL)
+                            <img src="{{ asset('storage/gambar-obat/' . $product->description->product_photo) }}" alt="" class="w-full p-5">
+                        @else
+                            <img src="{{ asset('img/Pencernaan.png') }}" alt="" class="w-full p-5">
+                        @endif
                         <p class="font-TripBold flex justify-center py-3 rounded-b-lg border-t-2 text-center">{{ $product->product_name }}</p>
                     </div>
 
@@ -155,7 +159,7 @@
                                     </button>
                                 </div>
                             </form>
-                        @else
+                        @elseif ($product->product_status == 'tidak aktif')
                         <div class="flex mt-10">
                             <p class="bg-red-500 ms-auto rounded-md px-5 py-2 font-bold text-white">
                                 Silahkan Beli Obat Baru Untuk Membuka Status Obat Menjadi Aktif!

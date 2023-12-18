@@ -38,7 +38,6 @@
             <div class="rounded-lg shadow-lg w-full bg-white h-fit md:p-16 md:px-24 p-7 overflow-x-auto">
                 <form action="{{ route('add-product-process') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    
                     @method('PUT')
 
                     @php
@@ -127,9 +126,9 @@
                             {{-- satuan --}}
                             <div class="w-full rounded-xl border shadow p-2">
                                 <select name="satuan_obat" id="" @selected(true) class="outline-none w-full" required>
-                                    <option disabled selected>Satuan Obat</option>
+                                    <option disabled {{ old('satuan_obat') == null ? 'selected' : '' }}>Satuan Obat</option>
                                     @foreach ($units as $item)
-                                        <option value="{{ $item->unit_id }}">
+                                        <option value="{{ $item->unit_id }}" {{ old('satuan_obat') == $item->unit_id ? 'selected' : '' }}>
                                             {{ $item->unit }}
                                         </option>
                                     @endforeach
@@ -148,9 +147,9 @@
                             {{-- tipe --}}
                             <div class="w-full rounded-xl border shadow p-2">
                                 <select name="tipe" id="" @selected(true) class="outline-none w-full" required>
-                                    <option disabled selected>Tipe Obat</option>
+                                    <option disabled {{ old('tipe') == null ? 'selected' : '' }}>Tipe Obat</option>
                                     @foreach ($types as $item)
-                                        <option value="{{ $item }}">{{ $item }}</option>
+                                        <option value="{{ $item }}" {{ old('tipe') == $item ? 'selected' : '' }}>{{ $item }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -158,15 +157,16 @@
                             <p class="mt-5">Pemasok Obat</p>
                             {{-- pemasok --}}
                             <div class="w-full rounded-xl border shadow p-2">
-                                <select name="pemasok" id="" @selected(true) class="outline-none w-full" required>
-                                    <option disabled selected>Pemasok Obat</option>
+                                <select name="pemasok" id="" class="outline-none w-full" required>
+                                    <option disabled {{ old('pemasok') == null ? 'selected' : '' }}>Pemasok Obat</option>
                                     @foreach ($suppliers as $item)
-                                        <option value="{{ $item->supplier_id }}">
+                                        <option value="{{ $item->supplier_id }}" {{ old('pemasok') == $item->supplier_id ? 'selected' : '' }}>
                                             {{ $item->supplier }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
+                            
 
                             <p class="mt-5">Produksi dari</p>
                             <input type="text" name="produksi" id="" placeholder="Produksi dari"  required value="{{ old('produksi') }}"
@@ -180,7 +180,7 @@
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Deskripsi Obat</p>
-                            <textarea id="" placeholder="Deskripsi Obat" name="deskripsi" required 
+                            <textarea placeholder="Deskripsi Obat" name="deskripsi" required 
                                 class="p-2 w-full border rounded-xl shadow h-28 @error('deskripsi') is-invalid @enderror">{{ old('deskripsi') }}</textarea>
                             @error('deskripsi')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
@@ -188,7 +188,7 @@
                         </div>
                         <div class="flex-col w-full">
                             <p class="mt-5">Efek Samping Obat</p>
-                            <textarea name="efek_samping" id="" placeholder="Efek Samping Obat" required
+                            <textarea name="efek_samping" placeholder="Efek Samping Obat" required
                                 class="p-2 w-full border rounded-xl shadow h-8 @error('efek_samping') is-invalid @enderror">{{ old('efek_samping') }}</textarea>
                             @error('efek_samping')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
@@ -199,7 +199,7 @@
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Dosis Obat</p>
-                            <textarea id="" placeholder="Dosis Obat" name="dosis" required
+                            <textarea placeholder="Dosis Obat" name="dosis" required
                                 class="p-2 w-full border rounded-xl shadow h-28 @error('dosis') is-invalid @enderror">{{ old('dosis') }}</textarea>
                             @error('dosis')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
@@ -207,8 +207,8 @@
                         </div>
                         <div class="flex-col w-full">
                             <p class="mt-5">Indikasi Umum Obat</p>
-                            <textarea id="" placeholder="Indikasi Umum Obat" name="indikasi"
-                                class="p-2 w-full border rounded-xl shadow"></textarea>
+                            <textarea placeholder="Indikasi Umum Obat" name="indikasi"
+                                class="p-2 w-full border rounded-xl shadow">{{ old('indikasi') }}</textarea>
                             @error('indikasi')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
                             @enderror
@@ -218,7 +218,7 @@
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Peringatan Obat</p>
-                            <textarea id="" placeholder="Peringatan Obat" name="peringatan"
+                            <textarea placeholder="Peringatan Obat" name="peringatan"
                                 class="p-2 w-full border rounded-xl shadow @error('peringatan') is-invalid @enderror">{{ old('peringatan') }}</textarea>
                             @error('peringatan')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
@@ -246,16 +246,25 @@
                     <button type="submit" class="w-48 bg-mainColor px-4 py-2 font-semibold text-lg text-white rounded-lg shadow shadow-semiBlack">Tambah</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
+
+    {{-- <!-- Place the first <script> tag in your HTML's <head> -->
+    <script src="https://cdn.tiny.cloud/1/fkny8lakkibesvbv59ae3w2w8d3d9vn18j36acymyng6i795/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+    <script>
+    tinymce.init({
+        selector: 'textarea',
+    });
+    </script> --}}
 
     {{-- DATATABLES SCRIPT --}}
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/datatables.js') }}"></script>
 
-     <script>
+    <script>
         function showFile(input) {
         const getFile = document.getElementById('uploadedFile');
         if (input.files && input.files[0]) {

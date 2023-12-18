@@ -212,6 +212,7 @@
                     </tbody>
                 </table>
             </div>
+            <livewire:transaksi-terakhir/>
         </div>
     </main>
 

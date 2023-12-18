@@ -37,8 +37,8 @@ class UserController extends Controller
                         'nohp' => ['numeric', 'nullable', 'digits_between:10,14', 'starts_with:08'],
                     ]);
                 }
-            auth()->user()->update(['username' => $validated_data['username']]);
-            auth()->user()->customer->update(['customer_phone' => $validated_data['nohp']]);
+            User::on('user')->where('user_id', auth()->user()->user_id)->update(['username' => $validated_data['username']]);
+            User::on('user')->where('user_id', auth()->user()->user_id)->first()->customer->update(['customer_phone' => $validated_data['nohp']]);
             
             return redirect()->route('profile-user')->with('success_profile','Berhasil Mengubah Data');
             }
@@ -59,14 +59,14 @@ class UserController extends Controller
             }
 
             if(Hash::check('123', auth()->user()->password)){
-                    auth()->user()->update([
+                    User::on('user')->where('user_id', auth()->user()->user_id)->update([
                         'password' => bcrypt($request->password_baru)
                     ]);
     
                     return redirect()->back()->with('success_password', 'Password Berhasil Diubah!!');
             }else{
                 if (Hash::check($request->password_lama, auth()->user()->password)) {
-                    auth()->user()->update([
+                    User::on('user')->where('user_id', auth()->user()->user_id)->update([
                         'password' => bcrypt($request->password_baru)
                     ]);
     
@@ -85,14 +85,14 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         
-        User::where('username', $username)->delete();
+        User::on('user')->where('username', $username)->delete();
 
         return redirect('/');
     }
 
     public function riwayatTransaksi(Request $request) {
 
-        $products_purcase = SellingInvoice::where('customer_id', Auth()->user()->user_id)->orderBy('order_date', 'desc');
+        $products_purcase = SellingInvoice::on('user')->where('customer_id', Auth()->user()->user_id)->orderBy('order_date', 'desc');
 
         if($request->status) {
             $products_purcase = $products_purcase->where('order_status', $request->status);
@@ -104,7 +104,7 @@ class UserController extends Controller
 
         $products_purcase = $products_purcase->paginate(5)->withQueryString();
 
-        $status = SellingInvoice::where('customer_id', Auth()->user()->user_id)->distinct()->pluck('order_status');
+        $status = SellingInvoice::on('user')->where('customer_id', Auth()->user()->user_id)->distinct()->pluck('order_status');
 
         return view('user.riwayat-pesanan', [
             'products_purcase' => $products_purcase,
@@ -113,9 +113,9 @@ class UserController extends Controller
     }
 
     public function detailRiwayatTransaksi(Request $request) {
-        $purcase = SellingInvoice::where('selling_invoice_id', $request->pesanan)->first();
+        $purcase = SellingInvoice::on('user')->where('selling_invoice_id', $request->pesanan)->first();
 
-        $detail_products = SellingInvoiceDetail::where('selling_invoice_id', $request->pesanan)->get();
+        $detail_products = SellingInvoiceDetail::on('user')->where('selling_invoice_id', $request->pesanan)->get();
         
         if($request->pesanan && $purcase->first() != NULL) {
             return view('user.detail-riwayat-pesanan', [

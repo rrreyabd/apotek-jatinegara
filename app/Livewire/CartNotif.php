@@ -17,8 +17,8 @@ class CartNotif extends Component
     }
 
     public function count_cart($user_id, $product_id, $quantity) {
-        if(Cart::where('user_id', $user_id)->where('product_id', $product_id)->first() == NULL){
-            Cart::create([
+        if(Cart::on('user')->where('user_id', $user_id)->where('product_id', $product_id)->first() == NULL){
+            Cart::on('user')->create([
                 "cart_id"=> Str::uuid(),
                 "user_id"=> $user_id,
                 "product_id"=> $product_id,
@@ -26,7 +26,7 @@ class CartNotif extends Component
             ]);
         }
 
-        $this->count = Cart::where("user_id", $user_id)->count();
+        $this->count = Cart::on('user')->where("user_id", $user_id)->count();
     }
 
     public function render()

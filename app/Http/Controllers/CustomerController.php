@@ -61,22 +61,22 @@ class CustomerController extends Controller
             'buktiPembayaran' => ['required', 'file', 'max: 5120','mimes:pdf,png,jpeg,jpg'],
         ]);
 
-        $produk_id = SellingInvoice::orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();
+        $produk_id = SellingInvoice::on('user')->orderBy('invoice_code', 'desc')->pluck('invoice_code')->first();
         $number = intval(str_replace("INV-", "", $produk_id)) + 1;
         
         $validated_data['buktiPembayaran'] = $request->buktiPembayaran->store('bukti-pembayaran');
 
-        $produks = auth()->user()->cart->all();
+        $produks = User::on('user')->where('user_id', auth()->user()->user_id)->first()->cart->all();
 
         try {
             DB::beginTransaction();
             $uuid = Str::uuid();
 
             // membuat invoice
-            SellingInvoice::create([
+            SellingInvoice::on('user')->create([
                 'selling_invoice_id'=> $uuid,
                 'invoice_code' => 'INV-'. str_pad($number, 6, '0', STR_PAD_LEFT),
-                'customer_id' => auth()->user()->user_id,
+                'customer_id' => User::on('user')->where('user_id', auth()->user()->user_id)->first()->user_id,
                 'recipient_name' => $request->nama,
                 'recipient_phone' => $request->nomor_telepon,
                 'recipient_file' => $request->resep_dokter,
@@ -90,7 +90,7 @@ class CustomerController extends Controller
 
             foreach($produks as $produk){
                 // memasukan product ke invoice_detail
-                SellingInvoiceDetail::create([
+                SellingInvoiceDetail::on('user')->create([
                     'selling_detail_id' => Str::uuid(),
                     'selling_invoice_id' => $uuid,
                     'product_name' => $produk->product->product_name,
@@ -145,7 +145,7 @@ class CustomerController extends Controller
                 // selesai menghapus product dari cart
             }
 
-            $alamatEmails = User::where('role', 'cashier')->get();
+            $alamatEmails = User::on('user')->where('role', 'cashier')->get();
 
             foreach($alamatEmails as $alamatEmail){
                 Mail::to($alamatEmail)->send(new notifikasi_pembelian());
@@ -195,7 +195,7 @@ class CustomerController extends Controller
     }
 
     public function cetak_struk(Request $request) {
-        $invoice = SellingInvoice::where('selling_invoice_id', $request->id)->first();
+        $invoice = SellingInvoice::on('user')->where('selling_invoice_id', $request->id)->first();
         // dd($invoice);
         return view('user.invoice', [
             'invoice'=> $invoice,

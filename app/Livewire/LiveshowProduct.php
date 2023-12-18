@@ -36,9 +36,9 @@ class LiveshowProduct extends Component
         // dd($cari); 
         // filter kategori
         if ($this->kategori) {
-            if (Category::where('category', $this->kategori)->first() != NULL) {
+            if (Category::on('user')->where('category', $this->kategori)->first() != NULL) {
                 // ubah menjadi view
-                $product = Product::whereHas('description.category', function ($query) { 
+                $product = Product::on('user')->whereHas('description.category', function ($query) { 
                     $query->where('category', $this->kategori);
                 });
             }else{
@@ -49,14 +49,14 @@ class LiveshowProduct extends Component
 
         // filter group
         if ($this->golongan) {
-            if (Group::where('group', $this->golongan)->first() != NULL) {
+            if (Group::on('user')->where('group', $this->golongan)->first() != NULL) {
                 // ubah menjadi view
                 if($this->kategori) {
                     $product = $product->whereHas('description.group', function ($query)  {
                         $query->where('group', $this->golongan);
                     });
                 }else{
-                    $product = Product::whereHas('description.group', function ($query)  { 
+                    $product = Product::on('user')->whereHas('description.group', function ($query)  { 
                         $query->where('group', $this->golongan);
                     });
                 }
@@ -68,7 +68,7 @@ class LiveshowProduct extends Component
 
         // filter unit
         if ($this->bentuk) {
-            if (Unit::where('unit', $this->bentuk)->first() != NULL) {
+            if (Unit::on('user')->where('unit', $this->bentuk)->first() != NULL) {
                 // ubah menjadi view
                 if($this->golongan) {
                     $product = $product->whereHas('description.unit', function ($query)  {
@@ -79,7 +79,7 @@ class LiveshowProduct extends Component
                         $query->where('unit', $this->bentuk);
                     });
                 }else{
-                    $product = Product::whereHas('description.unit', function ($query)  { 
+                    $product = Product::on('user')->whereHas('description.unit', function ($query)  { 
                         $query->where('unit', $this->bentuk);
                     });
                 }
@@ -97,7 +97,7 @@ class LiveshowProduct extends Component
                         $query->where('product_sell_price', '<=', $this->maksimum);
                     });
                 }else{
-                    $product = Product::whereHas('detail', function($query)  {
+                    $product = Product::on('user')->whereHas('detail', function($query)  {
                         $query->where('product_sell_price', '<=', $this->maksimum);
                     });
                 }
@@ -109,7 +109,7 @@ class LiveshowProduct extends Component
                         $query->where('product_sell_price', '>=', $this->minimum);
                     });
                 }else{
-                    $product = Product::whereHas('detail', function($query)  {
+                    $product = Product::on('user')->whereHas('detail', function($query)  {
                         $query->where('product_sell_price', '>=', $this->minimum);
                     });
                 }
@@ -121,14 +121,14 @@ class LiveshowProduct extends Component
         if ($this->filter) {
             if ($this->filter == "Popular") {
                 if($this->golongan || $this->kategori || $this->bentuk || $this->maksimum || $this->minimum) {
-                    $product = Product::join('Selling_Invoice_Details', 'Products.product_name', '=', 'Selling_Invoice_Details.product_name')
+                    $product = Product::on('user')->join('Selling_Invoice_Details', 'Products.product_name', '=', 'Selling_Invoice_Details.product_name')
                     ->whereIn('Products.product_name', $product->pluck('product_name')->toArray())
-                    ->select('Products.*', DB::raw('COUNT(Selling_Invoice_Details.product_name) as jumlah_kemunculan'))
+                    ->select('Products.*', DB::connection('user')->raw('COUNT(Selling_Invoice_Details.product_name) as jumlah_kemunculan'))
                     ->groupBy('Products.product_id', 'Products.description_id', 'Products.product_name')
                     ->orderBy('jumlah_kemunculan', 'DESC');
                 }else{
-                    $product = Product::join('Selling_Invoice_Details', 'Products.product_name', '=', 'Selling_Invoice_Details.product_name')
-                    ->select('Products.*', DB::raw('COUNT(Selling_Invoice_Details.product_name) as jumlah_kemunculan'))
+                    $product = Product::on('user')->join('Selling_Invoice_Details', 'Products.product_name', '=', 'Selling_Invoice_Details.product_name')
+                    ->select('Products.*', DB::connection('user')->raw('COUNT(Selling_Invoice_Details.product_name) as jumlah_kemunculan'))
                     ->groupBy('Products.product_id', 'Products.description_id', 'Products.product_name')
                     ->orderBy('jumlah_kemunculan', 'DESC');
                 }
@@ -138,7 +138,7 @@ class LiveshowProduct extends Component
                 if($this->golongan || $this->kategori || $this->bentuk || $this->minimum || $this->maksimum) {
                     $product = $product->orderBy('product_name');
                 }else{
-                    $product = Product::orderBy('product_name');
+                    $product = Product::on('user')->orderBy('product_name');
                 }
             }
 
@@ -146,7 +146,7 @@ class LiveshowProduct extends Component
                 if($this->golongan || $this->kategori || $this->bentuk || $this->minimum || $this->maksimum) {
                     $product = $product->orderBy('product_name', 'DESC');
                 }else{
-                    $product = Product::orderBy('product_name', 'DESC');
+                    $product = Product::on('user')->orderBy('product_name', 'DESC');
                 }
             }
 
@@ -157,7 +157,7 @@ class LiveshowProduct extends Component
                     ->select('products.*', 'product_details.product_sell_price')
                     ->distinct();
                 }else{
-                    $product = Product::join('product_details', 'products.product_id', '=', 'product_details.product_id')
+                    $product = Product::on('user')->join('product_details', 'products.product_id', '=', 'product_details.product_id')
                     ->orderBy('product_details.product_sell_price', 'DESC')
                     ->select('products.*', 'product_details.product_sell_price')
                     ->distinct();
@@ -171,7 +171,7 @@ class LiveshowProduct extends Component
                     ->select('products.*', 'product_details.product_sell_price')
                     ->distinct();
                 }else{
-                    $product = Product::join('product_details', 'products.product_id', '=', 'product_details.product_id')
+                    $product = Product::on('user')->join('product_details', 'products.product_id', '=', 'product_details.product_id')
                     ->orderBy('product_details.product_sell_price', 'ASC')
                     ->select('products.*', 'product_details.product_sell_price')
                     ->distinct();
@@ -184,7 +184,7 @@ class LiveshowProduct extends Component
             if($this->golongan || $this->kategori || $this->bentuk || $this->minimum || $this->maksimum || $this->filter) {
                 $product = $product->where('Products.product_name', 'like' ,"%". $cari ."%");
             }else{
-                $product = Product::where('Products.product_name', 'like' ,"%". $cari ."%");
+                $product = Product::on('user')->where('Products.product_name', 'like' ,"%". $cari ."%");
             }
         // akhir filter cari
 

@@ -40,11 +40,6 @@
 
         <div class="flex flex-col gap-8">
             <div class="flex justify-between">
-                <div class="sm:flex">
-                    <input type="month" name="" id="" class="w-fit p-3 rounded-lg shadow-lg border-none">
-                    <p class="mx-3 font-extrabold flex items-center text-2xl">-</p>
-                    <input type="month" name="" id="" class="w-fit p-3 rounded-lg shadow-lg border-none">
-                </div>
 
         </div>
             <div class="bg-white rounded-lg p-4 shadow-md overflow-x-auto">
@@ -87,7 +82,7 @@
                                 </div>
 
                                 {{-- MODAL DETAIL TRANSAKSI PEMBELIAN START --}}
-                                <div class="absolute w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal{{ $index }}">
+                                <div class="fixed w-full h-screen top-0 left-0 flex justify-center items-center backdrop-brightness-75 z-10 hidden" id="detailModal{{ $index }}">
                                     <div class="w-[70%] h-fit max-h-full bg-white rounded-md shadow-md p-8 flex flex-col gap-6 overflow-auto">
                                         <div class="flex justify-between items-center">
                                             <button onclick="toggleDetail({{ $index }})" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
@@ -164,10 +159,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex gap-4 mt-4">
-                                                    <button onclick="printModalContent(<?= $index ?>)" type="button" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
+                                                    <a href="{{ route('invoice-supplier',['id'=> $uuid]) }}" target="_blank" class="bg-mainColor py-1 px-4 text-white font-semibold rounded-md">
                                                         <i class="fa-solid fa-print"></i>
-                                                        Print
-                                                    </button>
+                                                        Download Invoice
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -206,27 +201,6 @@
         }
     </script>
 
-    <script>
-        function printModalContent(index) {
-            const modal = document.getElementById('detailModal' + index);
-
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><title>Print</title>');
-
-            printWindow.document.write('</head><body>');
-            printWindow.document.write(modal.innerHTML);
-            printWindow.document.write('</body></html>');
-
-            printWindow.document.close();
-
-            printWindow.onload = function () {
-                printWindow.print();
-                printWindow.onafterprint = function () {
-                    printWindow.close();
-                };
-            };
-        }
-    </script>
 </body>
 
 </html>

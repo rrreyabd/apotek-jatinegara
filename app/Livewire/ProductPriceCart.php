@@ -22,8 +22,8 @@ class ProductPriceCart extends Component
     public function quantity ($cart_id, $quantity){
         $this->cart_id = $cart_id;
         $this->product_quantity = $quantity;
-        $this->total_price = DB::table('cart_view')->where('cart_id', $this->cart)->first()->total_harga;
-        $this->quantity = Cart::where('cart_id', $this->cart)->first()->quantity;
+        $this->total_price = DB::connection('user')->table('cart_view')->where('cart_id', $this->cart)->first()->total_harga;
+        $this->quantity = Cart::on('user')->where('cart_id', $this->cart)->first()->quantity;
         $this->dispatch('totalHarga', $this->total_price);
     }
 

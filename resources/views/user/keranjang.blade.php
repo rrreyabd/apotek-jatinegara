@@ -82,7 +82,11 @@
                                 <th scope="row" class="w-5/12">
                                     <div class="sm:flex sm:grid-cols-3 gap-4 justify-center my-5">
                                         <div class="w-2/5">
-                                            <img src="{{asset('img/obat1.jpg/')}}" alt="" class="w-full">
+                                            @if (file_exists(public_path('storage/gambar-obat/' . $cart->product_photo)) && $cart->product_photo !== NULL)
+                                                <img src="{{ asset('storage/gambar-obat/' . $cart->product_photo) }}" alt="" class="w-full">
+                                            @else
+                                                <img src="{{asset('img/obat1.jpg/')}}" alt="" class="w-full">
+                                            @endif
                                         </div>
                                         <div class="w-3/5 text-start flex flex-col gap-1">
                                             <p class="font-semibold text-wrap">{{ $cart->product_name }}</p>

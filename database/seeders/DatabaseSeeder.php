@@ -39,9 +39,9 @@ class DatabaseSeeder extends Seeder
         for ($i=0; $i < 40; $i++) { 
             \App\Models\SellingInvoice::factory(1)->create();
         }
-        \App\Models\SellingInvoiceDetail::factory(150)->create();
-        \App\Models\BuyingInvoice::factory(10)->create();
-        \App\Models\BuyingInvoiceDetail::factory(40)->create();
+        \App\Models\SellingInvoiceDetail::factory(160)->create();
+        \App\Models\BuyingInvoice::factory(5)->create();
+        \App\Models\BuyingInvoiceDetail::factory(20)->create();
         \App\Models\Information::factory(1)->create();
         \App\Models\Cart::factory(30)->create();
     }

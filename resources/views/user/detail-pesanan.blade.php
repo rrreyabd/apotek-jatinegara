@@ -35,7 +35,11 @@
                 @foreach($carts as $cart)
                 <div class="px-8 flex justify-between">
                     <div class="flex gap-2">
-                        <img src="{{ asset('img/obat1.jpg/') }}" width="100" alt="">
+                        @if (file_exists(public_path('storage/gambar-obat/' . $cart->product_photo)) && $cart->product_photo !== NULL)
+                            <img src="{{ asset('storage/gambar-obat/' . $cart->product_photo) }}" width="100px" alt="" draggable="false">
+                        @else
+                            <img src="{{ asset('img/obat1.jpg')}}" width="100px" alt="" draggable="false">    
+                        @endif
 
                         <div class="flex flex-col justify-between text-sm">
                             <div class="w-[25vw]">
@@ -87,14 +91,14 @@
                         {{ $message }}
                     </div>
                 @enderror
-                <input type="text" name="nama" placeholder="Nama Pengambil Pesanan" value="" required class="h-12 px-4 rounded-2xl shadow-md">
+                <input type="text" name="nama" placeholder="Nama Pengambil Pesanan" value="{{ auth()->user()->username }}" required class="h-12 px-4 rounded-2xl shadow-md">
                 @error('nama')
                     <div class="text-sm text-red-200 ms-3 mb-0 text-left">
                         {{ $message }}
                     </div>
                 @enderror
                 
-                <input type="number" name="nomor_telepon" placeholder="No. HP" value="" required class="h-12 px-4 rounded-2xl shadow-md">
+                <input type="number" name="nomor_telepon" placeholder="No. HP" value="{{ auth()->user()->customer->customer_phone }}" required class="h-12 px-4 rounded-2xl shadow-md">
                 @error('nomor_telepon')
                     <div class="text-sm text-red-200 ms-3 mb-0 text-left">
                         {{ $message }}
