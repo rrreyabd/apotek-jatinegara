@@ -48,12 +48,13 @@ class OwnerController extends Controller
         $maxYear = $result->maxYear;
 
         $results = DB::connection('owner')->table('selling_invoices')
-            ->selectRaw('YEAR(order_complete) as year')
-            ->selectRaw('total_keuntungan(CONCAT(YEAR(order_complete), "-01-01"), CONCAT(YEAR(order_complete), "-12-31")) as total_profit')
-            ->whereYear('order_complete', '>=', $minYear)
-            ->whereYear('order_complete', '<=', $maxYear)
-            ->whereNotNull('order_complete')
-            ->get();
+        ->selectRaw('DISTINCT YEAR(order_complete) as year')
+        ->selectRaw('total_keuntungan(CONCAT(YEAR(order_complete), "-01-01"), CONCAT(YEAR(order_complete), "-12-31")) as total_profit')
+        ->whereYear('order_complete', '>=', $minYear)
+        ->whereYear('order_complete', '<=', $maxYear)
+        ->whereNotNull('order_complete')
+        ->groupBy(DB::raw('YEAR(order_complete), selling_invoices.order_complete'))
+        ->get();
         
         $resultsArray = $results->toArray();
 
@@ -158,9 +159,9 @@ class OwnerController extends Controller
             'tipe' => ['required'],
             'pemasok' => ['required'],
             'produksi' => ['required', 'min:5', 'max:255'],
-            'deskripsi' => ['required', 'regex:/^[a-zA-Z0-9\s.,\-\n\r]+$/'],
-            'efek_samping' => ['required', 'regex:/^[a-zA-Z0-9\s.,\-\n\r]+$/'],
-            'dosis' => ['required', 'regex:/^[a-zA-Z0-9\s.,\-\n\r]+$/'],
+            'deskripsi' => ['required'],
+            'efek_samping' => ['required'],
+            'dosis' => ['required'],
             'harga_beli' => ['required', 'numeric', 'min:3'],
             'harga_jual' => ['required', 'numeric', 'min:3'],
             'stock' => ['required', 'numeric', 'min:0'],
@@ -174,8 +175,6 @@ class OwnerController extends Controller
                 $carbonDate = Carbon::parse($request->expired_date);
                 $formatted = $carbonDate->format('Y-m-d H:i:s');
                 $GambarObat = $validated_data['gambar_obat']->store('gambar-obat');
-                
-                DB::statement('CALL insert_log(?, ?, ?, ?, ?, ?)', array($request->nama_obat, auth()->user()->username, 'product', 'insert', '-', $request->nama_obat));
 
                 DB::connection('owner')->statement('CALL add_product_procedure(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                     $request->id,
@@ -206,7 +205,9 @@ class OwnerController extends Controller
 
                 return redirect('/owner/produk')->with('add_status','Produk berhasil ditambah');
             }catch(Exception $e){
-                return redirect('/owner/produk')->with('error_status','Produk gagal ditambah');
+                throw $e;
+
+                // return redirect('/owner/produk')->with('error_status','Produk gagal ditambah');
             }
         }
 

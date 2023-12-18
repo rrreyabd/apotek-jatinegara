@@ -39,7 +39,6 @@ class ProductDescriptionFactory extends Factory
             'group_id' => $group_id,
             'supplier_id' => $supplier_id,
             'product_type' => fake()->randomElement(['umum', 'resep dokter']),
-            'product_photo' => fake()->word().'.jpg',
             'product_manufacture' => fake()->words(5, true),
             'product_DPN' => 'DKL'. fake()->numberBetween(100000000,999999999) .'A2',
             'product_sideEffect' => fake()->sentences(6, true),

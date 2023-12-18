@@ -38,7 +38,6 @@
             <div class="rounded-lg shadow-lg w-full bg-white h-fit md:p-16 md:px-24 p-7 overflow-x-auto">
                 <form action="{{ route('add-product-process') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    
                     @method('PUT')
 
                     @php
@@ -181,7 +180,7 @@
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Deskripsi Obat</p>
-                            <textarea id="" placeholder="Deskripsi Obat" name="deskripsi" required 
+                            <textarea placeholder="Deskripsi Obat" name="deskripsi" required 
                                 class="p-2 w-full border rounded-xl shadow h-28 @error('deskripsi') is-invalid @enderror">{{ old('deskripsi') }}</textarea>
                             @error('deskripsi')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
@@ -189,7 +188,7 @@
                         </div>
                         <div class="flex-col w-full">
                             <p class="mt-5">Efek Samping Obat</p>
-                            <textarea name="efek_samping" id="" placeholder="Efek Samping Obat" required
+                            <textarea name="efek_samping" placeholder="Efek Samping Obat" required
                                 class="p-2 w-full border rounded-xl shadow h-8 @error('efek_samping') is-invalid @enderror">{{ old('efek_samping') }}</textarea>
                             @error('efek_samping')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
@@ -200,7 +199,7 @@
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Dosis Obat</p>
-                            <textarea id="" placeholder="Dosis Obat" name="dosis" required
+                            <textarea placeholder="Dosis Obat" name="dosis" required
                                 class="p-2 w-full border rounded-xl shadow h-28 @error('dosis') is-invalid @enderror">{{ old('dosis') }}</textarea>
                             @error('dosis')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
@@ -208,7 +207,7 @@
                         </div>
                         <div class="flex-col w-full">
                             <p class="mt-5">Indikasi Umum Obat</p>
-                            <textarea id="" placeholder="Indikasi Umum Obat" name="indikasi"
+                            <textarea placeholder="Indikasi Umum Obat" name="indikasi"
                                 class="p-2 w-full border rounded-xl shadow">{{ old('indikasi') }}</textarea>
                             @error('indikasi')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
@@ -219,7 +218,7 @@
                     <div class="md:flex md:grid-col-2 gap-8 justify-between">
                         <div class="flex-col w-full">
                             <p class="mt-5">Peringatan Obat</p>
-                            <textarea id="" placeholder="Peringatan Obat" name="peringatan"
+                            <textarea placeholder="Peringatan Obat" name="peringatan"
                                 class="p-2 w-full border rounded-xl shadow @error('peringatan') is-invalid @enderror">{{ old('peringatan') }}</textarea>
                             @error('peringatan')
                                 <div class="text-xs text-mediumRed">{{ $message }}</div>
@@ -247,16 +246,25 @@
                     <button type="submit" class="w-48 bg-mainColor px-4 py-2 font-semibold text-lg text-white rounded-lg shadow shadow-semiBlack">Tambah</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
+
+    {{-- <!-- Place the first <script> tag in your HTML's <head> -->
+    <script src="https://cdn.tiny.cloud/1/fkny8lakkibesvbv59ae3w2w8d3d9vn18j36acymyng6i795/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+    <script>
+    tinymce.init({
+        selector: 'textarea',
+    });
+    </script> --}}
 
     {{-- DATATABLES SCRIPT --}}
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/datatables.js') }}"></script>
 
-     <script>
+    <script>
         function showFile(input) {
         const getFile = document.getElementById('uploadedFile');
         if (input.files && input.files[0]) {

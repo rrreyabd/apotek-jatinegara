@@ -38,7 +38,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('restrict');
             $table->enum('product_type', ['umum', 'resep dokter']);
-            $table->string('product_photo');
+            $table->string('product_photo')->nullable();
             $table->string('product_manufacture');
             $table->string('product_DPN', 15);
             $table->longText('product_sideEffect');

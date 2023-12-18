@@ -43,14 +43,11 @@
 
                     @php
                         $uuid = $product->product_id;
-                        $numericValue = hexdec(substr($uuid, -12));
-                        $formatted = 'P-' . str_pad($numericValue, 4, '0', STR_PAD_LEFT);
-
                         $detail_uuid = \Illuminate\Support\Str::uuid();
                     @endphp
 
                     <div class="flex flex-col justify-center items-center mb-3">
-                        <p class="text-3xl font-TripBold">{{ $formatted }}</p>
+                        <p class="text-3xl font-TripBold">{{ $product->product_name }}</p>
                         <input type="hidden" name="id" value="{{ $uuid }}">
                         <input type="hidden" name="detail_id" value="{{ $detail_uuid }}">
                     </div>
@@ -111,7 +108,7 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/datatables.js') }}"></script>
 
-     <script>
+    <script>
         function showFile(input) {
         const getFile = document.getElementById('uploadedFile');
         if (input.files && input.files[0]) {
