@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('username');
             $table->string('log_target', 100);
             $table->enum('log_description', ['insert', 'update', 'delete']);
-            $table->string('old_value');
-            $table->string('new_value');
+            $table->longText('old_value');
+            $table->longText('new_value');
         });
     }
 
