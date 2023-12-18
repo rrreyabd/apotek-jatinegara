@@ -60,7 +60,7 @@
             </div>
         @endif
 
-        <livewire:cashier-liveshow>
+        <livewire:cashier-liveshow/>
         
 
         {{-- CART START --}}

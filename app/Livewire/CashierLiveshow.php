@@ -33,12 +33,12 @@ class CashierLiveshow extends Component
 
     public function AddedToCart($product)
     {
-        $existingCart = Cart::where('user_id', auth()->user()->user_id)
+        $existingCart = Cart::on('cashier')->where('user_id', auth()->user()->user_id)
         ->where('product_id', $product['product_id'])
         ->first();
 
         if (!$existingCart) {
-            Cart::create([
+            Cart::on('cashier')->create([
                 "cart_id" => Str::uuid(),
                 'user_id' => auth()->user()->user_id,
                 'product_id' => $product['product_id'],
@@ -55,10 +55,10 @@ class CashierLiveshow extends Component
         return $this->search
         ? ($filteredProducts
             ? $filteredProducts->where("product_name", "LIKE", "%" . $this->search . "%")->orderBy('product_status')->paginate(8)
-            : Product::where("product_name", "LIKE", "%" . $this->search . "%")->orderBy('product_status')->paginate(8))
+            : Product::on('cashier')->where("product_name", "LIKE", "%" . $this->search . "%")->orderBy('product_status')->paginate(8))
         : ($filteredProducts
             ? $filteredProducts->orderBy('product_status')->paginate(8)
-            : Product::orderBy('product_status')->paginate(8));
+            : Product::on('cashier')->orderBy('product_status')->paginate(8));
     }
 
     public function applyFilter($filterType, $filterId)
@@ -111,15 +111,15 @@ class CashierLiveshow extends Component
 
         switch ($filterType) {
             case 'unit':
-                $filter = Unit::find($filterId);
+                $filter = Unit::on('cashier')->find($filterId);
                 break;
 
             case 'group':
-                $filter = Group::find($filterId);
+                $filter = Group::on('cashier')->find($filterId);
                 break;
 
             case 'category':
-                $filter = Category::find($filterId);
+                $filter = Category::on('cashier')->find($filterId);
                 break;
         }
 
@@ -144,9 +144,9 @@ class CashierLiveshow extends Component
     public function render()
     {
         $product = $this->search_product();
-        $this->categories = Category::orderBy('category')->get();
-        $this->groups = Group::orderBy('group')->get();
-        $this->units = Unit::orderBy('unit')->get();
+        $this->categories = Category::on('cashier')->orderBy('category')->get();
+        $this->groups = Group::on('cashier')->orderBy('group')->get();
+        $this->units = Unit::on('cashier')->orderBy('unit')->get();
 
         return view('livewire.cashier-liveshow', [
             'products' => $product ?? [],

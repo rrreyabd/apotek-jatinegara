@@ -40,11 +40,6 @@
 
         <div class="flex flex-col gap-8">
             <div class="flex justify-between">
-                <div class="sm:flex">
-                    <input type="month" name="" id="" class="w-fit p-3 rounded-lg shadow-lg border-none">
-                    <p class="mx-3 font-extrabold flex items-center text-2xl">-</p>
-                    <input type="month" name="" id="" class="w-fit p-3 rounded-lg shadow-lg border-none">
-                </div>
 
         </div>
             <div class="bg-white rounded-lg p-4 shadow-md overflow-x-auto">

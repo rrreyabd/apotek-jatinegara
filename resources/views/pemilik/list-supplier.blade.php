@@ -76,7 +76,7 @@
                                     </tr>
                                     <tr>
                                         <td class="py-5"><label for="noTelpSupplier">No Telp Supplier</label></td>
-                                        <td class="ps-5"><input type="text" class="p-2 px-4 rounded-xl shadow border @error('no_telp') is-invalid @enderror" required value="{{ old('no_telp') }}" name="no_telp"></td>
+                                        <td class="ps-5"><input type="number" class="p-2 px-4 rounded-xl shadow border @error('no_telp') is-invalid @enderror" required value="{{ old('no_telp') }}" name="no_telp"></td>
                                         @error('no_telp')
                                             <div class="text-xs text-mediumRed">{{ $message }}</div>
                                         @enderror
@@ -183,21 +183,21 @@
                                                         </td>
                                                         <td class="ps-5">
                                                             <input type="text" class="p-2 px-4 rounded-xl shadow border @error('nama_supplier') is-invalid @enderror text-slate-400" required value="{{ $item->supplier }}" name="nama_supplier" readonly>
+                                                            @error('nama_supplier')
+                                                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                                            @enderror
                                                         </td>
-                                                        @error('nama_supplier')
-                                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
-                                                        @enderror
                                                     </tr>
                                                     <tr>
                                                         <td class="py-5">
                                                             <label for="noTelpSupplier">No Telp Supplier</label>
                                                         </td>
                                                         <td class="ps-5">
-                                                            <input type="text" class="p-2 px-4 rounded-xl shadow border @error('no_telp') is-invalid @enderror" required value="{{ $item->supplier_phone }}" name="no_telp">
+                                                            <input type="number" class="p-2 px-4 rounded-xl shadow border @error('no_telp') is-invalid @enderror" required value="{{ $item->supplier_phone }}" name="no_telp">
+                                                            @error('no_telp')
+                                                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                                            @enderror
                                                         </td>
-                                                        @error('no_telp')
-                                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
-                                                        @enderror
                                                     </tr>
                                                     <tr>
                                                         <td class="py-5">
@@ -205,10 +205,10 @@
                                                         </td>
                                                         <td class="ps-5">
                                                             <input type="text" class="p-2 px-4 rounded-xl shadow border @error('alamat') is-invalid @enderror" required value="{{ $item->supplier_address }}" name="alamat">
+                                                            @error('alamat')
+                                                                <div class="text-xs text-mediumRed">{{ $message }}</div>
+                                                            @enderror
                                                         </td>
-                                                        @error('alamat')
-                                                            <div class="text-xs text-mediumRed">{{ $message }}</div>
-                                                        @enderror
                                                     </tr>
                                                 </table>
                                             </div>
