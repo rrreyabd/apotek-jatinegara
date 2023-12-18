@@ -365,7 +365,8 @@ class OwnerController extends Controller
             
             return redirect('/owner/produk')->with('add_status','Produk berhasil diperbaharui');
         }catch(Exception $e){
-            throw $e;
+            DB::rollBack();
+
             return redirect('/owner/produk')->with('error_status','Produk gagal diperbaharui');
         }
     }
@@ -412,13 +413,6 @@ class OwnerController extends Controller
         try{
             $carbonDate = Carbon::parse($request->expired_date);
             $formatted = $carbonDate->format('Y-m-d H:i:s');
-            // insert log
-            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch harga beli', 'insert', '-', $request->harga_beli));
-
-            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch expired', 'insert', '-', $formatted));
-        
-            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch stock', 'insert', '-', $request->stock));
-            // akhir insert log
 
             $product_id = $request->id;
             $products = Product::findOrFail($product_id);
@@ -437,9 +431,18 @@ class OwnerController extends Controller
                 $product_expired,
                 $product_stock,
             ]);
+
+            // insert log
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch harga beli', 'insert', '-', $request->harga_beli));
+
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch expired', 'insert', '-', $formatted));
+        
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Product::where('product_id', $request->id)->first()->product_name, auth()->user()->username, 'batch stock', 'insert', '-', $request->stock));
+            // akhir insert log
     
             return redirect('/owner/produk')->with('add_status','Batch produk berhasil ditambah');
         }catch(Exception $e){
+
             return redirect('/owner/produk')->with('error_status','Batch produk gagal ditambah');
         }
     }
@@ -520,13 +523,13 @@ class OwnerController extends Controller
     {
         DB::beginTransaction();
         try{
-            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->supplier, auth()->user()->username, 'nama supplier', 'delete', Supplier::where('supplier_id', $request->id)->supplier, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->first()->supplier, auth()->user()->username, 'nama supplier', 'delete', Supplier::where('supplier_id', $request->id)->first()->supplier, '-'));
 
-            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->supplier, auth()->user()->username, 'alamat supplier', 'delete', Supplier::where('supplier_id', $request->id)->supplier_address, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->first()->supplier, auth()->user()->username, 'alamat supplier', 'delete', Supplier::where('supplier_id', $request->id)->first()->supplier_address, '-'));
 
-            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->supplier, auth()->user()->username, 'nomor telepon supplier', 'delete', Supplier::where('supplier_id', $request->id)->supplier_phone, '-'));
+            DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array(Supplier::where('supplier_id', $request->id)->first()->supplier, auth()->user()->username, 'nomor telepon supplier', 'delete', Supplier::where('supplier_id', $request->id)->first()->supplier_phone, '-'));
 
-            Supplier::where('supplier_id', $request->id)->delete();
+            Supplier::where('supplier_id', $request->id)->first()->delete();
 
             DB::commit();
             return redirect('/owner/supplier')->with('add_status','Supplier berhasil dihapus');
@@ -625,15 +628,15 @@ class OwnerController extends Controller
             $cashiers= Cashier::find($id);
 
             if ($cashiers->cashier_phone != $request->nohp) {
-                DB::connect('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'nomor telpon cashier', 'update', $cashiers->cashier_phone, $request->nohp));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'nomor telpon cashier', 'update', $cashiers->cashier_phone, $request->nohp));
             }
 
             if ($cashiers->cashier_gender != $request->gender) {
-                DB::connect('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'gender cashier', 'update', $cashiers->cashier_gender, $request->gender));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'gender cashier', 'update', $cashiers->cashier_gender, $request->gender));
             }
 
             if ($cashiers->cashier_address != $request->address) {
-                DB::connect('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'alamat cashier', 'update', $cashiers->cashier_address, $request->address));
+                DB::connection('owner')->select('CALL insert_log(?, ?, ?, ?, ?, ?)', array($cashiers->user->first()->username, auth()->user()->username, 'alamat cashier', 'update', $cashiers->cashier_address, $request->address));
             }
 
             $cashiers -> cashier_phone = $request->nohp;

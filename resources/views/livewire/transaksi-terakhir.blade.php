@@ -1,5 +1,10 @@
 <div>
-    <input wire:change="cari" wire:model="tanggalTransaksi" value="{{ $tanggalTransaski ?? '' }}" type="month" class="w-fit p-3 rounded-lg shadow-lg border-none mb-10">
+    <form action="{{ route('cetak-report') }}" class="mb-10" method="post">
+        @csrf
+        <input wire:change="cari" wire:model="tanggalTransaksi" value="{{ $tanggalTransaski ?? '' }}" type="month" name="tanggal" id="tanggal" class="w-fit p-3 rounded-lg shadow-lg border-none" 
+        placeholder="Pilih Bulan" data-input required>
+        <button type="submit" class="text-white bg-blue-700 w-fit ml-3 p-3 rounded-lg shadow-lg border-none">Cetak Laporan</button>
+    </form>
 
             <div class="bg-white rounded-lg p-4 shadow-md overflow-x-auto">
                 <table id="myTable" class="table table-striped w-full text-xl">
