@@ -173,6 +173,7 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     Route::post('pesanan-pending/{sellingInvoiceID}', [OwnerController::class, 'refund'])->name('owner-refund');
     Route::get('resep_dokter/{img}', [OwnerController::class, 'resep_dokter']);
     Route::get('log', [OwnerController::class, 'display_log']);
+    Route::get('invoice/{id}', [OwnerController::class, 'display_invoice'])->name('invoice-supplier');
 
 });
 // akhir halaman owner

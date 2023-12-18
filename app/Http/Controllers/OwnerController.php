@@ -729,4 +729,19 @@ $resultsArray = $results->toArray();
         ]);
     }
 
+    public function display_invoice($id)
+    {
+        $faktur = BuyingInvoice::find($id);
+        $uuid = $faktur->buying_invoice_id;
+        $supplier = Supplier::where('supplier',$faktur->supplier_name)->first();
+        $numericValue = hexdec(substr($uuid, -5));
+        $formatted = 'FR-' . str_pad($numericValue, 6, '0', STR_PAD_LEFT);
+
+        return view('pemilik.invoice-pembelian',[
+            'invoice' => $faktur,
+            'invoice_number' => $formatted,
+            'supplier' => $supplier
+        ]);
+    }
+
 }
