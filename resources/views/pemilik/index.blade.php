@@ -14,8 +14,13 @@
 
     {{-- DATATABLES --}}
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    {{-- FLATPICKR.JS --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
     {{-- CHART.JS --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {{-- flatpickr.js --}}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 
 <body class="font-Inter relative">
@@ -163,7 +168,31 @@
             </div>
 
             <p class="font-bold text-2xl mt-5">Transaksi Terakhir</p>
-            <input type="month" name="" id="tgl-transaksi" class="w-fit p-3 rounded-lg shadow-lg border-none">
+            <form action="{{ route('cetak-report') }}" method="post">
+                @csrf
+                <input type="date" name="tanggal" id="tanggal"  class="w-fit p-3 rounded-lg shadow-lg border-none" 
+                placeholder="Pilih Bulan" data-input required>
+                <button type="submit" class="text-white bg-blue-700 w-fit p-3 rounded-lg shadow-lg border-none">Cetak Laporan</button>
+            </form>
+            
+            <script>
+                flatpickr("#tanggal", {
+                    dateFormat: "Y-m",
+                    enableTime: false,
+                    altInput: true,
+                    altFormat: "F Y",
+                    minDate: "2000-01",
+                    mode: "single",
+                    theme: "light" // atau "dark"
+                    // disable: [
+                    //     function(date) {
+                    //         // Menonaktifkan tanggal kecuali bulan pertama setiap tahun
+                    //         return date.getDate() !== 1;
+                    //     }
+                    // ],
+                });
+            </script>
+
 
             <div class="bg-white rounded-lg p-4 shadow-md overflow-x-auto">
                 <table id="myTable"  class="display table table-striped">
