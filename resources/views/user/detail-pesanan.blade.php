@@ -35,7 +35,11 @@
                 @foreach($carts as $cart)
                 <div class="px-8 flex justify-between">
                     <div class="flex gap-2">
-                        <img src="{{ asset('img/obat1.jpg/') }}" width="100" alt="">
+                        @if (file_exists(public_path('storage/gambar-obat/' . $cart->product_photo)) && $cart->product_photo !== NULL)
+                            <img src="{{ asset('storage/gambar-obat/' . $cart->product_photo) }}" width="100px" alt="" draggable="false">
+                        @else
+                            <img src="{{ asset('img/obat1.jpg')}}" width="100px" alt="" draggable="false">    
+                        @endif
 
                         <div class="flex flex-col justify-between text-sm">
                             <div class="w-[25vw]">

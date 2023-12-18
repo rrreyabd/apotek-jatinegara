@@ -274,7 +274,6 @@ class OwnerController extends Controller
             'gambar_obat' => ['file', 'max:5120', 'mimes:png,jpeg,jpg'],
         ]);
 
-        DB::beginTransaction();
         try{
             // insert log
             if($products->product_status != $request->status){
@@ -363,10 +362,9 @@ class OwnerController extends Controller
             $products->description->save();
             $products->detail()->orderBy('product_expired')->first()->save();
             
-            DB::commit();
             return redirect('/owner/produk')->with('add_status','Produk berhasil diperbaharui');
         }catch(Exception $e){
-            DB::rollBack();
+            throw $e;
             return redirect('/owner/produk')->with('error_status','Produk gagal diperbaharui');
         }
     }

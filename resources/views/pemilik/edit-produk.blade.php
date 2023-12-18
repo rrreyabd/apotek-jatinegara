@@ -201,7 +201,11 @@
 
                         <div class="md:flex w-6/12">
                             <div class="w-[200px] h-[170px] p-1 mt-8">
+                                @if (file_exists(public_path('storage/gambar-obat/' . $product->description->product_photo)) && $product->description->product_photo !== NULL)
                                 <img src="{{ asset('storage/gambar-obat/'.$product->description->product_photo) }}" id="uploadedFile" alt="Current Image" class="max-w-full max-h-full">
+                            @else
+                                <img src="{{ asset('img/obat1.jpg')}}" id="uploadedFile" alt="Current Image" class="max-w-full max-h-full">    
+                            @endif
                         </div>
 
                         <div class="ms-3 mt-3.5">
