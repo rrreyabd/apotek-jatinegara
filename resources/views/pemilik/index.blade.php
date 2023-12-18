@@ -170,29 +170,10 @@
             <p class="font-bold text-2xl mt-5">Transaksi Terakhir</p>
             <form action="{{ route('cetak-report') }}" method="post">
                 @csrf
-                <input type="date" name="tanggal" id="tanggal"  class="w-fit p-3 rounded-lg shadow-lg border-none" 
+                <input type="month" name="tanggal" id="tanggal"  class="w-fit p-3 rounded-lg shadow-lg border-none" 
                 placeholder="Pilih Bulan" data-input required>
-                <button type="submit" class="text-white bg-blue-700 w-fit p-3 rounded-lg shadow-lg border-none">Cetak Laporan</button>
+                <button type="submit" class="text-white bg-blue-700 w-fit ml-3 p-3 rounded-lg shadow-lg border-none">Cetak Laporan</button>
             </form>
-            
-            <script>
-                flatpickr("#tanggal", {
-                    dateFormat: "Y-m",
-                    enableTime: false,
-                    altInput: true,
-                    altFormat: "F Y",
-                    minDate: "2000-01",
-                    mode: "single",
-                    theme: "light" // atau "dark"
-                    // disable: [
-                    //     function(date) {
-                    //         // Menonaktifkan tanggal kecuali bulan pertama setiap tahun
-                    //         return date.getDate() !== 1;
-                    //     }
-                    // ],
-                });
-            </script>
-
 
             <div class="bg-white rounded-lg p-4 shadow-md overflow-x-auto">
                 <table id="myTable"  class="display table table-striped">
