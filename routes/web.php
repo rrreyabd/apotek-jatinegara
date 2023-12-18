@@ -159,6 +159,7 @@ Route::middleware(['auth', 'verified', 'cekRole:owner'])->prefix('owner')->group
     Route::get('resep_dokter/{img}', [OwnerController::class, 'resep_dokter']);
     Route::get('bukti-pembayaran/{img}', [OwnerController::class, 'bukti_pembayaran']);
     Route::get('log', [OwnerController::class, 'display_log']);
+    Route::post('report', [OwnerController::class, 'report'])->name('cetak-report');
     Route::get('invoice/{id}', [OwnerController::class, 'display_invoice'])->name('invoice-supplier');
 
 });
