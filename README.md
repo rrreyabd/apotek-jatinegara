@@ -9,7 +9,7 @@ Apotek Jati Negara adalah aplikasi apotek online yang memungkinkan pengguna untu
   
 [NB: Apotek Jati Negara adalah sebuah apotek yang berlokasi di Medan, data dan informasi yang ada telah disamarkan]
 
-# Instalasi & Konfigurasi
+# [Instalasi & Konfigurasi](#instalasi-&-konfigurasi)
 - ## Tech
    #### - [Laravel 10](#laravel)
    #### - [Tailwind CSS](#tailwind)
