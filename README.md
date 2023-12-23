@@ -114,7 +114,7 @@ Apotek Jati Negara adalah aplikasi apotek online yang memungkinkan pengguna untu
   - LinkedIn: Alwin Liufandy
 - ### Devandra Deal Fatahilla
   - Instagram: @devandradealf
-  - LinkedIn: 
+  - LinkedIn: Devandra Deal
 - ### Jessindy Tanuwijaya
   - Instagram: @jessindytanu
   - LinkedIn: 
