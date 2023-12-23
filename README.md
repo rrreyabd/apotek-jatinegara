@@ -105,6 +105,8 @@ Apotek Jati Negara adalah aplikasi apotek online yang memungkinkan pengguna untu
    - #### Jalankan Server Lokal
      #### jalankan perintah berikut:
          php artisan serve
+     #### dan
+         npm run dev
    - #### Buka Proyek di Browser
       Buka browser dan kunjungi alamat yang ditampilkan di terminal. Biasanya, ini adalah `http://127.0.0.1:8000`.
 
