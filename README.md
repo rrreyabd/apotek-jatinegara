@@ -1,5 +1,5 @@
 ## - [Intro](#intro)
-## - [Instalasi & Konfigurasi](#instalasikonfigurasi)
+## - [Instalasi & Konfigurasi](#instalasi-&-konfigurasi)
 ## - [Kontributor](#Kontributor)
 ## - [Source](#source)
 
