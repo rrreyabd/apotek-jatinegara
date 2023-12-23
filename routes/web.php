@@ -34,16 +34,6 @@ use App\Models\Supplier;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-
-Route::get('/test', function () {
-    $alamat = User::where('role', 'cashier')->get();
-    $products_name = Product::all()->pluck('product_name');
-    $product_name = fake()->randomElement($products_name);
-
-    dd(Product::where('product_name', $product_name)->first()->detail()->orderBy('product_expired')->first()->product_sell_price);
-});
-
 // halaman akses tanpa login
 Route::controller(GoogleController::class)->group(function() {
     Route::get('auth/google', 'redirectToGoogle')->name('auth.goole');
