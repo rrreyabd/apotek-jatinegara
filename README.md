@@ -11,10 +11,10 @@ Apotek Jati Negara adalah aplikasi apotek online yang memungkinkan pengguna untu
 
 # Instalasi Dan Konfigurasi
 - ## Tech
-   #### - [Laravel 10](#laravel-10)
-   #### - [Tailwind CSS](#tailwind-css)
-   #### - [Laravel Breeze](#laravel-breeze)
-   #### - [Laravel Livewire](#laravel-livewire)
+   #### - [Laravel 10]
+   #### - [Tailwind CSS]
+   #### - [Laravel Breeze]
+   #### - [Laravel Livewire]
 
  - ## Instalasi
    - #### Lakukan Clone pada Github Repositori ini
